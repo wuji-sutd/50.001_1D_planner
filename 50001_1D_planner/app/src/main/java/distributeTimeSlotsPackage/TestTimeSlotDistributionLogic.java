@@ -43,8 +43,8 @@ public class TestTimeSlotDistributionLogic {
     public static void addTasksFixed(ArrayList<Task> tasks){
         //note: ArrayList are passed by reference
         //Task(String name, int dueYear, int dueMonth, int dueDay, double time, int hoursNeeded, int hoursPerWeek)
-        tasks.add(new Task("Com Struct Problems",2020,Calendar.DECEMBER,30,13.5,3,2));
-        tasks.add(new Task("Com Struct Project",2020,Calendar.DECEMBER,30,23.30,1,4));
+        tasks.add(new Task("Com Struct Problems",2020,Calendar.DECEMBER,30,13.5,14,3));
+        tasks.add(new Task("Com Struct Project",2020,Calendar.DECEMBER,30,23.30,14,5));
         tasks.add(new Task("Java Project",2020,Calendar.DECEMBER,20,10,3,3));
         tasks.add(new Task("Algo Problems",2021,Calendar.JANUARY,1,14,14,5));
         tasks.add(new Task("Algo Revision",2020,Calendar.DECEMBER,22,14,9,3));

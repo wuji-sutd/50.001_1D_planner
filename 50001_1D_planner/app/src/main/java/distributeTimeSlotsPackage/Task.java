@@ -71,7 +71,10 @@ public class Task implements Comparable<Task> {
 //        System.out.println(numOfWeekBetween);
 //        System.out.println(timeFound);
 //        System.out.println(timeFound>=hoursNeeded);
-        if(timeFound==hoursNeeded) tightSchedule =true;
+        if(timeFound==hoursNeeded) {
+            tightSchedule =true;
+            System.out.println("tight " + name);
+        }
         return timeFound>=hoursNeeded;
     }
 
@@ -221,15 +224,15 @@ public class Task implements Comparable<Task> {
 
     @Override
     public int compareTo(Task t) {
-        //if(tightSchedule && t.tightSchedule ) {
+        if(tightSchedule && t.tightSchedule || !tightSchedule&&!t.tightSchedule ) {
             if (cal.getTimeInMillis() < t.getCal().getTimeInMillis())
                 return -1;
             else if (cal.getTimeInMillis() > t.getCal().getTimeInMillis())
                 return 1;
             else return 0;
-        //}
-        //else if(tightSchedule) return -1;
-        //else if(t.tightSchedule) return 1;
+        }
+        else if(tightSchedule) return -1;
+        else return 1;
 
     }
 

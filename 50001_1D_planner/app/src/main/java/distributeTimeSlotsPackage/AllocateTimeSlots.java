@@ -24,14 +24,14 @@ public class AllocateTimeSlots {
         //Task currentTask = chooseTaskToAssign(allTasks);
         String isAppropriateTimeSlot = "1";
         int count = 0;
-        int chosenRandom;
-        //Random r = new Random();
         while (currTimeSlotIndex < allTimeSlots.size() - 1) {
             while (count < allTasks.size()) {
                 if (allTasks.get(count).checkAssigned()) {
                     count++;
                     continue;
                 }
+                System.out.println(count +":"+allTasks.get(count).getName());
+
                 allTasks.get(count).assignLatestTimeSlot(currentTimeSlot);
 //                for (Task t : allTasks) {
 //                    t.printTimeSlots();
