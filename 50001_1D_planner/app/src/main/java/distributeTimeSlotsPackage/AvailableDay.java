@@ -56,14 +56,15 @@ public class AvailableDay {
     public int getNumberOfSlots(){
         int count = 0;
         double current = 0;
-        for(double key: availableTimes.keySet()){
+        for (double key : availableTimes.keySet()) {
             current = key;
-            while(current!=availableTimes.get(key)){
+            while (current != availableTimes.get(key)) {
                 count++;
-                current+=0.5;
+                current += 0.5;
             }
         }
         return count;
+
     }
 
     public int getDay() {

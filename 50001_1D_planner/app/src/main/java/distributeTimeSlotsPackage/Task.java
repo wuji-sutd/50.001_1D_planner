@@ -11,6 +11,7 @@ public class Task implements Comparable<Task> {
     private double time;
     private Calendar cal;
     public int numTaskSlotsNeeded;
+    public boolean tightSchedule = false;
     private ArrayList<TaskSlots> taskSlots = new ArrayList<>();
 
     public Task(String name, int dueYear, int dueMonth, int dueDay, double time, double hoursNeeded, double hoursPerWeek){
@@ -38,11 +39,40 @@ public class Task implements Comparable<Task> {
     //it still thinks theres a week
     public boolean checkEnoughTime(int numCurrentWeekAvailable){
         Calendar today = Calendar.getInstance();
+        int timeFound = 0;
+        int tempTimeFound = 0;
+        ConsolidatedAvailableDays consolidatedAvailableDays = ConsolidatedAvailableDays.getInstance();
+        AvailableDay[] availableDays = consolidatedAvailableDays.getAvailableDays();
         int numOfWeekBetween = (cal.get(Calendar.WEEK_OF_YEAR) - today.get(Calendar.WEEK_OF_YEAR) + 52)%52;
-        //System.out.println(cal.get(Calendar.WEEK_OF_YEAR));
-        //System.out.println(today.get(Calendar.WEEK_OF_YEAR));
-        //System.out.println(numOfWeekBetween);
-        return ((numOfWeekBetween)*hoursPerWeek + numCurrentWeekAvailable)>=hoursNeeded;
+
+        //get number of slots for week 0
+        for(int i =today.get(Calendar.DAY_OF_WEEK);i!=Calendar.SATURDAY+2;i++){
+            if(i == 8) {
+                tempTimeFound+= availableDays[Calendar.SUNDAY].getNumberOfSlots()/2;
+            } else {
+                tempTimeFound+= availableDays[i].getNumberOfSlots()/2;
+            }
+        }
+        //System.out.println(tempTimeFound);
+        timeFound +=tempTimeFound<hoursPerWeek? tempTimeFound:hoursPerWeek;
+        tempTimeFound = 0;
+        //get number of slots for last week
+        for(int i =cal.get(Calendar.DAY_OF_WEEK);i!=Calendar.SUNDAY;i--){
+            tempTimeFound+= availableDays[i].getNumberOfSlots()/2;
+        }
+        //System.out.println(tempTimeFound);
+
+        timeFound +=tempTimeFound<hoursPerWeek? tempTimeFound:hoursPerWeek;
+        //rest of the weeks
+        timeFound+=(numOfWeekBetween-1)>0? (numOfWeekBetween-1)*hoursPerWeek :0;
+//        System.out.println(name);
+//        System.out.println(cal.get(Calendar.WEEK_OF_YEAR));
+//        System.out.println(today.get(Calendar.WEEK_OF_YEAR));
+//        System.out.println(numOfWeekBetween);
+//        System.out.println(timeFound);
+//        System.out.println(timeFound>=hoursNeeded);
+        if(timeFound==hoursNeeded) tightSchedule =true;
+        return timeFound>=hoursNeeded;
     }
 
     public int partialChecks(){
@@ -191,11 +221,16 @@ public class Task implements Comparable<Task> {
 
     @Override
     public int compareTo(Task t) {
-        if(cal.getTimeInMillis()<t.getCal().getTimeInMillis())
-            return -1;
-        else if(cal.getTimeInMillis()>t.getCal().getTimeInMillis())
-            return 1;
-        else return 0;
+        //if(tightSchedule && t.tightSchedule ) {
+            if (cal.getTimeInMillis() < t.getCal().getTimeInMillis())
+                return -1;
+            else if (cal.getTimeInMillis() > t.getCal().getTimeInMillis())
+                return 1;
+            else return 0;
+        //}
+        //else if(tightSchedule) return -1;
+        //else if(t.tightSchedule) return 1;
+
     }
 
     public void printTimeSlots(){

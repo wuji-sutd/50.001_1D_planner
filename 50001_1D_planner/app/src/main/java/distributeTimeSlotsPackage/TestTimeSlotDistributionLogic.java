@@ -43,12 +43,18 @@ public class TestTimeSlotDistributionLogic {
     public static void addTasksFixed(ArrayList<Task> tasks){
         //note: ArrayList are passed by reference
         //Task(String name, int dueYear, int dueMonth, int dueDay, double time, int hoursNeeded, int hoursPerWeek)
-        tasks.add(new Task("Com Struct Problems",2020,Calendar.DECEMBER,30,13.5,12,2));
-        tasks.add(new Task("Com Struct Project",2020,Calendar.DECEMBER,30,23.30,12,2));
+        tasks.add(new Task("Com Struct Problems",2020,Calendar.DECEMBER,30,13.5,3,2));
+        tasks.add(new Task("Com Struct Project",2020,Calendar.DECEMBER,30,23.30,1,4));
         tasks.add(new Task("Java Project",2020,Calendar.DECEMBER,20,10,3,3));
         tasks.add(new Task("Algo Problems",2021,Calendar.JANUARY,1,14,14,5));
         tasks.add(new Task("Algo Revision",2020,Calendar.DECEMBER,22,14,9,3));
-        tasks.add(new Task("HASS Reading",2020,Calendar.NOVEMBER,21,10,5,5));
+        tasks.add(new Task("HASS Reading",2020,Calendar.DECEMBER,21,10,5,5));
+        ConsolidatedAvailableDays cd = ConsolidatedAvailableDays.getInstance();
+        AvailableDay[] availableDays = cd.getAvailableDays();
+        for(AvailableDay a : availableDays){
+            if(a==null) System.out.println("fds");
+            else System.out.println(a.getNumberOfSlots());
+        }
     }
 
     //this should be wherever the user adds or edits a task and when task cannot be finished on time
@@ -174,8 +180,8 @@ public class TestTimeSlotDistributionLogic {
                 //if(!checkAssigned()) return -3;
              */
             String[] outputSplit = outputOfAllocation.split(",");
-            if ("-1".equals(outputSplit[1])) {
-                System.out.println("Not Enough Time Slots for all Tasks" + outputSplit[0]);
+            if ("-3".equals(outputSplit[1])) {
+                System.out.println("Not Enough Time Slots for all Tasks");
             }
             return false;
         }
@@ -204,7 +210,7 @@ public class TestTimeSlotDistributionLogic {
         //taskNotCompleted("HASS Reading", 2, tasks, timeslots, numSlotsPerWeek);
 
         //3 changed available days
-        changeAvailableDaysFixed(tasks, timeslots, numSlotsPerWeek);
+        //changeAvailableDaysFixed(tasks, timeslots, numSlotsPerWeek);
 
 
 

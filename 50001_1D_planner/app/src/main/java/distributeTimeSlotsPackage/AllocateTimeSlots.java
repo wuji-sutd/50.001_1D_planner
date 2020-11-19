@@ -25,7 +25,7 @@ public class AllocateTimeSlots {
         String isAppropriateTimeSlot = "1";
         int count = 0;
         int chosenRandom;
-        Random r = new Random();
+        //Random r = new Random();
         while (currTimeSlotIndex < allTimeSlots.size() - 1) {
             while (count < allTasks.size()) {
                 if (allTasks.get(count).checkAssigned()) {
@@ -38,10 +38,13 @@ public class AllocateTimeSlots {
 //                }
                 isAppropriateTimeSlot = AllocateTime(allTimeSlots, allTasks, numSlotToFill, numSlotLeftToFill - 1,currTimeSlotIndex+1);
                 if (!isAppropriateTimeSlot.equals("1")) {
+                    if(isAppropriateTimeSlot.split(",")[1].equals("-3"))
+                        return isAppropriateTimeSlot;
+
                     //if(isAppropriateTimeSlot.split(",")[1].equals("-2")) {
                         allTasks.get(count).removeLatestTimeSlot();
                     //}
-                   // else return isAppropriateTimeSlot;
+                    //else return isAppropriateTimeSlot;
                 } else return "1";
                 count++;
             }
@@ -49,6 +52,11 @@ public class AllocateTimeSlots {
             while (currTimeSlotIndex < allTimeSlots.size() - 1) {
                 if(allTimeSlots.get(currTimeSlotIndex).getWeekofYear()!=currentWeekofYear) break;
                 currTimeSlotIndex++;
+            }
+            for(Task t:allTasks){
+                if(allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()>t.getCal().getTimeInMillis()){
+                    return "all,-3"; //completely failed
+                }
             }
             currentTimeSlot = allTimeSlots.get(currTimeSlotIndex);
             count=0;
