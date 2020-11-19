@@ -173,6 +173,7 @@ public class Task implements Comparable<Task> {
         Calendar today = Calendar.getInstance();
         double hoursLeft = hoursNeeded;
         for(TaskSlots ts: taskSlots){
+            if(ts!=null)
             if(ts.getTimeSlots().getCal().getTimeInMillis()<today.getTimeInMillis()){
                 hoursLeft-=0.5;
             }

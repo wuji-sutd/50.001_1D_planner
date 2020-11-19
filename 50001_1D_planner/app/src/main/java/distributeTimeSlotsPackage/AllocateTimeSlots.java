@@ -38,10 +38,10 @@ public class AllocateTimeSlots {
 //                }
                 isAppropriateTimeSlot = AllocateTime(allTimeSlots, allTasks, numSlotToFill, numSlotLeftToFill - 1,currTimeSlotIndex+1);
                 if (!isAppropriateTimeSlot.equals("1")) {
-                    if(isAppropriateTimeSlot.split(",")[1].equals("-2")) {
+                    //if(isAppropriateTimeSlot.split(",")[1].equals("-2")) {
                         allTasks.get(count).removeLatestTimeSlot();
-                    }
-                    else return isAppropriateTimeSlot;
+                    //}
+                   // else return isAppropriateTimeSlot;
                 } else return "1";
                 count++;
             }

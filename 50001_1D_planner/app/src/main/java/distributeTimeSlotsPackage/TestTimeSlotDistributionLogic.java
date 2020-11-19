@@ -6,26 +6,27 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 public class TestTimeSlotDistributionLogic {
     private static final int testingNumMonths = 2;
-
+    //replace in GetDataBaseTimeSlots
     public static void addAvailableDaysFixed(){
-        HashMap<Double,Double> mondayTimePeriod = new HashMap<>();
+        TreeMap<Double,Double> mondayTimePeriod = new TreeMap<>();
         mondayTimePeriod.put(10.0,12.0);
         mondayTimePeriod.put(14.5,17.0);
-        HashMap<Double,Double> tuesdayTimePeriod = new HashMap<>();
+        TreeMap<Double,Double> tuesdayTimePeriod = new TreeMap<>();
         tuesdayTimePeriod.put(9.0,13.0);
-        HashMap<Double,Double> wednesdayTimePeriod = new HashMap<>();
+        TreeMap<Double,Double> wednesdayTimePeriod = new TreeMap<>();
         wednesdayTimePeriod.put(8.0,9.0);
         wednesdayTimePeriod.put(17.5,20.0);
-        HashMap<Double,Double> thursdayTimePeriod = new HashMap<>();
+        TreeMap<Double,Double> thursdayTimePeriod = new TreeMap<>();
         thursdayTimePeriod.put(8.0,9.0);
         thursdayTimePeriod.put(17.5,20.0);
-        HashMap<Double,Double> fridayTimePeriod = new HashMap<>();
+        TreeMap<Double,Double> fridayTimePeriod = new TreeMap<>();
         fridayTimePeriod.put(8.0,9.0);
         fridayTimePeriod.put(17.5,20.0);
-        HashMap<Double,Double> sundayTimePeriod = new HashMap<>();
+        TreeMap<Double,Double> sundayTimePeriod = new TreeMap<>();
         sundayTimePeriod.put(10.0,12.0);
         sundayTimePeriod.put(14.0,18.0);
 
@@ -38,47 +39,19 @@ public class TestTimeSlotDistributionLogic {
         consolidatedAvailableDays.setAvailableTime(Calendar.SUNDAY, sundayTimePeriod);
     }
 
-    public static void addAvailableTimeSlots(ArrayList<TimeSlots> timeslots, HashMap<String, Integer> numSlotsPerWeek, int numberOfMonths){
-        ConsolidatedAvailableDays consolidatedAvailableDays = ConsolidatedAvailableDays.getInstance();
-        Calendar nMonthsFromNow = Calendar.getInstance();
-        nMonthsFromNow.add(Calendar.MONTH,numberOfMonths);
-        Calendar currentDay = Calendar.getInstance();
-        AvailableDay[] availableDays = consolidatedAvailableDays.getAvailableDays();
-
-        while(currentDay.get(Calendar.YEAR)!=nMonthsFromNow.get(Calendar.YEAR)
-                || currentDay.get(Calendar.MONTH)!=nMonthsFromNow.get(Calendar.MONTH)
-                || currentDay.get(Calendar.DAY_OF_MONTH)!=nMonthsFromNow.get(Calendar.DAY_OF_MONTH)){
-            HashMap<Double,Double> dayTimePeriod = availableDays[currentDay.get(Calendar.DAY_OF_WEEK)].getAvailableTimes();
-            String weekYear = currentDay.get(Calendar.WEEK_OF_YEAR) +","+ currentDay.get(Calendar.YEAR);
-            for(double key: dayTimePeriod.keySet()){
-                double current = key;
-                double endTime = dayTimePeriod.get(key);
-                while(current!=endTime){
-                    //int year, int month, int date, double time
-                    if(numSlotsPerWeek.containsKey(weekYear)){
-                        numSlotsPerWeek.put(weekYear,numSlotsPerWeek.get(weekYear)+1);
-                    } else {
-                        numSlotsPerWeek.put(weekYear,1);
-                    }
-                    timeslots.add(new TimeSlots(currentDay.get(Calendar.YEAR), currentDay.get(Calendar.MONTH),currentDay.get(Calendar.DAY_OF_MONTH),current));
-                    current +=0.5;
-                }
-            }
-            currentDay.add(Calendar.DATE,1);
-        }
-    }
-
+    //replaced in GetDataBaseTasks
     public static void addTasksFixed(ArrayList<Task> tasks){
         //note: ArrayList are passed by reference
         //Task(String name, int dueYear, int dueMonth, int dueDay, double time, int hoursNeeded, int hoursPerWeek)
-        tasks.add(new Task("Com Struct Problems",2020,Calendar.DECEMBER,30,13.5,14,2));
+        tasks.add(new Task("Com Struct Problems",2020,Calendar.DECEMBER,30,13.5,12,2));
         tasks.add(new Task("Com Struct Project",2020,Calendar.DECEMBER,30,23.30,12,2));
-        tasks.add(new Task("Java Project",2020,Calendar.NOVEMBER,20,10,3,3));
+        tasks.add(new Task("Java Project",2020,Calendar.DECEMBER,20,10,3,3));
         tasks.add(new Task("Algo Problems",2021,Calendar.JANUARY,1,14,14,5));
-        tasks.add(new Task("Algo Revision",2020,Calendar.DECEMBER,1,14,9,3));
-        tasks.add(new Task("HASS Reading",2020,Calendar.NOVEMBER,21,10,10,20));
+        tasks.add(new Task("Algo Revision",2020,Calendar.DECEMBER,22,14,9,3));
+        tasks.add(new Task("HASS Reading",2020,Calendar.NOVEMBER,21,10,5,5));
     }
 
+    //this should be wherever the user adds or edits a task and when task cannot be finished on time
     public static boolean checkHoursPerWeekEnough(ArrayList<Task> tasks, int numCurrentWeekAvailable){
         for(Task t:tasks){
             if(!t.checkEnoughTime(numCurrentWeekAvailable)){
@@ -96,18 +69,10 @@ public class TestTimeSlotDistributionLogic {
         return totalTimeSlotsNeeded<=timeslots.size();
     }
 
-    public static void getAvailableTimeSlots(ArrayList<TimeSlots> timeslots, ArrayList<TimeSlots> availableTimeslots){
-        for(TimeSlots ts: timeslots){
-            if (ts.getAssignedTaskSlot()==null){
-                availableTimeslots.add(ts);
-            }
-        }
-    }
-
     public static void addToExistingTimeTable(ArrayList<Task> taskToTry, ArrayList<Task> tasks, ArrayList<TimeSlots> timeslots, HashMap<String, Integer> numSlotsPerWeek){
         //get whatever timeslot is left
         ArrayList<TimeSlots> availableTimeslots = new ArrayList<>();
-        getAvailableTimeSlots(timeslots, availableTimeslots);
+        GetDatabaseTimeSlots.getAvailableTimeSlots(timeslots, availableTimeslots);
 
         if(!callAllocation(taskToTry,availableTimeslots,numSlotsPerWeek)){
             //create a new list of everything so as not to overwrite anything
@@ -125,7 +90,7 @@ public class TestTimeSlotDistributionLogic {
             }
             ArrayList<TimeSlots> timeslotsNew = new ArrayList<>();
             HashMap<String, Integer> numSlotsPerWeekNew = new HashMap<>();
-            addAvailableTimeSlots(timeslotsNew, numSlotsPerWeekNew, testingNumMonths);
+            GetDatabaseTimeSlots.addAvailableTimeSlots(timeslotsNew, numSlotsPerWeekNew);
             System.out.println("trying with all time slots");
             if(callAllocation(allTasksClone,timeslotsNew,numSlotsPerWeekNew)){
                 //copy over
@@ -179,7 +144,7 @@ public class TestTimeSlotDistributionLogic {
         //remake all the available time slots
         numSlotsPerWeek.clear();
         timeslots.clear();
-        addAvailableTimeSlots(timeslots, numSlotsPerWeek, testingNumMonths);
+        GetDatabaseTimeSlots.addAvailableTimeSlots(timeslots, numSlotsPerWeek);
         callAllocation(tasks,timeslots,numSlotsPerWeek);
     }
 
@@ -194,6 +159,7 @@ public class TestTimeSlotDistributionLogic {
         }
 
         Collections.sort(tasks);
+        for(Task t:tasks) System.out.println(t.getName());
         String outputOfAllocation = AllocateTimeSlots.AllocateTime(timeslots,tasks,totalTimeSlotsNeeded,totalTimeSlotsNeeded,0);
         if(outputOfAllocation.equals("1")) {
             for (Task t : tasks) {
@@ -209,7 +175,7 @@ public class TestTimeSlotDistributionLogic {
              */
             String[] outputSplit = outputOfAllocation.split(",");
             if ("-1".equals(outputSplit[1])) {
-                System.out.println("Not Enough Time Slots for all Tasks");
+                System.out.println("Not Enough Time Slots for all Tasks" + outputSplit[0]);
             }
             return false;
         }
@@ -221,7 +187,7 @@ public class TestTimeSlotDistributionLogic {
         //NOTE: only creating time slots for 2 months first
         ArrayList<TimeSlots> timeslots = new ArrayList<>();
         HashMap<String, Integer> numSlotsPerWeek = new HashMap<>();
-        addAvailableTimeSlots(timeslots, numSlotsPerWeek,testingNumMonths);
+        GetDatabaseTimeSlots.addAvailableTimeSlots(timeslots, numSlotsPerWeek);
 
         ArrayList<Task> tasks = new ArrayList<>();
         addTasksFixed(tasks);

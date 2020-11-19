@@ -3,6 +3,7 @@ package distributeTimeSlotsPackage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeMap;
 
 public class ConsolidatedAvailableDays {
     private static ConsolidatedAvailableDays instance = null;
@@ -22,7 +23,7 @@ public class ConsolidatedAvailableDays {
         if(instance==null) instance = new ConsolidatedAvailableDays();
         return instance;
     }
-    public void setAvailableTime(int day, HashMap<Double,Double> timePeriod){
+    public void setAvailableTime(int day, TreeMap<Double,Double> timePeriod){
         availableDays[day].resetAvailableTimes(timePeriod);
     }
 
