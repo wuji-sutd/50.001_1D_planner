@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/backToLogIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/back"
+            />
+
+        <TextView
+            android:id="@+id/createAccountTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="12"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/createAccountTitle"
+            android:textSize="25sp"/>
+
+
+    </LinearLayout>
+
+
+
+    <EditText
+        android:id="@+id/inputNewUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/inputNewUserName"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/inputNewUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/inputNewUserEmail"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/inputNewUserPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/inputNewUserPassword"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/inputNewUserConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/inputNewUserConfirmPassword"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/submitNewUserInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/submit" />
+</LinearLayout>

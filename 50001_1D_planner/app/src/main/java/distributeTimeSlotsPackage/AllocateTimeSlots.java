@@ -30,7 +30,6 @@ public class AllocateTimeSlots {
                     count++;
                     continue;
                 }
-                System.out.println(count +":"+allTasks.get(count).getName());
 
                 allTasks.get(count).assignLatestTimeSlot(currentTimeSlot);
 //                for (Task t : allTasks) {
