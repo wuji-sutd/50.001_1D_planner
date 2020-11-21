@@ -1,15 +1,19 @@
 package distributeTimeSlotsPackage;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import com.example.a50001_1d_planner.Task;
 
 public class AllocateTimeSlots {
-    //things to think about later, if like math sci math because of the randomness merge to math math sci
-
+    private static String TAG = "AllocateTimeSlotsClass";
     public static String AllocateTime(ArrayList<TimeSlots> allTimeSlots, ArrayList<Task> allTasks, int numSlotToFill, int numSlotLeftToFill, int currTimeSlotIndex) {
+        Log.d(TAG,"reached function");
         if (numSlotLeftToFill == 0) {
+            Log.d(TAG,"no slots left to fill");
+
             for (Task t : allTasks) {
                 if (t.completeChecks()!=1) {
                     return t.getTitle() + "," + t.completeChecks();
@@ -18,8 +22,10 @@ public class AllocateTimeSlots {
             return "1";
         }
         for (Task t : allTasks) {
-            if (t.partialChecks()!=1)
+            if (t.partialChecks()!=1) {
+                Log.d(TAG,"partialCheck");
                 return t.getTitle() + "," + t.partialChecks();
+            }
         }
         TimeSlots currentTimeSlot = allTimeSlots.get(currTimeSlotIndex); //get closest time slot to current day
         //Task currentTask = chooseTaskToAssign(allTasks);
@@ -28,21 +34,27 @@ public class AllocateTimeSlots {
         while (currTimeSlotIndex < allTimeSlots.size() - 1) {
             while (count < allTasks.size()) {
                 if (allTasks.get(count).checkAssigned()) {
+                    Log.d(TAG,"all assigned");
                     count++;
                     continue;
                 }
                 //if allocating time slot is before the start date for the task, skip the task
-                if(allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()-allTasks.get(count).getStartDateCal().getTimeInMillis()<0){
+                if(allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()<allTasks.get(count).getStartDateCal().getTimeInMillis()){
+                    Log.d(TAG,"start time interfering");
+                    Log.d(TAG,allTimeSlots.get(currTimeSlotIndex).toString());
+                    Log.d(TAG,allTasks.get(count).getStartDateCal().toString());
+                    Log.d(TAG,allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()+","+allTasks.get(count).getStartDateCal().getTimeInMillis());
                     count++;
                     continue;
                 }
 
                 allTasks.get(count).assignLatestTimeSlot(currentTimeSlot);
-//                for (Task t : allTasks) {
-//                    t.printTimeSlots();
-//                }
+                for (Task t : allTasks) {
+                    t.printTimeSlots(TAG);
+                }
                 isAppropriateTimeSlot = AllocateTime(allTimeSlots, allTasks, numSlotToFill, numSlotLeftToFill - 1,currTimeSlotIndex+1);
                 if (!isAppropriateTimeSlot.equals("1")) {
+                    Log.d(TAG,"not 1: "+isAppropriateTimeSlot);
                     if(isAppropriateTimeSlot.split(",")[1].equals("-3"))
                         return isAppropriateTimeSlot;
 
@@ -59,8 +71,13 @@ public class AllocateTimeSlots {
                 currTimeSlotIndex++;
             }
             for(Task t:allTasks){
-                if(allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()>t.getCal().getTimeInMillis()){
-                    return "all,-3"; //completely failed
+                if(!t.checkAssigned()) {
+                    if (allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis() > t.getCal().getTimeInMillis()) {
+                        Log.d(TAG, "timeslot over due date");
+                        Log.d(TAG, allTimeSlots.get(currTimeSlotIndex).toString());
+                        Log.d(TAG, t.getCal().toString());
+                        return "all,-3"; //completely failed
+                    }
                 }
             }
             currentTimeSlot = allTimeSlots.get(currTimeSlotIndex);

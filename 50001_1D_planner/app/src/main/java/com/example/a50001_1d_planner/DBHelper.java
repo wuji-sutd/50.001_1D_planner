@@ -14,7 +14,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // Database Name and Version
     public static final String DatabaseName = "Calendar.db";
-    public static final int DatabaseVersion = 5;
+    public static final int DatabaseVersion = 6;
 
     // Columns for the User Information Table
     public static final String UserTableName = "UserInfoTable";
@@ -86,7 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
 //        db.execSQL(SQL_CreateUserInfoTable);
 //        db.execSQL(SQL_CreateTaskInfoTable);
 //        db.execSQL(SQL_CreateWorkingHoursInfoTable);
-        onUpgrade(db,0,0);
+        onUpgrade(db,0,2);
     }
 
     @Override

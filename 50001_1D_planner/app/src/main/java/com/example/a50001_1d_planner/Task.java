@@ -14,7 +14,7 @@ import distributeTimeSlotsPackage.TaskSlots;
 import distributeTimeSlotsPackage.TimeSlots;
 
 public class Task implements Comparable<Task> {
-
+    private String TAG = "TaskClass";
     private long taskID;
     private long userID; // Declaring task using user ID in case if two persons have the same name
     private String title;
@@ -63,8 +63,9 @@ public class Task implements Comparable<Task> {
 
         this.time = time;
         this.estHours = Double.parseDouble(estHours);
-        int numOfWeekBetween = (dueDateCal.get(Calendar.WEEK_OF_YEAR) - startDateCal.get(Calendar.WEEK_OF_YEAR) + 52)%52 + 1;
+        int numOfWeekBetween = (int)((dueDateCal.get(Calendar.DAY_OF_YEAR) - startDateCal.get(Calendar.DAY_OF_YEAR) + 365)%365 + 1)/7;
         this.hoursPerWeek = Math.ceil(this.estHours/numOfWeekBetween);
+        this.hoursPerWeek = hoursPerWeek<1? 1:hoursPerWeek;
         this.numTaskSlotsNeeded = (int)this.estHours * 2;
         addTaskSlots();
     }
@@ -77,13 +78,13 @@ public class Task implements Comparable<Task> {
 
     public boolean checkEnoughTime(ArrayList<AvailableDay> availableDays){
         if(availableDays.size()==0) return false;
-        Calendar today = Calendar.getInstance();
+        //Calendar today = Calendar.getInstance();
         int timeFound = 0;
         int tempTimeFound = 0;
-        int numOfWeekBetween = (dueDateCal.get(Calendar.WEEK_OF_YEAR) - today.get(Calendar.WEEK_OF_YEAR) + 52)%52;
+        int numOfWeekBetween = (dueDateCal.get(Calendar.WEEK_OF_YEAR) - startDateCal.get(Calendar.WEEK_OF_YEAR) + 52)%52;
 
         //get number of slots for week 0
-        for(int i =today.get(Calendar.DAY_OF_WEEK);i!=Calendar.SATURDAY+2;i++){
+        for(int i =startDateCal.get(Calendar.DAY_OF_WEEK);i!=Calendar.SATURDAY+2;i++){
             if(i == 8) {
                 tempTimeFound+= availableDays.get(Calendar.SUNDAY-1).getNumberOfSlots()/2;
             } else {
@@ -101,15 +102,15 @@ public class Task implements Comparable<Task> {
         timeFound +=tempTimeFound<hoursPerWeek? tempTimeFound:hoursPerWeek;
         //rest of the weeks
         timeFound+=(numOfWeekBetween-1)>0? (numOfWeekBetween-1)*hoursPerWeek :0;
-//        System.out.println(name);
-//        System.out.println(cal.get(Calendar.WEEK_OF_YEAR));
-//        System.out.println(today.get(Calendar.WEEK_OF_YEAR));
-//        System.out.println(numOfWeekBetween);
-//        System.out.println(timeFound);
-//        System.out.println(timeFound>=hoursNeeded);
+        Log.d(TAG,title);
+        Log.d(TAG,String.valueOf(dueDateCal.get(Calendar.WEEK_OF_YEAR)));
+        Log.d(TAG,String.valueOf(startDateCal.get(Calendar.WEEK_OF_YEAR)));
+        Log.d(TAG,String.valueOf(numOfWeekBetween));
+        Log.d(TAG,String.valueOf(timeFound));
+        Log.d(TAG,String.valueOf(timeFound>=estHours));
         if(timeFound==estHours) {
             tightSchedule =true;
-            System.out.println("tight " + title);
+            Log.d(TAG,"tight " + title);
         }
         return timeFound>=estHours;
     }
@@ -175,7 +176,8 @@ public class Task implements Comparable<Task> {
         }
         for(int numSlots: weeklyHours.values()){
             if(numSlots>hoursPerWeek*2) {
-                //System.out.println("numSlots:"+numSlots);
+                Log.d(TAG,"numSlots:"+numSlots);
+                Log.d(TAG,"hours per week:"+hoursPerWeek);
                 return false;
             }
         }
@@ -207,6 +209,7 @@ public class Task implements Comparable<Task> {
 
     public void remakeTimeSlots(int numMissedSlots){
         estHours = getHoursNeededLeft() + (double)numMissedSlots/2;
+        Calendar today = Calendar.getInstance();
         numTaskSlotsNeeded = (int)estHours*2;
         for(TaskSlots ts: taskSlots){
             if(ts.getTimeSlots()!=null)
@@ -216,6 +219,8 @@ public class Task implements Comparable<Task> {
         for (int i = 0; i < numTaskSlotsNeeded; i++) {
             taskSlots.add(new TaskSlots(title,i));
         }
+        if(today.getTimeInMillis()>startDateCal.getTimeInMillis())
+            startDateCal = today;
     }
 
     //public void setTaskID(long taskID) { this.taskID = taskID; }
@@ -297,8 +302,11 @@ public class Task implements Comparable<Task> {
         for(TaskSlots ts:taskSlots){
             Calendar timeSlotCal = ts.getTimeSlots().getCal();
             formatedTimeSlots.append(timeSlotCal.get(Calendar.YEAR));
+            formatedTimeSlots.append(",");
             formatedTimeSlots.append(timeSlotCal.get(Calendar.MONTH));
+            formatedTimeSlots.append(",");
             formatedTimeSlots.append(timeSlotCal.get(Calendar.DAY_OF_MONTH));
+            formatedTimeSlots.append(",");
             formatedTimeSlots.append(ts.getTimeSlots().getTime());
             formatedTimeSlots.append(";");
         }

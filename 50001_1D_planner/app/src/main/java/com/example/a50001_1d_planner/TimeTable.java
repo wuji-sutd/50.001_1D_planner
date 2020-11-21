@@ -11,15 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import distributeTimeSlotsPackage.AllocateTimeSlots;
 import distributeTimeSlotsPackage.AvailableDay;
-import distributeTimeSlotsPackage.ConsolidatedAvailableDays;
-import distributeTimeSlotsPackage.GetDatabaseTimeSlots;
 import distributeTimeSlotsPackage.TimeSlots;
 
 public class TimeTable extends AppCompatActivity {
@@ -27,13 +24,13 @@ public class TimeTable extends AppCompatActivity {
     private WorkingHoursDAO workingHoursDAO;
     private String TAG = "TimeTableActivity";
 
-    private LinearLayout timeTableDisplayLayout;
+    private TextView timeTableDisplayLayoutTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
-        timeTableDisplayLayout = findViewById(R.id.timeTableDisplay);
+        timeTableDisplayLayoutTextView = findViewById(R.id.timeTableDisplayTextView);
         this.taskDAO = new TaskDAO(this);
         this.workingHoursDAO = new WorkingHoursDAO(this);
         //get all timeslots
@@ -71,25 +68,23 @@ public class TimeTable extends AppCompatActivity {
             }
         }
         if(canDisplay){
+            Log.d(TAG,"can display");
             //display all the time slots
+            String output = "";
             for(Task t: tasks){
                 ArrayList<String> timeslotsStringArray = t.getArrayListOfTimeSlots();
                 for(String timeslotsString: timeslotsStringArray) {
-                    TextView tTimeSlots = new TextView(this);
-                    tTimeSlots.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    timeTableDisplayLayout.addView(tTimeSlots);
+                    output+=timeslotsString+"\n";
                 }
             }
+            Log.d(TAG,"output: " +output);
+            timeTableDisplayLayoutTextView.setText(output);
         } else {
-            TextView t = new TextView(this);
-            t.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            timeTableDisplayLayout.addView(t);
+            timeTableDisplayLayoutTextView.setText("Not enough working hours");
         }
 
         //if all tasks have time slots, show the task for that particular day
         //for now idk what this page does so im just gonna show all the time slots
-
-
         Button menuButton = findViewById(R.id.menu);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,6 +188,9 @@ public class TimeTable extends AppCompatActivity {
                 itr.remove();
             }
         }
+        for(TimeSlots ts :timeslots){
+            Log.d(TAG,ts.toString());
+        }
         return callAllocation(tasks,timeslots,availableDays);
     }
 
@@ -205,6 +203,7 @@ public class TimeTable extends AppCompatActivity {
             Log.d(TAG,"Need more time slots!!!");
             return false;
         }
+        Log.d(TAG,"total time slots needed:"+totalTimeSlotsNeeded);
 
         Collections.sort(tasks);
         for(Task t:tasks) Log.d(TAG,t.getTitle());

@@ -142,7 +142,7 @@ public class TaskDAO {
         String startDate = cursor.getString(5);
         String assignedTimeSlots = cursor.getString(6);
 
-        Task task = new Task(userID, taskID, title, estHours, dueDate, startDate);
+        Task task = new Task(userID, taskID, title, estHours,startDate, dueDate);
 
         //checking if there are already assigned time slots
         Calendar c = Calendar.getInstance();
@@ -159,7 +159,7 @@ public class TaskDAO {
                     if(ts.getCal().getTimeInMillis()==c.getTimeInMillis())
                         foundts = ts;
                 }
-                task.assignLatestTimeSlot(foundts);
+                if(foundts!=null) task.assignLatestTimeSlot(foundts);
             }
         }
         /*

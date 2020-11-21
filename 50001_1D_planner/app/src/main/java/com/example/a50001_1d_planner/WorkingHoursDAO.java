@@ -178,6 +178,7 @@ public class WorkingHoursDAO {
         StringBuilder formattedString = new StringBuilder();
         for(double startTime:timePeriods.keySet()){
             formattedString.append(startTime);
+            formattedString.append("-");
             formattedString.append(timePeriods.get(startTime));
         }
         return formattedString.toString();
