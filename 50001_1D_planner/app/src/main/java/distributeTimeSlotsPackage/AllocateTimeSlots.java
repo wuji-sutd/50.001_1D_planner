@@ -3,6 +3,7 @@ package distributeTimeSlotsPackage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import com.example.a50001_1d_planner.Task;
 
 public class AllocateTimeSlots {
     //things to think about later, if like math sci math because of the randomness merge to math math sci
@@ -11,14 +12,14 @@ public class AllocateTimeSlots {
         if (numSlotLeftToFill == 0) {
             for (Task t : allTasks) {
                 if (t.completeChecks()!=1) {
-                    return t.getName() + "," + t.completeChecks();
+                    return t.getTitle() + "," + t.completeChecks();
                 }
             }
             return "1";
         }
         for (Task t : allTasks) {
             if (t.partialChecks()!=1)
-                return t.getName() + "," + t.partialChecks();
+                return t.getTitle() + "," + t.partialChecks();
         }
         TimeSlots currentTimeSlot = allTimeSlots.get(currTimeSlotIndex); //get closest time slot to current day
         //Task currentTask = chooseTaskToAssign(allTasks);
@@ -27,6 +28,11 @@ public class AllocateTimeSlots {
         while (currTimeSlotIndex < allTimeSlots.size() - 1) {
             while (count < allTasks.size()) {
                 if (allTasks.get(count).checkAssigned()) {
+                    count++;
+                    continue;
+                }
+                //if allocating time slot is before the start date for the task, skip the task
+                if(allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()-allTasks.get(count).getStartDateCal().getTimeInMillis()<0){
                     count++;
                     continue;
                 }

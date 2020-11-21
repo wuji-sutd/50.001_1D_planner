@@ -66,7 +66,7 @@
             android:layout_weight="2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/timePeriod"
+            android:hint="@string/timePeriod"
             />
 
     </LinearLayout>
@@ -94,7 +94,7 @@
             android:layout_weight="2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/timePeriod"
+            android:hint="@string/timePeriod"
             />
 
     </LinearLayout>
@@ -122,7 +122,7 @@
             android:layout_weight="2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/timePeriod"
+            android:hint="@string/timePeriod"
             />
 
     </LinearLayout>
@@ -150,7 +150,7 @@
             android:layout_weight="2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/timePeriod"
+            android:hint="@string/timePeriod"
             />
 
     </LinearLayout>
@@ -178,7 +178,7 @@
             android:layout_weight="2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/timePeriod"
+            android:hint="@string/timePeriod"
             />
 
     </LinearLayout>
@@ -206,7 +206,7 @@
             android:layout_weight="2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/timePeriod"
+            android:hint="@string/timePeriod"
             />
 
     </LinearLayout>
@@ -234,7 +234,7 @@
             android:layout_weight="2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/timePeriod"
+            android:hint="@string/timePeriod"
             />
 
     </LinearLayout>

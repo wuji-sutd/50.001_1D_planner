@@ -14,7 +14,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     // Database Name and Version
     public static final String DatabaseName = "Calendar.db";
-    public static final int DatabaseVersion = 1;
+    public static final int DatabaseVersion = 5;
 
     // Columns for the User Information Table
     public static final String UserTableName = "UserInfoTable";
@@ -30,7 +30,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TaskCol3_Title = "Title";
     public static final String TaskCol4_EstHours = "EstHours";
     public static final String TaskCol5_DueDate = "DueDate";
-    public static final String TaskCol6_WeeklyR = "WeeklyRecurring";
+    public static final String TaskCol6_StartDate = "StartDate";
+    public static final String TaskCol7_AssignedTimeSlots = "AssignedTimeSlots";
+
+    // Columns for the Working Hours Information Table
+    public static final String WorkingHoursTableName = "WorkingHoursInfoTable";
+    public static final String WHCol1_WdID = "WorkingDayID";
+    public static final String WHCol2_UserID = "WorkingDayUserID"; // The ID of user who created the task
+    public static final String WHCol3_WDDayOfWeek = "DayOfWeek";
+    public static final String WHCol4_AvailableHours = "AvailableHours";
+    public static final String WHCol5_HasChanged = "HasChanged";
 
     // SQL Statement for the User Information Table Creation
     private static final String SQL_CreateUserInfoTable = "CREATE TABLE "
@@ -49,7 +58,17 @@ public class DBHelper extends SQLiteOpenHelper {
             + TaskCol3_Title + " TEXT NOT NULL, "
             + TaskCol4_EstHours + " TEXT NOT NULL, "
             + TaskCol5_DueDate + " TEXT NOT NULL, "
-            + TaskCol6_WeeklyR + " TEXT NOT NULL "
+            + TaskCol6_StartDate + " TEXT NOT NULL, "
+            + TaskCol7_AssignedTimeSlots + " TEXT NOT NULL"
+            + ");";
+
+    private static final String SQL_CreateWorkingHoursInfoTable = "CREATE TABLE "
+            + WorkingHoursTableName + "("
+            + WHCol1_WdID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + WHCol2_UserID + " INTEGER NOT NULL, "
+            + WHCol3_WDDayOfWeek + " INTEGER NOT NULL, "
+            + WHCol4_AvailableHours + " TEXT NOT NULL, "
+            + WHCol5_HasChanged + " INTEGER NOT NULL"
             + ");";
 
     // Constructors
@@ -64,20 +83,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CreateUserInfoTable);
-        db.execSQL(SQL_CreateTaskInfoTable);
+//        db.execSQL(SQL_CreateUserInfoTable);
+//        db.execSQL(SQL_CreateTaskInfoTable);
+//        db.execSQL(SQL_CreateWorkingHoursInfoTable);
+        onUpgrade(db,0,0);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading the database from version " + oldVersion + " to " + newVersion);
-
         // Clear all data
         db.execSQL("DROP TABLE IF EXISTS " + UserTableName);
         db.execSQL("DROP TABLE IF EXISTS " + TaskTableName);
-
+        db.execSQL("DROP TABLE IF EXISTS " + WorkingHoursTableName);
         // Recreate the tables
-        onCreate(db);
+        db.execSQL(SQL_CreateUserInfoTable);
+        db.execSQL(SQL_CreateTaskInfoTable);
+        db.execSQL(SQL_CreateWorkingHoursInfoTable);
+        //onCreate(db);
     }
 
     /*// Insert New User Information

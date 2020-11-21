@@ -10,14 +10,20 @@ public class AvailableDay {
     private TreeMap<Double,Double> availableTimes;
     //private ArrayList<TimeSlots> timeSlots = new ArrayList<>();
     private int day;
+    private long availableDayID = 0;
+    private long userID = 0;
 
     public AvailableDay(int day){
         this.day = day;
         this.availableTimes = new TreeMap<>();
     }
-    public AvailableDay(int day, TreeMap<Double,Double> availableTimes){
+
+    public AvailableDay( long userID, long availableDayID, int day, TreeMap<Double,Double> availableTimes){
+        this.availableDayID =availableDayID;
+        this.userID = userID;
         this.day = day;
         this.availableTimes = availableTimes;
+        checkConflict();
     }
 
     public void addAvailableTime(double startTime, double endTime){
@@ -71,5 +77,11 @@ public class AvailableDay {
         return day;
     }
 
+    public long getAvailableDayID() {
+        return availableDayID;
+    }
 
+    public long getUserID() {
+        return userID;
+    }
 }

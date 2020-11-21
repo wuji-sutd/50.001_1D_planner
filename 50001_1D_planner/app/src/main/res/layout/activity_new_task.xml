@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/cancel"></Button>
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/date"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/save"></Button>
+            android:text="@string/save" />
 
     </LinearLayout>
 
@@ -83,6 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:inputType="numberDecimal"
             android:hint="@string/inputEstHours" />
 
     </LinearLayout>
@@ -108,7 +109,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/inputDueDate" />
+            android:inputType="date"
+            android:hint="DD/MM/YYYY" />
 
     </LinearLayout>
 
@@ -118,23 +120,55 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/weeklyRecurring"
+        <CheckBox android:id="@+id/inputweeklyRecurring"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="left"
-            android:text="@string/weeklyRecurring"
-            android:textSize="20sp" />
+            android:text="Weekly Recurring" />
 
-        <EditText
-            android:id="@+id/inputWeeklyRecurring"
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recurrenceDaySelection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <RadioGroup
+            android:id ="@+id/recurrenceDaySelection_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <RadioButton android:id="@+id/radio_mon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Mon" />
+            <RadioButton android:id="@+id/radio_tues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tues" />
+            <RadioButton android:id="@+id/radio_wed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wed" />
+            <RadioButton android:id="@+id/radio_thurs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thurs" />
+            <RadioButton android:id="@+id/radio_fri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fri" />
+            <RadioButton android:id="@+id/radio_sat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/yesOrNo" />
-
+            android:text="Sat" />
+            <RadioButton android:id="@+id/radio_sun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sun" />
+        </RadioGroup>
     </LinearLayout>
 
 

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.TreeMap;
 
+//NOT USING THIS CLASS
 public class ConsolidatedAvailableDays {
     private static ConsolidatedAvailableDays instance = null;
     private AvailableDay[] availableDays = new AvailableDay[8];
