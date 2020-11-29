@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import distributeTimeSlotsPackage.AvailableDay;
 import distributeTimeSlotsPackage.ConsolidatedAvailableDays;
@@ -29,6 +30,8 @@ public class Task implements Comparable<Task> {
     public int numTaskSlotsNeeded;
     public boolean tightSchedule = false;
     private ArrayList<TaskSlots> taskSlots = new ArrayList<>();
+    //number of time slots that were found to be over in the db but hasn't been reflected for some reason
+    private int tempOverTimeSlotsDB;
 
     public Task(long userID, long taskID, String title, String estHours, String startDate, String dueDate){
         assignFromConstructor(userID, taskID, title, estHours, startDate, dueDate, 23.30);
@@ -42,8 +45,7 @@ public class Task implements Comparable<Task> {
         this.userID = userID;
         this.title = title;
         this.taskID = taskID;
-        dueDateCal = Calendar.getInstance();
-        Calendar today = Calendar.getInstance();
+        dueDateCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         this.dueDate = dueDate;
         String[] dueDateComponents = dueDate.split("/"); //DD/MM/YYYY
         int hour = (int) time;
@@ -52,14 +54,19 @@ public class Task implements Comparable<Task> {
         dueDateCal.set(Integer.parseInt(dueDateComponents[2]),Integer.parseInt(dueDateComponents[1]),Integer.parseInt(dueDateComponents[0]), hour, min);
         dueDateCal.set(Calendar.HOUR_OF_DAY,hour);
 
-        startDateCal = Calendar.getInstance();
+        startDateCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+        Log.d(TAG,"start date: "+startDateCal.getTime().toString());
         this.startDate = startDate;
         String[] startDateComponents = startDate.split("/"); //DD/MM/YYYY
-        hour = (int) time;
-        min = time-hour ==0? 0:30;
+
         //set(int year, int month, int date, int hourOfDay, int minute)
-        startDateCal.set(Integer.parseInt(startDateComponents[2]),Integer.parseInt(startDateComponents[1]),Integer.parseInt(startDateComponents[0]), hour, min);
-        startDateCal.set(Calendar.HOUR_OF_DAY,hour);
+        startDateCal.set(Integer.parseInt(startDateComponents[2]),Integer.parseInt(startDateComponents[1]),Integer.parseInt(startDateComponents[0]), 0, 0);
+        if(startDateCal.get(Calendar.DAY_OF_YEAR)==today.get(Calendar.DAY_OF_YEAR)) {
+            startDateCal.set(Calendar.HOUR_OF_DAY, today.get(Calendar.HOUR_OF_DAY));
+            startDateCal.set(Calendar.MINUTE, today.get(Calendar.MINUTE)==0 ? 0:30);
+
+        }
 
         this.time = time;
         this.estHours = Double.parseDouble(estHours);
@@ -209,7 +216,7 @@ public class Task implements Comparable<Task> {
 
     public void remakeTimeSlots(int numMissedSlots){
         estHours = getHoursNeededLeft() + (double)numMissedSlots/2;
-        Calendar today = Calendar.getInstance();
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         numTaskSlotsNeeded = (int)estHours*2;
         for(TaskSlots ts: taskSlots){
             if(ts.getTimeSlots()!=null)
@@ -254,7 +261,8 @@ public class Task implements Comparable<Task> {
     public Calendar getStartDateCal() { return startDateCal; }
 
     public double getHoursNeededLeft(){
-        Calendar today = Calendar.getInstance();
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+        if(dueDateCal.getTimeInMillis()<today.getTimeInMillis()) return 0; //if over already, return 0
         double hoursLeft = estHours;
         for(TaskSlots ts: taskSlots){
             if(ts.getTimeSlots()!=null)
@@ -262,6 +270,7 @@ public class Task implements Comparable<Task> {
                     hoursLeft-=0.5;
                 }
         }
+        hoursLeft-=(tempOverTimeSlotsDB*0.5);
         return hoursLeft;
     }
 
@@ -271,6 +280,10 @@ public class Task implements Comparable<Task> {
 
     public double getTime() {
         return time;
+    }
+
+    public ArrayList<TaskSlots> getTaskSlots() {
+        return taskSlots;
     }
 
     @Override
@@ -321,6 +334,10 @@ public class Task implements Comparable<Task> {
             out.add(title+" : "+ ts.getTimeSlots().toString());
         }
         return out;
+    }
+
+    public void addToTempOverTimeSlotsDB(){
+        tempOverTimeSlotsDB+=1;
     }
 
 }

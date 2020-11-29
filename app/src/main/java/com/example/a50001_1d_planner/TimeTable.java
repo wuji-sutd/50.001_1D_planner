@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -20,38 +21,43 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TimeZone;
 
 import distributeTimeSlotsPackage.AllocateTimeSlots;
 import distributeTimeSlotsPackage.AvailableDay;
+import distributeTimeSlotsPackage.TaskSlots;
 import distributeTimeSlotsPackage.TimeSlots;
 
 public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private TaskDAO taskDAO;
     private WorkingHoursDAO workingHoursDAO;
     private String TAG = "TimeTableActivity";
+    private ArrayList<Task> tasks;
+    private boolean canDisplay;
 
-    private TextView timeTableDisplayLayoutTextView;
+    private LinearLayout timeTableDisplayLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
-        //timeTableDisplayLayoutTextView = findViewById(R.id.timeTableDisplayTextView);
+        timeTableDisplayLayout = findViewById(R.id.timeTableTaskDisplay);
         this.taskDAO = new TaskDAO(this);
         this.workingHoursDAO = new WorkingHoursDAO(this);
+        tasks = new ArrayList<>();
         //get all timeslots
         ArrayList<TimeSlots> timeslots = new ArrayList<>();
         //get all tasks
-        ArrayList<Task> tasks = taskDAO.getAllTasks(timeslots);
+        tasks = taskDAO.getAllTasks(timeslots);
         HashMap<String, Integer> numSlotsPerWeek = new HashMap<>();
         workingHoursDAO.getAllAvailableTimeSlots(timeslots,numSlotsPerWeek);
         ArrayList<AvailableDay> recentlyUpdatedDays = workingHoursDAO.getRecentlyUpdatedAvailableDays();
         ArrayList<AvailableDay> availableDays = workingHoursDAO.getAllAvailableDays();
-        boolean canDisplay = true;
+        canDisplay = true;
 
         //check if any of the working days were updated first
         if(recentlyUpdatedDays.size()>0){
-            if(!changeAvailableDaysFixed(tasks, timeslots,availableDays)) canDisplay =false;
+            if(!changeAvailableDaysFixed(timeslots,availableDays)) canDisplay =false;
             else{
                 for(AvailableDay availDay: recentlyUpdatedDays){
                     workingHoursDAO.removeHasChangedAvailableDays(availDay);
@@ -68,26 +74,13 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
                 }
             }
             if (needsAssigning) {
-                if (!addNewTaskAfter(tasks, unassignedTasks, timeslots, availableDays,numSlotsPerWeek)) {
+                if (!addNewTaskAfter(unassignedTasks, timeslots, availableDays,numSlotsPerWeek)) {
                     canDisplay = false;
                 }
             }
         }
-        if(canDisplay){
-            Log.d(TAG,"can display");
-            //display all the time slots
-            String output = "";
-            for(Task t: tasks){
-                ArrayList<String> timeslotsStringArray = t.getArrayListOfTimeSlots();
-                for(String timeslotsString: timeslotsStringArray) {
-                    output+=timeslotsString+"\n";
-                }
-            }
-            Log.d(TAG,"output: " +output);
-            //timeTableDisplayLayoutTextView.setText(output);
-        } else {
-            //timeTableDisplayLayoutTextView.setText("Not enough working hours");
-        }
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+        displayDayTasks(today.get(Calendar.YEAR),today.get(Calendar.MONTH),today.get(Calendar.DAY_OF_MONTH));
 
         //if all tasks have time slots, show the task for that particular day
         //for now idk what this page does so im just gonna show all the time slots
@@ -120,19 +113,79 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
     }
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
         TextView textView = findViewById(R.id.textView);
         textView.setText(currentDateString);
+        displayDayTasks(year,month,dayOfMonth);
+    }
+    public void displayDayTasks(int curYear, int curMonth, int curDay){
+        timeTableDisplayLayout.removeAllViews();
+        if(canDisplay) {
+            Log.d(TAG,"can display");
+            //display all the time slots
+            String output = "";
+            for(Task t: tasks){
+                ArrayList<String> timeslotsStringArray = t.getArrayListOfTimeSlots();
+                for(String timeslotsString: timeslotsStringArray) {
+                    output+=timeslotsString+"\n";
+                }
+            }
+            Log.d(TAG,"output: " +output);
+            ArrayList<TaskSlots> currDayTaskSlots = new ArrayList<>();
+            for (Task t : tasks) {
+                for (TaskSlots ts : t.getTaskSlots()) {
+                    Calendar taskSlotCal = ts.getTimeSlots().getCal();
+                    if (taskSlotCal.get(Calendar.YEAR) == curYear &&
+                            taskSlotCal.get(Calendar.MONTH) == curMonth &&
+                            taskSlotCal.get(Calendar.DAY_OF_MONTH) == curDay) {
+                        currDayTaskSlots.add(ts);
+                    }
+                }
+            }
+            if(currDayTaskSlots.size()>0) {
+                for (TaskSlots ts : currDayTaskSlots) {
+                    LinearLayout taskLinearLayout = new LinearLayout(this);
+                    TextView taskSlotTextView = new TextView(this);
+                    taskSlotTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                            LayoutParams.WRAP_CONTENT));
+                    taskSlotTextView.setText(ts.toString());
+                    taskSlotTextView.setTextSize(20);
+                    taskSlotTextView.setPadding(20, 20, 20, 20);// in pixels (left, top, right, bottom)
+                    taskLinearLayout.addView(taskSlotTextView);
+                    timeTableDisplayLayout.addView(taskLinearLayout);
+                }
+            }
+            else{
+                TextView taskSlotTextView = new TextView(this);
+                taskSlotTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT));
+                taskSlotTextView.setText("No tasks assigned today");
+                taskSlotTextView.setTextSize(20);
+                taskSlotTextView.setPadding(20, 20, 20, 20);// in pixels (left, top, right, bottom)
+                timeTableDisplayLayout.addView(taskSlotTextView);
+            }
+
+        }
+        else{
+            TextView taskSlotTextView = new TextView(this);
+            taskSlotTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT));
+            taskSlotTextView.setText("Please set more working hours");
+            taskSlotTextView.setTextSize(10);
+            taskSlotTextView.setPadding(20, 20, 20, 20);// in pixels (left, top, right, bottom)
+            timeTableDisplayLayout.addView(taskSlotTextView);
+        }
+
     }
 
-    public class DatePickerFragment extends DialogFragment {
+    public static class DatePickerFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Calendar c = Calendar.getInstance();
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
@@ -142,14 +195,14 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
 
 
     //after the initial setting up, the user adds a new task
-    public boolean addNewTaskAfter(ArrayList<Task> tasks, ArrayList<Task> newTasks, ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays, HashMap<String, Integer> numSlotsPerWeek){
+    public boolean addNewTaskAfter(ArrayList<Task> newTasks, ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays, HashMap<String, Integer> numSlotsPerWeek){
         Log.d(TAG,"trying with available first");
-        return addToExistingTimeTable(newTasks, tasks, timeslots, availableDays, numSlotsPerWeek);
+        return addToExistingTimeTable(newTasks, timeslots, availableDays, numSlotsPerWeek);
     }
 
     //this should be wherever the user adds or edits a task and when task cannot be finished on time
-    public boolean checkHoursPerWeekEnough(ArrayList<Task> tasks, ArrayList<AvailableDay> availableDays){
-        for(Task t:tasks){
+    public boolean checkHoursPerWeekEnough(ArrayList<Task> tasksToCheck, ArrayList<AvailableDay> availableDays){
+        for(Task t:tasksToCheck){
             if(!t.checkEnoughTime(availableDays)){
                 Log.d(TAG,t.getTitle() + ": the number of hours a week is insufficient to complete the task");
                 return false;
@@ -158,12 +211,12 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
         return true;
     }
 
-    public boolean checkEnoughTimeSlots(ArrayList<Task> tasks, ArrayList<TimeSlots> timeslots, int totalTimeSlotsNeeded, ArrayList<AvailableDay> availableDays){
-        if(!checkHoursPerWeekEnough(tasks,availableDays)) return false;
+    public boolean checkEnoughTimeSlots(ArrayList<Task> tasksToCheck, ArrayList<TimeSlots> timeslots, int totalTimeSlotsNeeded, ArrayList<AvailableDay> availableDays){
+        if(!checkHoursPerWeekEnough(tasksToCheck,availableDays)) return false;
         return totalTimeSlotsNeeded<=timeslots.size();
     }
 
-    public boolean addToExistingTimeTable(ArrayList<Task> taskToTry, ArrayList<Task> tasks, ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays, HashMap<String, Integer> numSlotsPerWeek){
+    public boolean addToExistingTimeTable(ArrayList<Task> taskToTry, ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays, HashMap<String, Integer> numSlotsPerWeek){
         //get whatever timeslot is left
         ArrayList<TimeSlots> availableTimeslots = new ArrayList<>();
         workingHoursDAO.getAvailableTimeSlots(timeslots, availableTimeslots);
@@ -177,7 +230,9 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             }
             //remove any tasks that are already over
             for (Iterator<Task> itr = allTasksClone.iterator(); itr.hasNext();) {
-                if (itr.next().getEstHours()==0) {
+                Task curTask = itr.next();
+                if (curTask.getEstHours()==0) {
+                    taskDAO.deleteTask(curTask);
                     itr.remove();
                 }
             }
@@ -197,7 +252,7 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
     }
 
     //TODO: implement this when there is a button to say that a task is not completed
-    public void taskNotCompleted(String notCompletedTaskName, int numSlotsMissed, ArrayList<Task> tasks, ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays,HashMap<String, Integer> numSlotsPerWeek){
+    public void taskNotCompleted(String notCompletedTaskName, int numSlotsMissed, ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays,HashMap<String, Integer> numSlotsPerWeek){
         ArrayList<Task> incompleteTask = new ArrayList<>();
         for(Task t :tasks){
             if(t.getTitle().equals(notCompletedTaskName)){
@@ -210,18 +265,19 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             Log.d(TAG,"cannot find task");
             return;
         }
-        addToExistingTimeTable(incompleteTask, tasks, timeslots, availableDays, numSlotsPerWeek);
+        addToExistingTimeTable(incompleteTask, timeslots, availableDays, numSlotsPerWeek);
     }
 
-    //TODO: implement this when I figure out how to tell if the working hours are changed
-    public boolean changeAvailableDaysFixed(ArrayList<Task> tasks, ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays){
+    public boolean changeAvailableDaysFixed(ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays){
         Log.d(TAG,"\n\nTesting changeAvailableDaysFixed");
         for(Task task:tasks){
             task.remakeTimeSlots();
         }
         //remove any tasks that are already over
         for (Iterator<Task> itr = tasks.iterator(); itr.hasNext();) {
-            if (itr.next().getEstHours()==0) {
+            Task curTask = itr.next();
+            if (curTask.getEstHours()==0) {
+                taskDAO.deleteTask(curTask);
                 itr.remove();
             }
         }
@@ -231,23 +287,27 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
         return callAllocation(tasks,timeslots,availableDays);
     }
 
-    public boolean callAllocation(ArrayList<Task> tasks,ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays){
+    public boolean callAllocation(ArrayList<Task> allocationTasks,ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays){
         int totalTimeSlotsNeeded = 0;
-        for(Task t:tasks){
+        for(Task t:allocationTasks){
             totalTimeSlotsNeeded +=t.getNumTaskSlotsNeeded();
         }
-        if(!checkEnoughTimeSlots(tasks,timeslots, totalTimeSlotsNeeded,availableDays)) {
+        if(!checkEnoughTimeSlots(allocationTasks,timeslots, totalTimeSlotsNeeded,availableDays)) {
             Log.d(TAG,"Need more time slots!!!");
             return false;
         }
         Log.d(TAG,"total time slots needed:"+totalTimeSlotsNeeded);
 
-        Collections.sort(tasks);
-        for(Task t:tasks) Log.d(TAG,t.getTitle());
-        String outputOfAllocation = AllocateTimeSlots.AllocateTime(timeslots,tasks,totalTimeSlotsNeeded,totalTimeSlotsNeeded,0);
+        Collections.sort(allocationTasks);
+        for(Task t:allocationTasks) {
+            Log.d(TAG,t.getTitle());
+            Log.d(TAG,"startTime: "+t.getStartDateCal().getTime().toString());
+        }
+        String outputOfAllocation = AllocateTimeSlots.AllocateTime(timeslots,allocationTasks,totalTimeSlotsNeeded,totalTimeSlotsNeeded,0);
         if(outputOfAllocation.equals("1")) {
             //update database
-            for (Task t : tasks) {
+            for (Task t : allocationTasks) {
+                Log.d(TAG,"allocated");
                 t.printTimeSlots(TAG);
                 taskDAO.updateTaskTimeSlot(t);
             }
@@ -266,4 +326,6 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             return false;
         }
     }
+
+
 }

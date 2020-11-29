@@ -3,6 +3,7 @@ package distributeTimeSlotsPackage;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class TimeSlots {
     public static double  duration = 0.5; //0.5h == 30min
@@ -11,7 +12,7 @@ public class TimeSlots {
     private TaskSlots assignedTaskSlot = null;
 
     public TimeSlots(int year, int month, int date, double time){
-        cal = Calendar.getInstance();
+        cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         //set(int year, int month, int date, int hourOfDay, int minute)
         this.time = time;
         int hour = (int) time;
@@ -49,5 +50,20 @@ public class TimeSlots {
 
     public double getTime() {
         return time;
+    }
+
+    public String getStartToEndTime(){
+        double startMin = time-(int)time;
+        String startTime;
+        String endTime;
+        if(startMin==0){
+            startTime = String.format(Locale.ENGLISH,"%02d:00", (int)time);
+            endTime = String.format(Locale.ENGLISH,"%02d:30", (int)time);
+        }
+        else{
+            startTime = String.format(Locale.ENGLISH,"%02d:30", (int)time);
+            endTime = String.format(Locale.ENGLISH,"%02d:00", (int)time+1);
+        }
+        return startTime + " - " + endTime;
     }
 }

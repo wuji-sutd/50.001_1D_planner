@@ -12,6 +12,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import distributeTimeSlotsPackage.TaskSlots;
 import distributeTimeSlotsPackage.TimeSlots;
@@ -145,7 +146,7 @@ public class TaskDAO {
         Task task = new Task(userID, taskID, title, estHours,startDate, dueDate);
 
         //checking if there are already assigned time slots
-        Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         if(!assignedTimeSlots.isEmpty()){
             String[] timeslotsDetails = assignedTimeSlots.split(";");
             for(int j = 0; j<timeslotsDetails.length;j++){
@@ -160,6 +161,7 @@ public class TaskDAO {
                         foundts = ts;
                 }
                 if(foundts!=null) task.assignLatestTimeSlot(foundts);
+                else task.addToTempOverTimeSlotsDB();
             }
         }
         /*

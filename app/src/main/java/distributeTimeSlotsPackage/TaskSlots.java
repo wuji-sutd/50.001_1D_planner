@@ -32,5 +32,9 @@ public class TaskSlots {
         }
         return timeSlots.toString();
     }
+    @Override
+    public String toString(){
+        return timeSlots.getStartToEndTime()+" " + nameTask;
+    }
 
 }

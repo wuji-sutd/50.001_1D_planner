@@ -39,10 +39,10 @@ public class AllocateTimeSlots {
                     continue;
                 }
                 //if allocating time slot is before the start date for the task, skip the task
-                if(allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()<allTasks.get(count).getStartDateCal().getTimeInMillis()){
+                if(allTimeSlots.get(currTimeSlotIndex).getCal().getTime().before(allTasks.get(count).getStartDateCal().getTime())){
                     Log.d(TAG,"start time interfering");
                     Log.d(TAG,allTimeSlots.get(currTimeSlotIndex).toString());
-                    Log.d(TAG,allTasks.get(count).getStartDateCal().toString());
+                    Log.d(TAG,allTasks.get(count).getStartDateCal().getTime().toString());
                     Log.d(TAG,allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()+","+allTasks.get(count).getStartDateCal().getTimeInMillis());
                     count++;
                     continue;
@@ -72,10 +72,10 @@ public class AllocateTimeSlots {
             }
             for(Task t:allTasks){
                 if(!t.checkAssigned()) {
-                    if (allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis() > t.getCal().getTimeInMillis()) {
+                    if (allTimeSlots.get(currTimeSlotIndex).getCal().getTime().after(t.getCal().getTime())){
                         Log.d(TAG, "timeslot over due date");
                         Log.d(TAG, allTimeSlots.get(currTimeSlotIndex).toString());
-                        Log.d(TAG, t.getCal().toString());
+                        Log.d(TAG, t.getCal().getTime().toString());
                         return "all,-3"; //completely failed
                     }
                 }

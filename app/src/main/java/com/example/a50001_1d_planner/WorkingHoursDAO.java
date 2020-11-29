@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.TreeMap;
 
 import distributeTimeSlotsPackage.AvailableDay;
@@ -132,9 +133,9 @@ public class WorkingHoursDAO {
 
     //because there are 2 arrayLists to return, just give the arrayList to return in advance
     public void getAllAvailableTimeSlots(ArrayList<TimeSlots> timeslots, HashMap<String, Integer> numSlotsPerWeek){
-        Calendar nMonthsFromNow = Calendar.getInstance();
+        Calendar nMonthsFromNow = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         nMonthsFromNow.add(Calendar.MONTH,NUMBER_OF_MONTHS);
-        Calendar currentDay = Calendar.getInstance();
+        Calendar currentDay = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         ArrayList<AvailableDay> availableDays = getAllAvailableDays();
         if(availableDays.size()==0) return;
         //go from today to n months from now

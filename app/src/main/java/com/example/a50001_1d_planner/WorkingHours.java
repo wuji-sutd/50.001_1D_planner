@@ -8,10 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.TreeMap;
 
 import distributeTimeSlotsPackage.AvailableDay;
@@ -19,17 +23,6 @@ import distributeTimeSlotsPackage.AvailableDay;
 public class WorkingHours extends AppCompatActivity {
     private String TAG = "WorkingHoursActivity";
     private WorkingHoursDAO workingHoursDAO;
-    /*
-    private Button backToMenu;
-    private Button saveWorkingHours;
-    private EditText monHours;
-    private EditText tuesHours;
-    private EditText wedHours;
-    private EditText thursHours;
-    private EditText friHours;
-    private EditText satHours;
-    private EditText sunHours;
-    */
     private TimePicker Mondaystart;
     private TimePicker Mondayend;
     private TimePicker Tuesdaystart;
@@ -45,7 +38,6 @@ public class WorkingHours extends AppCompatActivity {
     private TimePicker Sundaystart;
     private TimePicker Sundayend;
 
-    //TODO: if the working hours exist in the DB, show it onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,38 +47,55 @@ public class WorkingHours extends AppCompatActivity {
 
         this.Mondaystart = findViewById(R.id.Mondaystart);
         this.Mondaystart.setIs24HourView(true);
+        setTimePickerInterval(Mondaystart);
         this.Mondayend = findViewById(R.id.Mondayend);
         this.Mondayend.setIs24HourView(true);
+        setTimePickerInterval(Mondayend);
 
         this.Tuesdaystart = findViewById(R.id.Tuesdaystart);
         this.Tuesdaystart.setIs24HourView(true);
+        setTimePickerInterval(Tuesdaystart);
         this.Tuesdayend = findViewById(R.id.Tuesdayend);
         this.Tuesdayend.setIs24HourView(true);
+        setTimePickerInterval(Tuesdayend);
 
         this.Wednesdaystart = findViewById(R.id.Wednesdaystart);
         this.Wednesdaystart.setIs24HourView(true);
+        setTimePickerInterval(Wednesdaystart);
         this.Wednesdayend = findViewById(R.id.Wednesdayend);
         this.Wednesdayend.setIs24HourView(true);
+        setTimePickerInterval(Wednesdayend);
+
 
         this.Thursdaystart = findViewById(R.id.Thursdaystart);
         this.Thursdaystart.setIs24HourView(true);
+        setTimePickerInterval(Thursdaystart);
         this.Thursdayend = findViewById(R.id.Thursdayend);
         this.Thursdayend.setIs24HourView(true);
+        setTimePickerInterval(Thursdayend);
+
 
         this.Fridaystart = findViewById(R.id.Fridaystart);
         this.Fridaystart.setIs24HourView(true);
+        setTimePickerInterval(Fridaystart);
         this.Fridayend = findViewById(R.id.Fridayend);
         this.Fridayend.setIs24HourView(true);
+        setTimePickerInterval(Fridayend);
 
         this.Saturdaystart = findViewById(R.id.Saturdaystart);
         this.Saturdaystart.setIs24HourView(true);
+        setTimePickerInterval(Saturdaystart);
         this.Saturdayend = findViewById(R.id.Saturdayend);
         this.Saturdayend.setIs24HourView(true);
+        setTimePickerInterval(Saturdayend);
+
 
         this.Sundaystart = findViewById(R.id.Sundaystart);
         this.Sundaystart.setIs24HourView(true);
+        setTimePickerInterval(Sundaystart);
         this.Sundayend = findViewById(R.id.Sundayend);
         this.Sundayend.setIs24HourView(true);
+        setTimePickerInterval(Sundayend);
 
         //get the existing working hours, this is assuming one time slot only
         ArrayList<AvailableDay> availableDayArrayList = workingHoursDAO.getAllAvailableDays();
@@ -97,12 +106,12 @@ public class WorkingHours extends AppCompatActivity {
                     for(double key: availableTimes.keySet()){
                         int hour = (int)key;
                         getCorrespondingDayEditText(availableDay.getDay(),true).setCurrentHour(hour);
-                        getCorrespondingDayEditText(availableDay.getDay(),true).setCurrentMinute((key-hour)==0? 0:30);
+                        getCorrespondingDayEditText(availableDay.getDay(),true).setCurrentMinute((key-hour)==0? 0:1);
 
                         double endTime = availableTimes.get(key);
                         hour = (int)endTime;
                         getCorrespondingDayEditText(availableDay.getDay(),false).setCurrentHour(hour);
-                        getCorrespondingDayEditText(availableDay.getDay(),false).setCurrentMinute((endTime-hour)==0? 0:30);
+                        getCorrespondingDayEditText(availableDay.getDay(),false).setCurrentMinute((endTime-hour)==0? 0:1);
                     }
                 }
             }
@@ -118,6 +127,7 @@ public class WorkingHours extends AppCompatActivity {
         });
 
         Button saveWorkingHours = findViewById(R.id.saveWorkingHours);
+
         saveWorkingHours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,11 +153,12 @@ public class WorkingHours extends AppCompatActivity {
         int startMin = dayStart.getCurrentMinute();
         int endHour= dayEnd.getCurrentHour();
         int endMin = dayEnd.getCurrentMinute();
-        Log.d(TAG,String.format("%d:%d-%d:%d",startHour,startMin,endHour,endMin));
+        //Log.d(TAG,String.format("%d:%d-%d:%d",startHour,startMin,endHour,endMin));
         String startMinString = startMin==0? "0":"5";
         String startTime = startHour+"."+startMinString;
         String endMinString = endMin==0? "0":"5";
         String endTime = endHour+"."+endMinString;
+        Log.d(TAG,startTime + "-" + endTime);
         return startTime + "-" + endTime;
     }
 
@@ -174,6 +185,27 @@ public class WorkingHours extends AppCompatActivity {
             default:
                 if(isStart) return Sundaystart;
                 else return Saturdayend;
+        }
+    }
+
+    //only allow 30min intervals
+    private void setTimePickerInterval(TimePicker timePicker) {
+        try {
+            Class<?> classForid = Class.forName("com.android.internal.R$id"); //get the internal class
+            Field field = classForid.getField("minute"); //get the public member minute of the class
+            NumberPicker  minutePicker = timePicker.findViewById(field.getInt(null));
+
+            minutePicker.setMinValue(0);
+            minutePicker.setMaxValue(1);
+            List<String> displayedValues = new ArrayList<String>();
+            for (int i = 0; i < 60; i += 30) {
+                displayedValues.add(String.format(Locale.ENGLISH,"%02d", i));
+            }
+            minutePicker.setDisplayedValues(displayedValues
+                    .toArray(new String[0]));
+            minutePicker.setWrapSelectorWheel(true);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

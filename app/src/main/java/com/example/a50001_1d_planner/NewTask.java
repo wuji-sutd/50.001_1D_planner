@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class NewTask extends AppCompatActivity {
     private final String TAG = "NewTaskActivity";
@@ -52,8 +53,8 @@ public class NewTask extends AppCompatActivity {
     private RadioButton radioSun;
 
     private int dueYear =0;
-    Calendar today = Calendar.getInstance();
-    Calendar dueDateCal = Calendar.getInstance();
+    Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+    Calendar dueDateCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class NewTask extends AppCompatActivity {
         setContentView(R.layout.activity_new_task);
 
         setUpPopUpWindow(0.9,0.7);
-
+        Log.d(TAG,"calendar time" + today.getTime().toString());
         weeklyRecSwitch = (Switch)findViewById(R.id.weeklyRecSwitch);
         weeklyRecSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -86,11 +87,13 @@ public class NewTask extends AppCompatActivity {
         this.estMinInput = findViewById(R.id.inputEstMin);
         //minpicker = new String[] {"00", "30"};
         //this.estMinInput.setDisplayedValues(minpicker);
-        this.estMinInput.setMaxValue(59);
-        this.estMinInput.setMinValue(00);
+        this.estMinInput.setMaxValue(1);
+        this.estMinInput.setMinValue(0);
+        String[] minuteValues = {"00","30"};
+        estMinInput.setDisplayedValues(minuteValues);
 
         this.dueDateInput = findViewById(R.id.inputNewTaskDueDate);
-        Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -141,7 +144,10 @@ public class NewTask extends AppCompatActivity {
            public void onClick(View v) {
                long userID = 0; // Need a method to find which user created the task
                String title = titleInput.getText().toString();
+               Log.d(TAG,String.valueOf(estMinInput.getValue()));
                String estHours = String.valueOf(estHoursInput.getValue());
+               estHours+=(estMinInput.getValue()==0 ? ".0" : ".5");
+               Log.d(TAG,estHours);
                String dueDate = getDateFromDatePicker();
                boolean weeklyR = weeklyRecSwitch.isChecked();
                int recurringDueDate = Calendar.SUNDAY;
@@ -190,7 +196,7 @@ public class NewTask extends AppCompatActivity {
         int day = dueDateInput.getDayOfMonth();
         int month = dueDateInput.getMonth();
         int year = dueDateInput.getYear();
-        return String.format(Locale.ENGLISH,"%d/%d/%d",day,month,year);
+        return String.format(Locale.ENGLISH,"%d/%d/%d",day,month+1,year);
     }
 
     //return 1 is valid, 0 if due date is over, -1 if date format wrong
@@ -250,7 +256,7 @@ public class NewTask extends AppCompatActivity {
     public void createWeeklyOccuringTasks(int recurringDueDate, long userID, String title, String estHours){
         String startDate, endDate;
         int daysBetween = recurringDueDate-today.get(Calendar.DAY_OF_WEEK);
-        Calendar currentRecurring = Calendar.getInstance();
+        Calendar currentRecurring = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         //if today is the due date, just ignore today
         //we make currentRecurring to the start date for the task
         if(daysBetween==0){
@@ -294,5 +300,6 @@ public class NewTask extends AppCompatActivity {
             currentRecurring.add(Calendar.DATE,7-NUM_DAYS_BEFORE_RECURRENCE);
         }
     }
+
 
 }
