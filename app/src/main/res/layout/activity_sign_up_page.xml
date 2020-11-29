@@ -42,7 +42,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/inputNewUserName"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/inputNewUserEmail"
@@ -50,7 +51,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/inputNewUserEmail"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/inputNewUserPassword"
@@ -58,7 +60,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/inputNewUserPassword"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/inputNewUserConfirmPassword"
@@ -66,7 +69,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/inputNewUserConfirmPassword"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/submitNewUserInfo"

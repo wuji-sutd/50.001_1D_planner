@@ -2,6 +2,7 @@
 
 
 
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="match_parent"
@@ -9,17 +10,25 @@
     android:layout_height="match_parent">
 
 
+    <ImageView
+        android:id="@+id/appicon"
+        android:layout_width="130dp"
+        android:layout_height="22dp"
+        android:layout_gravity="center"
+        android:layout_weight="10"
+        android:gravity="bottom"
+        android:src="@mipmap/ic_launcher" />
+
     <TextView
         android:id="@+id/appName"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_weight="5"
-        android:text="@string/app_name"
-        android:textSize="25sp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
-        android:gravity="center"
+        android:layout_weight="3"
+        android:gravity="center|top"
+        android:text="@string/app_name"
         android:textColor="@color/colorPrimaryDark"
-        />
+        android:textSize="40sp" />
 
     <EditText
         android:id="@+id/inputUserName"
