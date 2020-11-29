@@ -21,7 +21,6 @@ import distributeTimeSlotsPackage.TimeSlots;
 public class WorkingHoursDAO {
     private static final int NUMBER_OF_MONTHS = 2;
     public static final String TAG = "WorkingHoursDAO";
-
     private Context mContext;
 
     private SQLiteDatabase mDatabase;
@@ -44,6 +43,7 @@ public class WorkingHoursDAO {
             e.printStackTrace();
         }
     }
+
 
     public void open() throws SQLException{
         mDatabase = mDBHelper.getWritableDatabase();
