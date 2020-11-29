@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,7 +19,7 @@ import distributeTimeSlotsPackage.AvailableDay;
 public class WorkingHours extends AppCompatActivity {
     private String TAG = "WorkingHoursActivity";
     private WorkingHoursDAO workingHoursDAO;
-
+    /*
     private Button backToMenu;
     private Button saveWorkingHours;
     private EditText monHours;
@@ -28,6 +29,21 @@ public class WorkingHours extends AppCompatActivity {
     private EditText friHours;
     private EditText satHours;
     private EditText sunHours;
+    */
+    private TimePicker Mondaystart;
+    private TimePicker Mondayend;
+    private TimePicker Tuesdaystart;
+    private TimePicker Tuesdayend;
+    private TimePicker Wednesdaystart;
+    private TimePicker Wednesdayend;
+    private TimePicker Thursdaystart;
+    private TimePicker Thursdayend;
+    private TimePicker Fridaystart;
+    private TimePicker Fridayend;
+    private TimePicker Saturdaystart;
+    private TimePicker Saturdayend;
+    private TimePicker Sundaystart;
+    private TimePicker Sundayend;
 
     //TODO: if the working hours exist in the DB, show it onCreate
     @Override
@@ -36,13 +52,41 @@ public class WorkingHours extends AppCompatActivity {
         setContentView(R.layout.activity_working_hours);
         this.workingHoursDAO = new WorkingHoursDAO(this);
         final long userID = 0;
-        monHours = findViewById(R.id.MondayWorkingHours);
-        tuesHours = findViewById(R.id.TuesdayWorkingHours);
-        wedHours = findViewById(R.id.WednesdayWorkingHours);
-        thursHours = findViewById(R.id.ThursdayWorkingHours);
-        friHours = findViewById(R.id.FridayWorkingHours);
-        satHours = findViewById(R.id.SaturdayWorkingHours);
-        sunHours = findViewById(R.id.SundayWorkingHours);
+
+        this.Mondaystart = findViewById(R.id.Mondaystart);
+        this.Mondaystart.setIs24HourView(true);
+        this.Mondayend = findViewById(R.id.Mondayend);
+        this.Mondayend.setIs24HourView(true);
+
+        this.Tuesdaystart = findViewById(R.id.Tuesdaystart);
+        this.Tuesdaystart.setIs24HourView(true);
+        this.Tuesdayend = findViewById(R.id.Tuesdayend);
+        this.Tuesdayend.setIs24HourView(true);
+
+        this.Wednesdaystart = findViewById(R.id.Wednesdaystart);
+        this.Wednesdaystart.setIs24HourView(true);
+        this.Wednesdayend = findViewById(R.id.Wednesdayend);
+        this.Wednesdayend.setIs24HourView(true);
+
+        this.Thursdaystart = findViewById(R.id.Thursdaystart);
+        this.Thursdaystart.setIs24HourView(true);
+        this.Thursdayend = findViewById(R.id.Thursdayend);
+        this.Thursdayend.setIs24HourView(true);
+
+        this.Fridaystart = findViewById(R.id.Fridaystart);
+        this.Fridaystart.setIs24HourView(true);
+        this.Fridayend = findViewById(R.id.Fridayend);
+        this.Fridayend.setIs24HourView(true);
+
+        this.Saturdaystart = findViewById(R.id.Saturdaystart);
+        this.Saturdaystart.setIs24HourView(true);
+        this.Saturdayend = findViewById(R.id.Saturdayend);
+        this.Saturdayend.setIs24HourView(true);
+
+        this.Sundaystart = findViewById(R.id.Sundaystart);
+        this.Sundaystart.setIs24HourView(true);
+        this.Sundayend = findViewById(R.id.Sundayend);
+        this.Sundayend.setIs24HourView(true);
 
         //get the existing working hours, this is assuming one time slot only
         ArrayList<AvailableDay> availableDayArrayList = workingHoursDAO.getAllAvailableDays();
@@ -50,25 +94,21 @@ public class WorkingHours extends AppCompatActivity {
             for(AvailableDay availableDay:availableDayArrayList){
                 TreeMap<Double,Double> availableTimes =  availableDay.getAvailableTimes();
                 if(availableTimes.size()>0){
-                    StringBuilder formattedText = new StringBuilder();
                     for(double key: availableTimes.keySet()){
                         int hour = (int)key;
-                        formattedText.append(hour);
-                        formattedText.append("/");
-                        formattedText.append((key-hour)==0? "00": "30");
-                        formattedText.append(" to ");
+                        getCorrespondingDayEditText(availableDay.getDay(),true).setCurrentHour(hour);
+                        getCorrespondingDayEditText(availableDay.getDay(),true).setCurrentMinute((key-hour)==0? 0:30);
+
                         double endTime = availableTimes.get(key);
                         hour = (int)endTime;
-                        formattedText.append(hour);
-                        formattedText.append("/");
-                        formattedText.append((key-hour)==0? "00": "30");
+                        getCorrespondingDayEditText(availableDay.getDay(),false).setCurrentHour(hour);
+                        getCorrespondingDayEditText(availableDay.getDay(),false).setCurrentMinute((endTime-hour)==0? 0:30);
                     }
-                    getCorrespondingDayEditText(availableDay.getDay()).setText(formattedText.toString());
                 }
             }
         }
 
-        backToMenu = findViewById(R.id.backToMenu);
+        Button backToMenu = findViewById(R.id.backToMenu);
         backToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,55 +117,66 @@ public class WorkingHours extends AppCompatActivity {
             }
         });
 
-        saveWorkingHours = findViewById(R.id.saveWorkingHours);
+        Button saveWorkingHours = findViewById(R.id.saveWorkingHours);
         saveWorkingHours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                workingHoursDAO.createWorkingHours(userID, Calendar.MONDAY, getFormattedWorkingHours(monHours.getText().toString()));
-                workingHoursDAO.createWorkingHours(userID, Calendar.TUESDAY, getFormattedWorkingHours(tuesHours.getText().toString()));
-                workingHoursDAO.createWorkingHours(userID, Calendar.WEDNESDAY, getFormattedWorkingHours(wedHours.getText().toString()));
-                workingHoursDAO.createWorkingHours(userID, Calendar.THURSDAY, getFormattedWorkingHours(thursHours.getText().toString()));
-                workingHoursDAO.createWorkingHours(userID, Calendar.FRIDAY, getFormattedWorkingHours(friHours.getText().toString()));
-                workingHoursDAO.createWorkingHours(userID, Calendar.SATURDAY, getFormattedWorkingHours(satHours.getText().toString()));
-                workingHoursDAO.createWorkingHours(userID, Calendar.SUNDAY, getFormattedWorkingHours(sunHours.getText().toString()));
+                workingHoursDAO.createWorkingHours(userID, Calendar.MONDAY, getFormattedWorkingHours(Mondaystart,Mondayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.TUESDAY, getFormattedWorkingHours(Tuesdaystart,Tuesdayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.WEDNESDAY, getFormattedWorkingHours(Wednesdaystart,Wednesdayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.THURSDAY, getFormattedWorkingHours(Thursdaystart,Thursdayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.FRIDAY, getFormattedWorkingHours(Fridaystart,Fridayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.SATURDAY, getFormattedWorkingHours(Saturdaystart,Saturdayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.SUNDAY, getFormattedWorkingHours(Sundaystart,Sundayend));
+
                 Intent saveWorkingHoursIntent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(saveWorkingHoursIntent);
             }
         });
+
     }
 
     //NOTE: if allowing for more than one time slot: available times should be "13.5-15,17-18"
     //currently accepts only one input can make it an arrayList in the future
-    public String getFormattedWorkingHours(String rawHours){
-        if(rawHours.isEmpty()) return "";
-        String[] hours = rawHours.split("to");
-        Log.d(TAG,rawHours);
-        Log.d(TAG,hours[0]+","+hours[1]);
-        String[] startTimeSplit = hours[0].trim().split("/");
-        String startMin = startTimeSplit[1].equals("00")? "0":"5";
-        String startTime = startTimeSplit[0]+"."+startMin;
-        String[] endTimeSplit = hours[1].trim().split("/");
-        String endMin = endTimeSplit[1].equals("00")? "0":"5";
-        String endTime = endTimeSplit[0]+"."+endMin;
+    public String getFormattedWorkingHours(TimePicker dayStart, TimePicker dayEnd){
+        int startHour= dayStart.getCurrentHour();
+        int startMin = dayStart.getCurrentMinute();
+        int endHour= dayEnd.getCurrentHour();
+        int endMin = dayEnd.getCurrentMinute();
+        Log.d(TAG,String.format("%d:%d-%d:%d",startHour,startMin,endHour,endMin));
+        String startMinString = startMin==0? "0":"5";
+        String startTime = startHour+"."+startMinString;
+        String endMinString = endMin==0? "0":"5";
+        String endTime = endHour+"."+endMinString;
         return startTime + "-" + endTime;
     }
 
-    public EditText getCorrespondingDayEditText(int day){
+    public TimePicker getCorrespondingDayEditText(int day,boolean isStart){
         switch (day){
             case Calendar.MONDAY:
-                return monHours;
+                if(isStart) return Mondaystart;
+                else return Mondayend;
             case Calendar.TUESDAY:
-                return tuesHours;
+                if(isStart) return Tuesdaystart;
+                else return Tuesdayend;
             case Calendar.WEDNESDAY:
-                return wedHours;
+                if(isStart) return Wednesdaystart;
+                else return Wednesdayend;
             case Calendar.THURSDAY:
-                return thursHours;
+                if(isStart) return Thursdaystart;
+                else return Thursdayend;
             case Calendar.FRIDAY:
-                return friHours;
+                if(isStart) return Fridaystart;
+                else return Fridayend;
             case Calendar.SATURDAY:
-                return satHours;
+                if(isStart) return Saturdaystart;
+                else return Saturdayend;
             default:
-                return sunHours;
+                if(isStart) return Sundaystart;
+                else return Saturdayend;
         }
     }
+
 }
+
+

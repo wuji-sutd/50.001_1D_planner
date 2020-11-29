@@ -6,34 +6,43 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class NewTask extends AppCompatActivity {
+    private final String TAG = "NewTaskActivity";
     private final int NUM_DAYS_BEFORE_RECURRENCE = 3;
     private TaskDAO mtaskDAO;
 
     private EditText titleInput;
-    private EditText estHoursInput;
-    private EditText dueDateInput;
-    private CheckBox weeklyRInput;
+    private NumberPicker estHoursInput;
+    private NumberPicker estMinInput;
+    private DatePicker dueDateInput;
+
+    private Switch weeklyRecSwitch;
 
     private Button cancelNewTask;
     private Button saveNewTask;
     private RadioGroup weeklyRecurringDueDate;
 
     //radio buttons
+
     private RadioButton radioMon;
     private RadioButton radioTues;
     private RadioButton radioWed;
@@ -51,43 +60,71 @@ public class NewTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        setUpPopUpWindow();
+        setUpPopUpWindow(0.9,0.7);
+
+        weeklyRecSwitch = (Switch)findViewById(R.id.weeklyRecSwitch);
+        weeklyRecSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Toast.makeText(getBaseContext(),"Recurring mode On", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getBaseContext(),"Recurring mode Off", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         // Initialize
         this.mtaskDAO = new TaskDAO(this);
 
         this.titleInput = findViewById(R.id.inputNewTaskTitle);
+
         this.estHoursInput = findViewById(R.id.inputEstHours);
+        this.estHoursInput.setMaxValue(23);
+        this.estHoursInput.setMinValue(0);
+        this.estMinInput = findViewById(R.id.inputEstMin);
+        //minpicker = new String[] {"00", "30"};
+        //this.estMinInput.setDisplayedValues(minpicker);
+        this.estMinInput.setMaxValue(59);
+        this.estMinInput.setMinValue(00);
+
         this.dueDateInput = findViewById(R.id.inputNewTaskDueDate);
-        this.weeklyRInput = findViewById(R.id.inputweeklyRecurring);
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        this.dueDateInput.init(year, month, day, null);
 
         this.cancelNewTask = findViewById(R.id.cancelNewTask);
         this.saveNewTask = findViewById(R.id.saveNewTask);
         this.weeklyRecurringDueDate = findViewById(R.id.recurrenceDaySelection_radio);
 
-        //show the possible due dates for the weekly occurring only if there is a weekly occurring
-        weeklyRInput.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-             @Override
-             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                 if (isChecked) {
-                     weeklyRecurringDueDate.setVisibility(View.VISIBLE);
-                 } else {
-                     weeklyRecurringDueDate.setVisibility(View.GONE);
-                 }
-             }
-         });
+        weeklyRecSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    weeklyRecurringDueDate.setVisibility(View.VISIBLE);
+                    setUpPopUpWindow(0.9,0.85);
+
+                } else {
+                    weeklyRecurringDueDate.setVisibility(View.GONE);
+                    setUpPopUpWindow(0.9,0.7);
+                }
+            }
+        });
         addTaskData();
         backToMenu();
     }
 
     // Set up the dimension of pop-up window: 90% width * 70% height
-    public void setUpPopUpWindow() {
+    public void setUpPopUpWindow(double widthProportion, double heightProportion) {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int) (width*0.9), (int) (height*0.7));
+        getWindow().setLayout((int) (width*widthProportion), (int) (height*heightProportion));
     }
 
     public void addTaskData() {
@@ -104,9 +141,9 @@ public class NewTask extends AppCompatActivity {
            public void onClick(View v) {
                long userID = 0; // Need a method to find which user created the task
                String title = titleInput.getText().toString();
-               String estHours = estHoursInput.getText().toString();
-               String dueDate = dueDateInput.getText().toString();
-               Boolean weeklyR = weeklyRInput.isChecked();
+               String estHours = String.valueOf(estHoursInput.getValue());
+               String dueDate = getDateFromDatePicker();
+               boolean weeklyR = weeklyRecSwitch.isChecked();
                int recurringDueDate = Calendar.SUNDAY;
                if(weeklyR){
                    recurringDueDate = getRecurringDueDate();
@@ -147,6 +184,13 @@ public class NewTask extends AppCompatActivity {
                 startActivity(cancelNewTaskIntent);
             }
         });
+    }
+
+    public String getDateFromDatePicker(){
+        int day = dueDateInput.getDayOfMonth();
+        int month = dueDateInput.getMonth();
+        int year = dueDateInput.getYear();
+        return String.format(Locale.ENGLISH,"%d/%d/%d",day,month,year);
     }
 
     //return 1 is valid, 0 if due date is over, -1 if date format wrong
@@ -201,6 +245,7 @@ public class NewTask extends AppCompatActivity {
             return Calendar.SUNDAY;
         }
     }
+
 
     public void createWeeklyOccuringTasks(int recurringDueDate, long userID, String title, String estHours){
         String startDate, endDate;

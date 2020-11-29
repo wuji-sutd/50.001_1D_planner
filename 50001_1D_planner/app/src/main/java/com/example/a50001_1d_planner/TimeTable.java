@@ -1,16 +1,22 @@
 package com.example.a50001_1d_planner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,7 +25,7 @@ import distributeTimeSlotsPackage.AllocateTimeSlots;
 import distributeTimeSlotsPackage.AvailableDay;
 import distributeTimeSlotsPackage.TimeSlots;
 
-public class TimeTable extends AppCompatActivity {
+public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private TaskDAO taskDAO;
     private WorkingHoursDAO workingHoursDAO;
     private String TAG = "TimeTableActivity";
@@ -30,7 +36,7 @@ public class TimeTable extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
-        timeTableDisplayLayoutTextView = findViewById(R.id.timeTableDisplayTextView);
+        //timeTableDisplayLayoutTextView = findViewById(R.id.timeTableDisplayTextView);
         this.taskDAO = new TaskDAO(this);
         this.workingHoursDAO = new WorkingHoursDAO(this);
         //get all timeslots
@@ -78,9 +84,9 @@ public class TimeTable extends AppCompatActivity {
                 }
             }
             Log.d(TAG,"output: " +output);
-            timeTableDisplayLayoutTextView.setText(output);
+            //timeTableDisplayLayoutTextView.setText(output);
         } else {
-            timeTableDisplayLayoutTextView.setText("Not enough working hours");
+            //timeTableDisplayLayoutTextView.setText("Not enough working hours");
         }
 
         //if all tasks have time slots, show the task for that particular day
@@ -102,7 +108,38 @@ public class TimeTable extends AppCompatActivity {
                 startActivity(checkListIntent);
             }
         });
+
+        Button date = findViewById(R.id.date);
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
     }
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+        TextView textView = findViewById(R.id.textView);
+        textView.setText(currentDateString);
+    }
+
+    public class DatePickerFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener) getActivity(), year, month, day);
+        }
+    }
+
 
     //after the initial setting up, the user adds a new task
     public boolean addNewTaskAfter(ArrayList<Task> tasks, ArrayList<Task> newTasks, ArrayList<TimeSlots> timeslots, ArrayList<AvailableDay> availableDays, HashMap<String, Integer> numSlotsPerWeek){

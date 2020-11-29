@@ -38,11 +38,12 @@
     <string name="timePeriod">HH/MM to HH/MM</string>
     <string name="title">Title: </string>
     <string name="newTaskTitle">Title: </string>
-    <string name="estHoursToComplete">Estimated Hours to Complete</string>
     <string name="estHours">Hours: </string>
     <string name="estMinutes">Minutes</string>
     <string name="dueDate">Due Date: </string>
+    <string name="estHoursToComplete">Estimated time to Complete(Hr:Min): </string>
     <string name="weeklyRecurring">Weekly Recurring: </string>
+    <string name= "weeklyRecSwitch">Weekly Recurring? </string>
     <string name="delete">Delete</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
@@ -57,5 +58,8 @@
     <string name="inputNewUserConfirmPassword">Confirm Password: </string>
     <string name="submit">Submit</string>
     <string name="createAccountTitle">Create Account</string>
-
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    <string name = "today">Today</string>
+    <string name = "to">To</string>
 </resources>

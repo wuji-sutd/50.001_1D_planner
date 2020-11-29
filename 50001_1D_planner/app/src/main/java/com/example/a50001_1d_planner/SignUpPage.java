@@ -46,30 +46,29 @@ public class SignUpPage extends AppCompatActivity {
     // Create a new user and save into database if the 'SUBMIT' button is clicked
     public void addNewUser() {
         submission.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
-                                              String name = nameInput.getText().toString();
-                                              String email = emailInput.getText().toString();
-                                              String password = passwordInput.getText().toString();
-                                              String confirmPassword = confirmPasswordInput.getText().toString();
+              @Override
+              public void onClick(View v) {
+                  String name = nameInput.getText().toString();
+                  String email = emailInput.getText().toString();
+                  String password = passwordInput.getText().toString();
+                  String confirmPassword = confirmPasswordInput.getText().toString();
 
-                                              boolean isValidPassword = checkPassword(password, confirmPassword);
+                  boolean isValidPassword = checkPassword(password, confirmPassword);
 
-                                              // If the two passwords are not identical: input again
-                                              if (! isValidPassword)
-                                                  Toast.makeText(SignUpPage.this, "Invalid Password, please try again", Toast.LENGTH_LONG).show();
-                                              else {
-                                                  User createdUser = mUserDAO.createUser(name, email, password);
-                                                  Toast.makeText(SignUpPage.this, "Sign up successfully", Toast.LENGTH_LONG).show();
+                  // If the two passwords are not identical: input again
+                  if (! isValidPassword)
+                      Toast.makeText(SignUpPage.this, "Invalid Password, please try again", Toast.LENGTH_LONG).show();
+                  else {
+                      User createdUser = mUserDAO.createUser(name, email, password);
+                      Toast.makeText(SignUpPage.this, "Sign up successfully", Toast.LENGTH_LONG).show();
 
-                                                  // If they are identical, save it and return to the log in page
-                                                  Intent backToLogInIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                                  startActivity(backToLogInIntent);
-                                              }
-
-                                          }
-                                      }
-        );
+                      // If they are identical, save it and return to the log in page
+                      Intent backToLogInIntent = new Intent(getApplicationContext(), MainActivity.class);
+                      startActivity(backToLogInIntent);
+                    }
+                }
+        }
+);
 
     }
 

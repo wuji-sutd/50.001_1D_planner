@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#03A9F4"
+    android:background="#FFFFFF"
     android:orientation="vertical">
 
     <LinearLayout
@@ -66,25 +66,31 @@
     <LinearLayout
         android:id="@+id/newTaskHoursLine"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="107dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/estHours"
-            android:layout_width="wrap_content"
+            android:layout_width="179dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:gravity="left"
-            android:text="@string/estHours"
+            android:text="@string/estHoursToComplete"
             android:textSize="20sp" />
 
-        <EditText
+        <NumberPicker
             android:id="@+id/inputEstHours"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="numberDecimal"
-            android:hint="@string/inputEstHours" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <NumberPicker
+            android:id="@+id/inputEstMin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
 
     </LinearLayout>
 
@@ -104,13 +110,13 @@
             android:text="@string/dueDate"
             android:textSize="20sp" />
 
-        <EditText
+        <DatePicker
             android:id="@+id/inputNewTaskDueDate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="80sp"
             android:layout_weight="1"
-            android:inputType="date"
-            android:hint="DD/MM/YYYY" />
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner" />
 
     </LinearLayout>
 
@@ -118,15 +124,26 @@
     <LinearLayout
         android:id="@+id/newTaskWeeklyRecurringLine"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal">
-        <CheckBox android:id="@+id/inputweeklyRecurring"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Weekly Recurring" />
+
+        <Switch
+            android:id="@+id/weeklyRecSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="60sp"
+            android:layout_marginRight="60sp"
+            android:layout_weight="1"
+            android:switchMinWidth="60sp"
+            android:text="@string/weeklyRecSwitch"
+            android:textOff="@string/No"
+            android:textOn="@string/Yes"
+            android:textSize="20sp"
+
+
+            />
 
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/recurrenceDaySelection"
         android:layout_width="match_parent"
@@ -161,15 +178,14 @@
                 android:layout_height="wrap_content"
                 android:text="Fri" />
             <RadioButton android:id="@+id/radio_sat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sat" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sat" />
             <RadioButton android:id="@+id/radio_sun"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sun" />
         </RadioGroup>
     </LinearLayout>
-
 
 </LinearLayout>

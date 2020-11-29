@@ -1,244 +1,368 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:fillViewport="false">
 
-    <LinearLayout
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/backToMenu"
-            android:layout_width="53dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/back"
-            />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/setWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="6"
-            android:text="@string/workingHours"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="25sp"
-            android:textColor="@color/colorPrimaryDark"
-            />
+            <Button
+                android:id="@+id/backToMenu"
+                android:layout_width="53dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/back"
+                />
 
-        <Button
-            android:id="@+id/saveWorkingHours"
-            android:layout_width="53dp"
+            <TextView
+                android:id="@+id/setWorkingHours"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="6"
+                android:text="@string/workingHours"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:textColor="@color/colorPrimaryDark"
+                />
+
+            <Button
+                android:id="@+id/saveWorkingHours"
+                android:layout_width="53dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save"
+                />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/save"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Monday"
+                android:layout_width="154dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Monday"
+                android:textSize="23sp" />
+
+            <TimePicker
+                android:id="@+id/Mondaystart"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:timePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/to1"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/Mondaystart"
+                android:text = "@string/to"/>
+
+            <TimePicker
+                android:id="@+id/Mondayend"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/to1"
+                android:timePickerMode="spinner"  />
+
+        </RelativeLayout>
+        <!-- adds a line in between-->
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#A1979797"
             />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Tuesday"
+                android:layout_width="154dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Tuesday"
+                android:textSize="23sp" />
+
+            <TimePicker
+                android:id="@+id/Tuesdaystart"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:timePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/to2"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/Tuesdaystart"
+                android:text = "@string/to"/>
+
+            <TimePicker
+                android:id="@+id/Tuesdayend"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/to2"
+                android:timePickerMode="spinner" />
+
+        </RelativeLayout>
+        <!-- adds a line in between-->
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#A1979797"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Wednesday"
+                android:layout_width="154dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Wednesday"
+                android:textSize="23sp" />
+
+            <TimePicker
+                android:id="@+id/Wednesdaystart"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:timePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/to3"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/Wednesdaystart"
+                android:text = "@string/to"/>
+
+            <TimePicker
+                android:id="@+id/Wednesdayend"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/to3"
+                android:timePickerMode="spinner" />
+
+        </RelativeLayout>
+        <!-- adds a line in between-->
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#A1979797"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Thursday"
+                android:layout_width="154dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Thursday"
+                android:textSize="23sp" />
+
+            <TimePicker
+                android:id="@+id/Thursdaystart"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:timePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/to4"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/Thursdaystart"
+                android:text = "@string/to"/>
+
+            <TimePicker
+                android:id="@+id/Thursdayend"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/to4"
+                android:timePickerMode="spinner" />
+
+        </RelativeLayout>
+        <!-- adds a line in between-->
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#A1979797"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Friday"
+                android:layout_width="154dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Friday"
+                android:textSize="23sp" />
+
+            <TimePicker
+                android:id="@+id/Fridaystart"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:timePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/to5"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/Fridaystart"
+                android:text = "@string/to"/>
+
+            <TimePicker
+                android:id="@+id/Fridayend"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/to5"
+                android:timePickerMode="spinner" />
+
+        </RelativeLayout>
+        <!-- adds a line in between-->
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#A1979797"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Saturday"
+                android:layout_width="154dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Saturday"
+                android:textSize="23sp" />
+
+            <TimePicker
+                android:id="@+id/Saturdaystart"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:timePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/to6"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/Saturdaystart"
+                android:text = "@string/to"/>
+
+            <TimePicker
+                android:id="@+id/Saturdayend"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/to6"
+                android:timePickerMode="spinner" />
+
+        </RelativeLayout>
+        <!-- adds a line in between-->
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#A1979797"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Sunday"
+                android:layout_width="154dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Sunday"
+                android:textSize="23sp" />
+
+            <TimePicker
+                android:id="@+id/Sundaystart"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:timePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/to7"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/Sundaystart"
+                android:text = "@string/to"/>
+
+            <TimePicker
+                android:id="@+id/Sundayend"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@id/to7"
+                android:timePickerMode="spinner" />
+
+        </RelativeLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/Monday"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/Monday"
-            android:textSize="23sp"
-            />
-
-        <EditText
-            android:id="@+id/MondayWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:hint="@string/timePeriod"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/Tuesday"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/Tuesday"
-            android:textSize="23sp"
-            />
-
-        <EditText
-            android:id="@+id/TuesdayWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:hint="@string/timePeriod"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/Wednesday"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/Wednesday"
-            android:textSize="23sp"
-            />
-
-        <EditText
-            android:id="@+id/WednesdayWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:hint="@string/timePeriod"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/Thursday"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/Thursday"
-            android:textSize="23sp"
-            />
-
-        <EditText
-            android:id="@+id/ThursdayWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:hint="@string/timePeriod"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/Friday"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/Friday"
-            android:textSize="23sp"
-            />
-
-        <EditText
-            android:id="@+id/FridayWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:hint="@string/timePeriod"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/Saturday"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/Saturday"
-            android:textSize="23sp"
-            />
-
-        <EditText
-            android:id="@+id/SaturdayWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:hint="@string/timePeriod"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/Sunday"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/Sunday"
-            android:textSize="23sp"
-            />
-
-        <EditText
-            android:id="@+id/SundayWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:hint="@string/timePeriod"
-            />
-
-    </LinearLayout>
-
-
-
-</LinearLayout>
+</ScrollView>
