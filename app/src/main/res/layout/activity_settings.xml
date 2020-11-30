@@ -20,20 +20,20 @@
             android:layout_width="53dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/back"
-            />
+            android:baselineAligned="false"
+            android:text="@string/back" />
 
         <TextView
             android:id="@+id/settingsTitle"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_weight="12"
-            android:textSize="25sp"
             android:layout_gravity="center"
+            android:layout_weight="12"
             android:gravity="center"
+            android:paddingRight="65dp"
             android:text="@string/settings"
             android:textColor="@color/colorPrimaryDark"
-            />
+            android:textSize="25sp" />
 
     </LinearLayout>
 

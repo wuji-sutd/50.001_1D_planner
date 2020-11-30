@@ -1,5 +1,6 @@
 package com.example.a50001_1d_planner;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -41,6 +42,9 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_table);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.activity_title);
+
         timeTableDisplayLayout = findViewById(R.id.timeTableTaskDisplay);
         this.taskDAO = new TaskDAO(this);
         this.workingHoursDAO = new WorkingHoursDAO(this);

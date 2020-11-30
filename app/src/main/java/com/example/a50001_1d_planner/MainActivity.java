@@ -1,5 +1,6 @@
 package com.example.a50001_1d_planner;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import distributeTimeSlotsPackage.TestTimeSlotDistributionLogic;
 
@@ -13,8 +14,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //NOTE: if need to clean the database, uncomment this
-        //DBHelper dbHelper = new DBHelper(this);
-        //dbHelper.onUpgrade(dbHelper.getWritableDatabase(),0,0);
+//        DBHelper dbHelper = new DBHelper(this);
+//        dbHelper.onUpgrade(dbHelper.getWritableDatabase(),0,0);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.activity_title);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

@@ -3,5 +3,6 @@
     <color name="colorPrimary">#C6D57DF4</color>
     <color name="colorPrimaryDark">#C25BDF</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="white">#FFFFFF</color>
     <color name="ic_launcher_background">#FFFFFF</color>
 </resources>
