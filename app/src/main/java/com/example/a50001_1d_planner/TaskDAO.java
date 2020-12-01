@@ -106,9 +106,14 @@ public class TaskDAO {
         while (! cursor.isAfterLast()) {
             Task task = cursorToTask(cursor, timeSlots);
             listOfTasks.add(task);
+            Log.d(TAG,"forloop:" + task.getTitle() +task.getTaskID());
             cursor.moveToNext();
         }
         cursor.close();
+        Log.d(TAG,"finding");
+        for(Task t:listOfTasks){
+            Log.d(TAG,t.getTitle()+t.getTaskID());
+        }
         return listOfTasks;
     }
 
@@ -153,20 +158,31 @@ public class TaskDAO {
                 String[] details = timeslotsDetails[j].split(",");
                 int hour = (int) Double.parseDouble(details[3]);
                 int min = Double.parseDouble(details[3])-hour ==0? 0:30;
-                c.set(Integer.parseInt(details[0]),Integer.parseInt(details[1]),Integer.parseInt(details[2]),0,min,0);
+                int  tsYear= Integer.parseInt(details[0]);
+                int tsMonth = Integer.parseInt(details[1]);
+                int tsDay = Integer.parseInt(details[2]);
+                c.set(tsYear,tsMonth,tsDay,0,min,0);
                 c.set(Calendar.HOUR_OF_DAY,hour);
                 TimeSlots foundts = null;
                 for(TimeSlots ts:timeSlots){
-                    if(ts.getCal().getTimeInMillis()==c.getTimeInMillis())
+
+                    if(ts.getCal().get(Calendar.YEAR) == tsYear &&
+                            ts.getCal().get(Calendar.MONTH) == tsMonth &&
+                            ts.getCal().get(Calendar.DAY_OF_MONTH) == tsDay &&
+                            ts.getCal().get(Calendar.HOUR_OF_DAY) == hour &&
+                            ts.getCal().get(Calendar.MINUTE) == min
+                    )
                         foundts = ts;
                 }
                 if(foundts!=null) task.assignLatestTimeSlot(foundts);
-                else task.addToTempOverTimeSlotsDB();
+                else task.removeOneTimeSlotsDB();
             }
         }
         /*
         Might also need to find user's name by the user ID
         */
+        Log.d(TAG,task.getTitle());
+
         return task;
     }
 

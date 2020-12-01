@@ -54,5 +54,16 @@ public class Menu extends AppCompatActivity {
             }
         });
 
+        Button editTask = (Button) findViewById(R.id.editTasksButton);
+
+        editTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Menu.this, EditTask.class));
+            }
+        });
+
+
+
     }
 }

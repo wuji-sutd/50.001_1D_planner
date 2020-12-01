@@ -226,7 +226,7 @@ public class Task implements Comparable<Task> {
         for (int i = 0; i < numTaskSlotsNeeded; i++) {
             taskSlots.add(new TaskSlots(title,i));
         }
-        if(today.getTimeInMillis()>startDateCal.getTimeInMillis())
+        if(today.getTime().after(startDateCal.getTime()))
             startDateCal = today;
     }
 
@@ -270,7 +270,7 @@ public class Task implements Comparable<Task> {
                     hoursLeft-=0.5;
                 }
         }
-        hoursLeft-=(tempOverTimeSlotsDB*0.5);
+        estHours = hoursLeft;
         return hoursLeft;
     }
 
@@ -336,8 +336,9 @@ public class Task implements Comparable<Task> {
         return out;
     }
 
-    public void addToTempOverTimeSlotsDB(){
-        tempOverTimeSlotsDB+=1;
+    public void removeOneTimeSlotsDB(){
+        estHours-=0.5;
+        taskSlots.remove(0);
     }
 
 }

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/newTaskHead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/cancelEditTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/saveEditTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/save" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/editTaskTitleLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/editTaskTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:text="@string/newTaskTitle"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/selectEditTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/newTaskHoursLine"
+        android:layout_width="match_parent"
+        android:layout_height="107dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/estHoursLeft"
+            android:layout_width="179dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Estimated Hours Left"
+            android:textSize="20sp" />
+
+        <NumberPicker
+            android:id="@+id/inputEditEstHours"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <NumberPicker
+            android:id="@+id/inputEditEstMin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/editTaskDueDateLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/editTaskDueDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:text="@string/dueDate"
+            android:textSize="20sp" />
+
+        <DatePicker
+            android:id="@+id/inputeditTaskDueDate"
+            android:layout_width="wrap_content"
+            android:layout_height="80sp"
+            android:layout_weight="1"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/editTaskWeeklyRecurringLine"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <Switch
+            android:id="@+id/editWeeklyRecSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="60sp"
+            android:layout_marginRight="60sp"
+            android:layout_weight="1"
+            android:switchMinWidth="60sp"
+            android:text="@string/weeklyRecSwitch"
+            android:textOff="@string/No"
+            android:textOn="@string/Yes"
+            android:textSize="20sp"
+
+
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/editRecurrenceDaySelection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <RadioGroup
+            android:id ="@+id/editRecurrenceDaySelection_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <RadioButton android:id="@+id/radio_mon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Mon" />
+            <RadioButton android:id="@+id/radio_tues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tues" />
+            <RadioButton android:id="@+id/radio_wed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wed" />
+            <RadioButton android:id="@+id/radio_thurs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thurs" />
+            <RadioButton android:id="@+id/radio_fri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fri" />
+            <RadioButton android:id="@+id/radio_sat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sat" />
+            <RadioButton android:id="@+id/radio_sun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sun" />
+        </RadioGroup>
+    </LinearLayout>
+
+</LinearLayout>

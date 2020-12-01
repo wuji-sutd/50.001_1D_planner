@@ -30,6 +30,15 @@ import distributeTimeSlotsPackage.TaskSlots;
 import distributeTimeSlotsPackage.TimeSlots;
 
 public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+    public static String currentYearIntentKey = "CURRENTYEAR";
+    public static String currentMonthIntentKey = "CURRENTMONTH";
+    public static String currentDayIntentKey = "CURRENTDAY";
+    public static String canDisplayIntentKey = "CANDISPLAY";
+
+    private int currentYearIntent = -1;
+    private int currentMonthIntent = -1;
+    private int currentDayIntent = -1;
+
     private TaskDAO taskDAO;
     private WorkingHoursDAO workingHoursDAO;
     private String TAG = "TimeTableActivity";
@@ -48,16 +57,22 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
         timeTableDisplayLayout = findViewById(R.id.timeTableTaskDisplay);
         this.taskDAO = new TaskDAO(this);
         this.workingHoursDAO = new WorkingHoursDAO(this);
-        tasks = new ArrayList<>();
         //get all timeslots
         ArrayList<TimeSlots> timeslots = new ArrayList<>();
         //get all tasks
-        tasks = taskDAO.getAllTasks(timeslots);
         HashMap<String, Integer> numSlotsPerWeek = new HashMap<>();
         workingHoursDAO.getAllAvailableTimeSlots(timeslots,numSlotsPerWeek);
+        for(TimeSlots ts: timeslots){
+            Log.d(TAG,"timeslots: " +ts);
+        }
+        tasks = taskDAO.getAllTasks(timeslots);
         ArrayList<AvailableDay> recentlyUpdatedDays = workingHoursDAO.getRecentlyUpdatedAvailableDays();
         ArrayList<AvailableDay> availableDays = workingHoursDAO.getAllAvailableDays();
         canDisplay = true;
+
+        for(Task t:tasks){
+            Log.d(TAG,"start:" +t.getTitle()+t.getTaskID() +":" +t.getNumTaskSlotsNeeded());
+        }
 
         //check if any of the working days were updated first
         if(recentlyUpdatedDays.size()>0){
@@ -76,6 +91,8 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
                     unassignedTasks.add(t);
                     needsAssigning = true;
                 }
+                Log.d(TAG,"else:" +t.getTitle());
+
             }
             if (needsAssigning) {
                 if (!GetAllocatedTasks.addNewTaskAfter(this, unassignedTasks, tasks, timeslots, availableDays,numSlotsPerWeek)) {
@@ -102,6 +119,10 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             @Override
             public void onClick(View v) {
                 Intent checkListIntent = new Intent(getApplicationContext(), CheckList.class);
+                checkListIntent.putExtra(currentYearIntentKey,currentYearIntent);
+                checkListIntent.putExtra(currentMonthIntentKey,currentMonthIntent);
+                checkListIntent.putExtra(currentDayIntentKey,currentDayIntent);
+                checkListIntent.putExtra(canDisplayIntentKey,canDisplay);
                 startActivity(checkListIntent);
             }
         });
@@ -121,9 +142,12 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+        String currentDateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
         TextView textView = findViewById(R.id.textView);
-        textView.setText(currentDateString);
+        textView.setText(currentDateFormat);
+        currentYearIntent = year;
+        currentMonthIntent = month;
+        currentDayIntent = dayOfMonth;
         displayDayTasks(year,month,dayOfMonth);
     }
     public void displayDayTasks(int curYear, int curMonth, int curDay){
@@ -131,17 +155,12 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
         if(canDisplay) {
             Log.d(TAG,"can display");
             //display all the time slots
-            String output = "";
-            for(Task t: tasks){
-                ArrayList<String> timeslotsStringArray = t.getArrayListOfTimeSlots();
-                for(String timeslotsString: timeslotsStringArray) {
-                    output+=timeslotsString+"\n";
-                }
-            }
-            Log.d(TAG,"output: " +output);
             ArrayList<TaskSlots> currDayTaskSlots = new ArrayList<>();
             for (Task t : tasks) {
+                Log.d(TAG,t.getTitle() +t.getTaskID());
                 for (TaskSlots ts : t.getTaskSlots()) {
+                    Log.d(TAG,"here");
+                    Log.d(TAG,ts.getNameTask() + ts.getTaskTime());
                     Calendar taskSlotCal = ts.getTimeSlots().getCal();
                     if (taskSlotCal.get(Calendar.YEAR) == curYear &&
                             taskSlotCal.get(Calendar.MONTH) == curMonth &&
