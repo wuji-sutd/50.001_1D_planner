@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -22,14 +23,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import distributeTimeSlotsPackage.AvailableDay;
+import distributeTimeSlotsPackage.TimeSlots;
+
 public class EditTask extends AppCompatActivity {
 
-    private final String TAG = "NewTaskActivity";
+    private final String TAG = "EditTaskActivity";
     private final int NUM_DAYS_BEFORE_RECURRENCE = 3;
-    private TaskDAO mtaskDAO;
+    private TaskDAO taskDAO;
+    private WorkingHoursDAO workingHoursDAO;
+    private ArrayList<Task> tasks;
 
     private Spinner titleSelection;
     private NumberPicker estHoursInput;
@@ -38,8 +46,9 @@ public class EditTask extends AppCompatActivity {
 
     private Switch weeklyRecSwitch;
 
-    private Button cancelNewTask;
-    private Button saveNewTask;
+    private Button cancelEditTask;
+    private Button saveEditTask;
+    private Button deleteEditTask;
     private RadioGroup weeklyRecurringDueDate;
 
     //radio buttons
@@ -51,10 +60,11 @@ public class EditTask extends AppCompatActivity {
     private RadioButton radioSat;
     private RadioButton radioSun;
 
-    private int dueYear =0;
+    private ArrayList<Task> focusingTasks;
     Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
     Calendar dueDateCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
 
+    //TODO: add a delete button
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,21 +84,32 @@ public class EditTask extends AppCompatActivity {
         });
 
         // Initialize
-        this.mtaskDAO = new TaskDAO(this);
+        this.taskDAO = new TaskDAO(this);
         this.titleSelection = findViewById(R.id.selectEditTask);
-        ArrayList<String> taskNameSelection = getTaskNames();
+        focusingTasks = new ArrayList<>();
+        HashSet<String> taskNameSelection = getTaskNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item,taskNameSelection);
-
+                android.R.layout.simple_spinner_dropdown_item,taskNameSelection.toArray(new String[taskNameSelection.size()]));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         titleSelection.setAdapter(adapter);
+
+        titleSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateFieldsForTask(titleSelection.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         this.estHoursInput = findViewById(R.id.inputEditEstHours);
         this.estHoursInput.setMaxValue(23);
         this.estHoursInput.setMinValue(0);
         this.estMinInput = findViewById(R.id.inputEditEstMin);
-        //minpicker = new String[] {"00", "30"};
-        //this.estMinInput.setDisplayedValues(minpicker);
+
         this.estMinInput.setMaxValue(1);
         this.estMinInput.setMinValue(0);
         String[] minuteValues = {"00","30"};
@@ -101,8 +122,9 @@ public class EditTask extends AppCompatActivity {
         int day = c.get(Calendar.DAY_OF_MONTH);
         this.dueDateInput.init(year, month, day, null);
 
-        this.cancelNewTask = findViewById(R.id.cancelEditTask);
-        this.saveNewTask = findViewById(R.id.saveEditTask);
+        this.cancelEditTask = findViewById(R.id.cancelEditTask);
+        this.saveEditTask = findViewById(R.id.saveEditTask);
+        this.deleteEditTask = findViewById(R.id.deleteEditTask);
         this.weeklyRecurringDueDate = findViewById(R.id.editRecurrenceDaySelection_radio);
 
         weeklyRecSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -117,6 +139,7 @@ public class EditTask extends AppCompatActivity {
         });
         addTaskData();
         backToMenu();
+        deleteEditTaskFromDB();
     }
 
     public void addTaskData() {
@@ -128,7 +151,7 @@ public class EditTask extends AppCompatActivity {
         this.radioSat = findViewById(R.id.radio_sat);
         this.radioSun = findViewById(R.id.radio_sun);
 
-        saveNewTask.setOnClickListener(new View.OnClickListener() {
+        saveEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 long userID = 0; // Need a method to find which user created the task
@@ -150,18 +173,63 @@ public class EditTask extends AppCompatActivity {
                 } else if(isValidDueDate==0){
                     Toast.makeText(EditTask.this,"Due date over",Toast.LENGTH_LONG).show();
                 } else {
-                    //if weekly occurring create many new Tasks
-                    String startDate, endDate;
-                    if(weeklyR) {
-                        createWeeklyOccuringTasks(recurringDueDate, userID, title, estHours);
-                    } else {
-                        startDate = today.get(Calendar.DAY_OF_MONTH) + "/" +
-                                today.get(Calendar.MONTH) + "/" + today.get(Calendar.YEAR);
-                        endDate = dueDateCal.get(Calendar.DAY_OF_MONTH) + "/" +
-                                dueDateCal.get(Calendar.MONTH) + "/" + dueDateCal.get(Calendar.YEAR);
-                        mtaskDAO.createTask(userID, title, estHours, startDate, endDate);
+                    //check how different the task is from the original task
+                    //first figure out what the task is
+                    //if estimated hours are different only remove time slots, allocate correct number of task slots and reassign
+                    //if due date different is longer, and weekly occuring add new tasks, if due date is shorter, remove tasks
+                    //if due date different not weekly recurring, change the due date and weekly hours and reassign
+                    //if weekly recurring change to non-weekly recurring, find out due date and save it as a single task
+                    //if not weekly recurring and then becomes weekly recurring, delete task and redistribute
+                    //if weekly recurring and changed date of recurrence, delete tasks and redistribute
+                    if(weeklyR && focusingTasks.size()==1) { //changing from non-weekly to weekly
+                        focusingTasks.get(0).remakeTimeSlots();
+                        taskDAO.deleteTask(focusingTasks.get(0));
+                        createWeeklyOccuringTasks(recurringDueDate, userID, title, estHours,false);
+                    } else if (weeklyR && recurringDueDate!=focusingTasks.get(0).getCal().get(Calendar.DAY_OF_WEEK)){
+                        //check if days for recurrance is diff
+                        for(Task ft:focusingTasks) {
+                            ft.remakeTimeSlots();
+                            taskDAO.deleteTask(ft);
+                        }
+                        createSingleTask(userID, title, estHours);
+                    } else if(focusingTasks.size()>1){ //changing from weekly to non-weekly
+                        for(Task ft:focusingTasks) {
+                            ft.remakeTimeSlots();
+                            taskDAO.deleteTask(ft);
+                        }
+                        createSingleTask(userID, title, estHours);
+                    } else { //not changing weekly occurring doesn't require complete recreation
+                        if (dueDateInput.getYear() != focusingTasks.get(focusingTasks.size() - 1).getCal().get(Calendar.YEAR) ||
+                                dueDateInput.getMonth() != focusingTasks.get(focusingTasks.size() - 1).getCal().get(Calendar.MONTH) ||
+                                dueDateInput.getDayOfMonth() != focusingTasks.get(focusingTasks.size() - 1).getCal().get(Calendar.DAY_OF_MONTH)) {
+                            //due date different
+                            if (weeklyR) {
+                                if (dueDateCal.getTime().after(focusingTasks.get(focusingTasks.size() - 1).getCal().getTime())) {
+                                    //if the new due date is after the original due date add dates
+                                    createWeeklyOccuringTasks(recurringDueDate, userID, title, estHours,true);
+                                } else { //remove dates if new due date is before original due date
+                                    for (Task ft : focusingTasks) {
+                                        if (ft.getCal().getTime().after(dueDateCal.getTime())) {
+                                            ft.remakeTimeSlots();
+                                            taskDAO.deleteTask(ft);
+                                        }
+                                    }
+                                }
+                            } else {//not weekly occurring but due date diff
+                                focusingTasks.get(0).changeDueDateCal(dueDateCal);
+                            }
+                        }
+                        if ((estHoursInput.getValue() + estMinInput.getValue() * 0.5) != focusingTasks.get(0).getHoursNeededLeft()) {
+                            //estimatedTime is different
+                            for(Task ft:focusingTasks) {
+                                ft.changeEstimatedHours(estHoursInput.getValue(),estMinInput.getValue());
+                            }
+                        }
+                        for(Task ft:focusingTasks) {
+                            taskDAO.updateTaskTimeSlot(ft);
+                        }
                     }
-                    Toast.makeText(EditTask.this, "New task added", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditTask.this, "Task Edited", Toast.LENGTH_LONG).show();
                     // Return back to menu page if new task is added
                     Intent cancelNewTaskIntent = new Intent(getApplicationContext(), Menu.class);
                     startActivity(cancelNewTaskIntent);
@@ -172,11 +240,25 @@ public class EditTask extends AppCompatActivity {
 
     // Return back to menu page if the 'CANCEL' button is clicked
     public void backToMenu() {
-        cancelNewTask.setOnClickListener(new View.OnClickListener() {
+        cancelEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cancelNewTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(cancelNewTaskIntent);
+                Intent cancelEditTaskIntent = new Intent(getApplicationContext(), Menu.class);
+                startActivity(cancelEditTaskIntent);
+            }
+        });
+    }
+
+    public void deleteEditTaskFromDB() {
+        for(Task ft:focusingTasks){
+            ft.remakeTimeSlots();
+            taskDAO.deleteTask(ft);
+        }
+        deleteEditTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent deleteEditTaskIntent = new Intent(getApplicationContext(), Menu.class);
+                startActivity(deleteEditTaskIntent);
             }
         });
     }
@@ -215,7 +297,6 @@ public class EditTask extends AppCompatActivity {
             if(dueDateCal.getTimeInMillis()<today.getTimeInMillis()){
                 return 0;
             }
-            dueYear = year;
             return 1;
 
         }catch (NumberFormatException e){
@@ -241,11 +322,26 @@ public class EditTask extends AppCompatActivity {
         }
     }
 
+    public void createSingleTask(long userID, String title, String estHours){
+        String startDate = today.get(Calendar.DAY_OF_MONTH) + "/" +
+                today.get(Calendar.MONTH) + "/" + today.get(Calendar.YEAR);
+        String endDate = dueDateCal.get(Calendar.DAY_OF_MONTH) + "/" +
+                dueDateCal.get(Calendar.MONTH) + "/" + dueDateCal.get(Calendar.YEAR);
+        taskDAO.createTask(userID, title, estHours, startDate, endDate);
 
-    public void createWeeklyOccuringTasks(int recurringDueDate, long userID, String title, String estHours){
+    }
+
+
+    public void createWeeklyOccuringTasks(int recurringDueDate, long userID, String title, String estHours,boolean addingNewRecurrence){
         String startDate, endDate;
-        int daysBetween = recurringDueDate-today.get(Calendar.DAY_OF_WEEK);
         Calendar currentRecurring = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+
+        int daysBetween =recurringDueDate-today.get(Calendar.DAY_OF_WEEK);;
+        if(addingNewRecurrence) {
+            daysBetween = 0;
+            Task finalTask = focusingTasks.get(focusingTasks.size()-1);
+            currentRecurring.set(finalTask.getCal().get(Calendar.YEAR),finalTask.getCal().get(Calendar.MONTH),finalTask.getCal().get(Calendar.DAY_OF_MONTH));
+        }
         //if today is the due date, just ignore today
         //we make currentRecurring to the start date for the task
         if(daysBetween==0){
@@ -259,7 +355,7 @@ public class EditTask extends AppCompatActivity {
                 currentRecurring.add(Calendar.DATE,daysBetween);
                 endDate = currentRecurring.get(Calendar.DAY_OF_MONTH)+"/"+
                         currentRecurring.get(Calendar.MONTH)+"/"+ currentRecurring.get(Calendar.YEAR);
-                mtaskDAO.createTask(userID, title, estHours, startDate, endDate);
+                taskDAO.createTask(userID, title, estHours, startDate, endDate);
                 currentRecurring.add(Calendar.DATE,7 - NUM_DAYS_BEFORE_RECURRENCE);
             } else {
                 currentRecurring.add(Calendar.DATE,daysBetween-NUM_DAYS_BEFORE_RECURRENCE);
@@ -272,12 +368,15 @@ public class EditTask extends AppCompatActivity {
                 currentRecurring.add(Calendar.DATE,daysBetween+7);
                 endDate = currentRecurring.get(Calendar.DAY_OF_MONTH)+"/"+
                         currentRecurring.get(Calendar.MONTH)+"/"+ currentRecurring.get(Calendar.YEAR);
-                mtaskDAO.createTask(userID, title, estHours, startDate, endDate);
+                taskDAO.createTask(userID, title, estHours, startDate, endDate);
                 currentRecurring.add(Calendar.DATE,7 - NUM_DAYS_BEFORE_RECURRENCE);
             } else {
                 currentRecurring.add(Calendar.DATE, daysBetween + 7 - NUM_DAYS_BEFORE_RECURRENCE);
             }
         }
+        currentRecurring.set(Calendar.HOUR_OF_DAY,0);
+        currentRecurring.set(Calendar.MINUTE,0);
+
         while(currentRecurring.getTimeInMillis()<=dueDateCal.getTimeInMillis()){
             startDate = currentRecurring.get(Calendar.DAY_OF_MONTH)+"/"+
                     currentRecurring.get(Calendar.MONTH)+"/"+ currentRecurring.get(Calendar.YEAR);
@@ -285,14 +384,84 @@ public class EditTask extends AppCompatActivity {
             if(currentRecurring.getTimeInMillis()>dueDateCal.getTimeInMillis()) break;
             endDate = currentRecurring.get(Calendar.DAY_OF_MONTH)+"/"+
                     currentRecurring.get(Calendar.MONTH)+"/"+ currentRecurring.get(Calendar.YEAR);
-            mtaskDAO.createTask(userID, title, estHours, startDate, endDate);
+            taskDAO.createTask(userID, title, estHours, startDate, endDate);
             currentRecurring.add(Calendar.DATE,7-NUM_DAYS_BEFORE_RECURRENCE);
         }
     }
 
-    //TODO: get all the Tasks and get the task naems
-    public ArrayList<String> getTaskNames(){
-        ArrayList<String> tasksNames = new ArrayList<>();
+    public HashSet<String> getTaskNames(){
+        HashSet<String> tasksNames = new HashSet<>();
+        this.taskDAO = new TaskDAO(this);
+        this.workingHoursDAO = new WorkingHoursDAO(this);
+        //get all timeslots
+        ArrayList<TimeSlots> timeslots = new ArrayList<>();
+        //get all tasks
+        HashMap<String, Integer> numSlotsPerWeek = new HashMap<>();
+        workingHoursDAO.getAllAvailableTimeSlots(timeslots,numSlotsPerWeek);
+        for(TimeSlots ts: timeslots){
+            Log.d(TAG,"timeslots: " +ts);
+        }
+        tasks = taskDAO.getAllTasks(timeslots);
+
+        for(Task t:tasks){
+            Log.d(TAG,"start:" +t.getTitle()+t.getTaskID() +":" +t.getNumTaskSlotsNeeded());
+            tasksNames.add(t.getTitle());
+        }
+
+        for(String s :tasksNames) {
+            Log.d(TAG,"hashset: "+ s);
+        }
         return tasksNames;
+    }
+
+    public void updateFieldsForTask(String taskName){
+        for(Task t:tasks){
+            if(t.getTitle().equals(taskName)){
+                focusingTasks.add(t);
+            }
+        }
+        if(focusingTasks.size() == 0){
+            Log.d(TAG,"cannot find focusing task");
+            return;
+        }
+        if(focusingTasks.size() >1){ //recurring task
+            weeklyRecSwitch.setChecked(true); //may need to automatically change the view for this
+            int recurringDay = focusingTasks.get(0).getCal().get(Calendar.DAY_OF_WEEK);
+            setSelectedRadioButton(recurringDay);
+        } else{
+            weeklyRecSwitch.setChecked(false);
+        }
+
+        Calendar getDueDate = focusingTasks.get(focusingTasks.size()-1).getCal();
+        dueDateInput.updateDate(getDueDate.get(Calendar.YEAR),getDueDate.get(Calendar.MONTH),getDueDate.get(Calendar.DAY_OF_MONTH));
+        double estimatedHoursLeft = focusingTasks.get(focusingTasks.size()-1).getHoursNeededLeft();
+        estHoursInput.setValue((int)estimatedHoursLeft);
+        estMinInput.setValue(estimatedHoursLeft - (int)estimatedHoursLeft==0? 0:1);
+    }
+
+    public void setSelectedRadioButton(int recurringDay){
+        switch (recurringDay){
+            case Calendar.MONDAY:
+                radioMon.setSelected(true);
+                break;
+            case Calendar.TUESDAY:
+                radioTues.setSelected(true);
+                break;
+            case Calendar.WEDNESDAY:
+                radioWed.setSelected(true);
+                break;
+            case Calendar.THURSDAY:
+                radioThurs.setSelected(true);
+                break;
+            case Calendar.FRIDAY:
+                radioFri.setSelected(true);
+                break;
+            case Calendar.SATURDAY:
+                radioSat.setSelected(true);
+                break;
+            case Calendar.SUNDAY:
+                radioSun.setSelected(true);
+                break;
+        }
     }
 }

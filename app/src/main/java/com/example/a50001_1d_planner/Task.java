@@ -31,7 +31,7 @@ public class Task implements Comparable<Task> {
     public boolean tightSchedule = false;
     private ArrayList<TaskSlots> taskSlots = new ArrayList<>();
     //number of time slots that were found to be over in the db but hasn't been reflected for some reason
-    private int tempOverTimeSlotsDB;
+    private int taskSlotIndex;
 
     public Task(long userID, long taskID, String title, String estHours, String startDate, String dueDate){
         assignFromConstructor(userID, taskID, title, estHours, startDate, dueDate, 23.30);
@@ -81,6 +81,7 @@ public class Task implements Comparable<Task> {
         for (int i = 0; i < numTaskSlotsNeeded; i++) {
             taskSlots.add(new TaskSlots(title,i));
         }
+        taskSlotIndex = numTaskSlotsNeeded-1;
     }
 
     public boolean checkEnoughTime(ArrayList<AvailableDay> availableDays){
@@ -313,15 +314,19 @@ public class Task implements Comparable<Task> {
     public String getFormatTimeSlotsDB(String TAG){
         StringBuilder formatedTimeSlots = new StringBuilder();
         for(TaskSlots ts:taskSlots){
-            Calendar timeSlotCal = ts.getTimeSlots().getCal();
-            formatedTimeSlots.append(timeSlotCal.get(Calendar.YEAR));
-            formatedTimeSlots.append(",");
-            formatedTimeSlots.append(timeSlotCal.get(Calendar.MONTH));
-            formatedTimeSlots.append(",");
-            formatedTimeSlots.append(timeSlotCal.get(Calendar.DAY_OF_MONTH));
-            formatedTimeSlots.append(",");
-            formatedTimeSlots.append(ts.getTimeSlots().getTime());
-            formatedTimeSlots.append(";");
+            if(ts.getTimeSlots()!=null) {
+                Calendar timeSlotCal = ts.getTimeSlots().getCal();
+                formatedTimeSlots.append(timeSlotCal.get(Calendar.YEAR));
+                formatedTimeSlots.append(",");
+                formatedTimeSlots.append(timeSlotCal.get(Calendar.MONTH));
+                formatedTimeSlots.append(",");
+                formatedTimeSlots.append(timeSlotCal.get(Calendar.DAY_OF_MONTH));
+                formatedTimeSlots.append(",");
+                formatedTimeSlots.append(ts.getTimeSlots().getTime());
+                formatedTimeSlots.append(";");
+            } else {
+                formatedTimeSlots.append("null;");
+            }
         }
         String output = formatedTimeSlots.toString();
         Log.d(TAG,output);
@@ -339,6 +344,34 @@ public class Task implements Comparable<Task> {
     public void removeOneTimeSlotsDB(){
         estHours-=0.5;
         taskSlots.remove(0);
+    }
+
+    public void changeDueDateCal(Calendar newDueDateCal){
+        this.dueDateCal = newDueDateCal;
+        this.dueDate = newDueDateCal.get(Calendar.DAY_OF_MONTH)+"//"+newDueDateCal.get(Calendar.MONTH)+"//"+newDueDateCal.get(Calendar.YEAR);//DD/MM/YYYY
+        int numOfWeekBetween = (int)((dueDateCal.get(Calendar.DAY_OF_YEAR) - startDateCal.get(Calendar.DAY_OF_YEAR) + 365)%365 + 1)/7;
+        this.hoursPerWeek = Math.ceil(this.estHours/numOfWeekBetween);
+        this.hoursPerWeek = hoursPerWeek<1? 1:hoursPerWeek;
+    }
+
+    //newMin should be 0 or 1
+    public void changeEstimatedHours(int newHour, int newMin){
+        double newEstHours = newHour+ newMin*0.5;
+        double tempEstHours = newEstHours;
+        if(newEstHours<estHours){
+            while(tempEstHours!=estHours){
+                TaskSlots ts = taskSlots.get(taskSlots.size()-1);
+                if(ts.getTimeSlots()!=null) ts.getTimeSlots().setAssignedTaskSlot(null);
+                taskSlots.remove(ts);
+                tempEstHours+=0.5;
+            }
+        } else if (newEstHours>estHours){
+            while(tempEstHours!=estHours){
+                taskSlots.add(new TaskSlots(title,++taskSlotIndex));
+                tempEstHours-=0.5;
+            }
+        }
+        estHours = newEstHours;
     }
 
 }

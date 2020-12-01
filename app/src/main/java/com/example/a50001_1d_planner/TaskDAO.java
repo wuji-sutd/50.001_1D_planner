@@ -83,7 +83,6 @@ public class TaskDAO {
 
     public void updateTaskTimeSlot(Task task){
         long id = task.getTaskID();
-
         ContentValues values = new ContentValues();
         values.put(DBHelper.TaskCol1_TaskID, id);
         values.put(DBHelper.TaskCol2_UserID, task.getUserID());
@@ -155,6 +154,7 @@ public class TaskDAO {
         if(!assignedTimeSlots.isEmpty()){
             String[] timeslotsDetails = assignedTimeSlots.split(";");
             for(int j = 0; j<timeslotsDetails.length;j++){
+                if(timeslotsDetails[j].equals("null")) continue;
                 String[] details = timeslotsDetails[j].split(",");
                 int hour = (int) Double.parseDouble(details[3]);
                 int min = Double.parseDouble(details[3])-hour ==0? 0:30;

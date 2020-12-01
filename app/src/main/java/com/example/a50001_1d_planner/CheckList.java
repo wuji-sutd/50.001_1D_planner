@@ -33,6 +33,7 @@ public class CheckList extends AppCompatActivity {
     private String TAG = "TimeTableActivity";
     private ArrayList<Task> tasks;
     private boolean canDisplay;
+    private boolean isTodayList;
 
     private LinearLayout checkListDisplayLayout;
 
@@ -52,12 +53,14 @@ public class CheckList extends AppCompatActivity {
 
         currentCalendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         if(currentYear!=-1) {
+            isTodayList = false;
             currentCalendar.set(Calendar.YEAR, currentYear);
             currentCalendar.set(Calendar.MONTH, currentMonth);
             currentCalendar.set(Calendar.DAY_OF_MONTH, currentDay);
             String currentDateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(currentCalendar.getTime());
             textDate.setText(currentDateFormat);
         } else {
+            isTodayList = true;
             textDate.setText("Today");
         }
 
@@ -132,8 +135,16 @@ public class CheckList extends AppCompatActivity {
         taskSlotTextView.setText(wordsToDisplay);
         taskSlotTextView.setTextSize(20);
         taskSlotTextView.setPadding(20, 20, 20, 20);// in pixels (left, top, right, bottom)
+//        if(isTodayList){
+//            Button doneButton = new Button(this);
+//            doneButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+//                    LinearLayout.LayoutParams.WRAP_CONTENT));
+//            doneButton.setText("Done");
+//            doneButton.setTextSize(10);
+//        }
         if(hasTask) {
             LinearLayout taskLinearLayout = new LinearLayout(this);
+            taskLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
             taskLinearLayout.addView(taskSlotTextView);
             checkListDisplayLayout.addView(taskLinearLayout);
         } else {
