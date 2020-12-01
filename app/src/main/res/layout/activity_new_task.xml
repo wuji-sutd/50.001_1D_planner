@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -18,8 +18,10 @@
             android:id="@+id/cancelNewTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5sp"
             android:layout_weight="1"
-            android:text="@string/cancel" />
+            android:text="@string/cancel"
+            android:textSize="13sp" />
 
         <Button
             android:id="@+id/date"
@@ -27,13 +29,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:text="@string/Date"
+            android:textSize="13sp"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/saveNewTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5sp"
             android:layout_weight="1"
+            android:textSize="13sp"
             android:text="@string/save" />
 
     </LinearLayout>
@@ -48,17 +53,20 @@
             android:id="@+id/newTaskTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
             android:layout_gravity="center"
             android:gravity="left"
             android:text="@string/newTaskTitle"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/inputNewTaskTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5sp"
+            android:layout_marginRight="10sp"
             android:layout_weight="1"
-            android:hint="@string/inputTaskTitle" />
+            android:hint="" />
 
     </LinearLayout>
 
@@ -73,22 +81,25 @@
             android:id="@+id/estHours"
             android:layout_width="179dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="left"
             android:text="@string/estHoursToComplete"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <NumberPicker
             android:id="@+id/inputEstHours"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="10sp"
             android:layout_weight="1" />
 
         <NumberPicker
             android:id="@+id/inputEstMin"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="10sp"
             android:layout_weight="1" />
 
 
@@ -108,12 +119,15 @@
             android:layout_gravity="center"
             android:gravity="left"
             android:text="@string/dueDate"
-            android:textSize="20sp" />
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:textSize="18sp" />
 
         <DatePicker
             android:id="@+id/inputNewTaskDueDate"
             android:layout_width="wrap_content"
             android:layout_height="80sp"
+            android:layout_marginRight="10sp"
             android:layout_weight="1"
             android:calendarViewShown="false"
             android:datePickerMode="spinner" />
@@ -131,14 +145,14 @@
             android:id="@+id/weeklyRecSwitch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="60sp"
-            android:layout_marginRight="60sp"
+            android:layout_marginLeft="50sp"
+            android:layout_marginRight="50sp"
             android:layout_weight="1"
             android:switchMinWidth="60sp"
             android:text="@string/weeklyRecSwitch"
             android:textOff="@string/No"
             android:textOn="@string/Yes"
-            android:textSize="20sp"
+            android:textSize="15sp"
 
 
             />

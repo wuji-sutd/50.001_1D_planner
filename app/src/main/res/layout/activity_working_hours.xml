@@ -21,7 +21,9 @@
                 android:layout_width="53dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="5sp"
                 android:text="@string/back"
+                android:textSize="13sp"
                 />
 
             <TextView
@@ -32,8 +34,8 @@
                 android:text="@string/workingHours"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textSize="25sp"
-                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryalt"
                 />
 
             <Button
@@ -41,6 +43,7 @@
                 android:layout_width="53dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginRight="5sp"
                 android:text="@string/save"
                 />
 
@@ -58,7 +61,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/Monday"
-                android:textSize="23sp" />
+                android:textSize="20sp" />
 
             <TimePicker
                 android:id="@+id/Mondaystart"
@@ -105,7 +108,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/Tuesday"
-                android:textSize="23sp" />
+                android:textSize="20sp" />
 
             <TimePicker
                 android:id="@+id/Tuesdaystart"
@@ -151,7 +154,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/Wednesday"
-                android:textSize="23sp" />
+                android:textSize="20sp" />
 
             <TimePicker
                 android:id="@+id/Wednesdaystart"
@@ -197,7 +200,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/Thursday"
-                android:textSize="23sp" />
+                android:textSize="20sp" />
 
             <TimePicker
                 android:id="@+id/Thursdaystart"
@@ -243,7 +246,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/Friday"
-                android:textSize="23sp" />
+                android:textSize="20sp" />
 
             <TimePicker
                 android:id="@+id/Fridaystart"
@@ -289,7 +292,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/Saturday"
-                android:textSize="23sp" />
+                android:textSize="20sp" />
 
             <TimePicker
                 android:id="@+id/Saturdaystart"
@@ -335,7 +338,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/Sunday"
-                android:textSize="23sp" />
+                android:textSize="20sp" />
 
             <TimePicker
                 android:id="@+id/Sundaystart"

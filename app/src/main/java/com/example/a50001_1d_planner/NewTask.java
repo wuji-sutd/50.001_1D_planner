@@ -156,10 +156,12 @@ public class NewTask extends AppCompatActivity {
                }
                //check if due date is in the correct format
                int isValidDueDate = validDueDate(dueDate);
-               if(isValidDueDate==-1){
-                   Toast.makeText(NewTask.this,"Due date invalid",Toast.LENGTH_LONG).show();
+               if(title.length()==0){
+                   Toast.makeText(NewTask.this,"Please input title",Toast.LENGTH_SHORT).show();
+               } else if(isValidDueDate==-1){
+                   Toast.makeText(NewTask.this,"Due date invalid",Toast.LENGTH_SHORT).show();
                } else if(isValidDueDate==0){
-                   Toast.makeText(NewTask.this,"Due date over",Toast.LENGTH_LONG).show();
+                   Toast.makeText(NewTask.this,"Due date over",Toast.LENGTH_SHORT).show();
                } else {
                    //if weekly occurring create many new Tasks
                    String startDate, endDate;

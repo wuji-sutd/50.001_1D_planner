@@ -40,10 +40,10 @@
     <string name="newTaskTitle">Title: </string>
     <string name="estHours">Hours: </string>
     <string name="estMinutes">Minutes</string>
-    <string name="dueDate">Due Date: </string>
-    <string name="estHoursToComplete">Estimated time to Complete(Hr:Min): </string>
+    <string name="dueDate">Due date: </string>
+    <string name="estHoursToComplete">Estimated time to complete (Hr Min): </string>
     <string name="weeklyRecurring">Weekly Recurring: </string>
-    <string name= "weeklyRecSwitch">Weekly Recurring? </string>
+    <string name="weeklyRecSwitch">Weekly Recurring? </string>
     <string name="delete">Delete</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
