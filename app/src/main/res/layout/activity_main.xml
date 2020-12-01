@@ -35,14 +35,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:hint="@string/inputUserName" />
+        android:inputType="textPersonName"
+        android:digits="@string/alphanumeric"
+        android:maxLength="30"
+        android:hint="@string/inputUserName"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/inputPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:hint="@string/inputPassword" />
+        android:inputType="textPassword"
+        android:maxLength="30"
+        android:hint="@string/inputPassword"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/logIn"

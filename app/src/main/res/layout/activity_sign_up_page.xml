@@ -43,6 +43,8 @@
         android:ems="10"
         android:hint="@string/inputNewUserName"
         android:inputType="textPersonName"
+        android:digits="@string/alphanumeric"
+        android:maxLength="30"
         android:autofillHints="" />
 
     <EditText
@@ -61,6 +63,7 @@
         android:ems="10"
         android:hint="@string/inputNewUserPassword"
         android:inputType="textPassword"
+        android:digits="@string/alphanumeric"
         android:autofillHints="" />
 
     <EditText
@@ -70,6 +73,7 @@
         android:ems="10"
         android:hint="@string/inputNewUserConfirmPassword"
         android:inputType="textPassword"
+        android:digits="@string/alphanumeric"
         android:autofillHints="" />
 
     <Button
@@ -77,4 +81,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/submit" />
+
+    <TextView
+        android:id="@+id/errorBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/red"/>
 </LinearLayout>

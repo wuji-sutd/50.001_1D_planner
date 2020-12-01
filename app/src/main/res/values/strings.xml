@@ -20,8 +20,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="inputUserName">User Name:</string>
-    <string name="inputPassword">Password:</string>
+    <string name="inputUserName">Username</string>
+    <string name="inputPassword">Password</string>
     <string name="next">Next</string>
     <string name="signUp">Sign Up</string>
     <string name="logIn">Log In</string>
@@ -52,14 +52,15 @@
     <string name="inputEstHours">Please input the estimate hours</string>
     <string name="inputDueDate">Please set the due date</string>
     <string name="yesOrNo">Yes/No</string>
-    <string name="inputNewUserName">Name: </string>
-    <string name="inputNewUserEmail">Email Address: </string>
-    <string name="inputNewUserPassword">Password: </string>
-    <string name="inputNewUserConfirmPassword">Confirm Password: </string>
+    <string name="inputNewUserName">Userame</string>
+    <string name="inputNewUserEmail">Email Address</string>
+    <string name="inputNewUserPassword">Password</string>
+    <string name="inputNewUserConfirmPassword">Confirm Password</string>
     <string name="submit">Submit</string>
     <string name="createAccountTitle">Create Account</string>
     <string name="Yes">Yes</string>
     <string name="No">No</string>
-    <string name = "today">Today</string>
-    <string name = "to">To</string>
+    <string name="today">Today</string>
+    <string name="to">To</string>
+    <string name="alphanumeric">1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</string>
 </resources>
