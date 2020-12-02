@@ -8,16 +8,15 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/backToSettings"
-            android:layout_width="53dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/back"
             />
 
@@ -25,24 +24,48 @@
             android:id="@+id/account"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_weight="12"
             android:text="@string/account"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="25sp"
+            android:textSize="24sp"
             android:textColor="@color/colorPrimaryalt"
             />
 
-    </LinearLayout>
+    </FrameLayout>
 
-    <Button
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#A1979797"
+        />
+
+    <TextView
         android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/userName"
-        android:gravity="left"
         android:layout_gravity="center"
-        />
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="5sp"
+        android:text="@string/userName"
+        android:textSize="20sp"
+        android:gravity="left" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        android:layout_marginLeft="10sp"
+        android:text="@string/email"
+        android:textSize="15sp"
+        android:gravity="left" />
+
+    <Button
+        android:id="@+id/changePw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:text="@string/changePw"
+        android:gravity="left"
+        android:layout_gravity="center" />
 
     <Button
         android:id="@+id/logOut"
@@ -50,8 +73,7 @@
         android:layout_height="wrap_content"
         android:text="@string/logOut"
         android:gravity="left"
-        android:layout_gravity="center"
-        />
+        android:layout_gravity="center" />
 
 
 

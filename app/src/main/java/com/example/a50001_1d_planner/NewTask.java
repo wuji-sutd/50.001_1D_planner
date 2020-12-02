@@ -1,6 +1,7 @@
 package com.example.a50001_1d_planner;
 
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -60,8 +61,10 @@ public class NewTask extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.activity_title);
 
-        setUpPopUpWindow(0.9,0.7);
+        //setUpPopUpWindow(0.9,0.7);
         Log.d(TAG,"calendar time" + today.getTime().toString());
         weeklyRecSwitch = (Switch)findViewById(R.id.weeklyRecSwitch);
         weeklyRecSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

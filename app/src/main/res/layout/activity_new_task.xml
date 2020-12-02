@@ -21,14 +21,31 @@
             android:text="@string/cancel"
             android:textSize="13sp" />
 
+        <TextView
+            android:id="@+id/newTask"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/newTask"
+            android:textSize="24sp"
+            android:textColor="@color/colorPrimaryalt" />
+
         <Button
             android:id="@+id/saveNewTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:text="@string/save"
             android:textSize="13sp" />
 
     </FrameLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#A1979797"
+        />
 
     <LinearLayout
         android:id="@+id/newTaskTitleLine"

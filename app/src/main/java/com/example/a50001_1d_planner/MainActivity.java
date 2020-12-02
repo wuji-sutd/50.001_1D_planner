@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,18 +17,27 @@ public class MainActivity extends AppCompatActivity {
         //NOTE: if need to clean the database, uncomment this
 //        DBHelper dbHelper = new DBHelper(this);
 //        dbHelper.onUpgrade(dbHelper.getWritableDatabase(),0,0);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.activity_title);
+        getSupportActionBar().hide();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         Button toMain = findViewById(R.id.logIn);
         toMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toMainIntent = new Intent(getApplicationContext(), TimeTable.class);
-                startActivity(toMainIntent);
+                //if {
+                //    Toast.makeText(MainActivity.this, "User does not exist", Toast.LENGTH_SHORT).show();
+                //}
+                //else if !={
+                //    Toast.makeText(MainActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                //}
+                //else {
+                    Intent toMainIntent = new Intent(getApplicationContext(), TimeTable.class);
+                    startActivity(toMainIntent);
+                //}
             }
         });
 
