@@ -8,31 +8,29 @@
     android:layout_height="match_parent">
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/backToLogIn"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/back"
-            />
+            android:text="@string/back" />
 
         <TextView
             android:id="@+id/createAccountTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="12"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/createAccountTitle"
-            android:textSize="25sp"/>
+            android:textSize="24sp"
+            android:textColor="@color/colorPrimaryalt" />
 
 
-    </LinearLayout>
+    </FrameLayout>
 
 
 
@@ -40,6 +38,8 @@
         android:id="@+id/inputNewUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
         android:ems="10"
         android:hint="@string/inputNewUserName"
         android:inputType="textPersonName"
@@ -51,6 +51,8 @@
         android:id="@+id/inputNewUserEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
         android:ems="10"
         android:hint="@string/inputNewUserEmail"
         android:inputType="textEmailAddress"
@@ -60,6 +62,8 @@
         android:id="@+id/inputNewUserPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
         android:ems="10"
         android:hint="@string/inputNewUserPassword"
         android:inputType="textPassword"
@@ -70,6 +74,8 @@
         android:id="@+id/inputNewUserConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
         android:ems="10"
         android:hint="@string/inputNewUserConfirmPassword"
         android:inputType="textPassword"
@@ -80,12 +86,16 @@
         android:id="@+id/submitNewUserInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
         android:text="@string/submit" />
 
     <TextView
         android:id="@+id/errorBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
         android:textSize="12sp"
         android:textColor="@color/red"/>
 </LinearLayout>

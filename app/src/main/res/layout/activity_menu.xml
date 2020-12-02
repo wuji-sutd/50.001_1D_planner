@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <LinearLayout
+
+    <RelativeLayout
         android:id="@+id/menuHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,26 +16,21 @@
 
         <Button
             android:id="@+id/backToMain"
-            android:layout_width="53dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/back"
-            />
+            android:text="@string/back" />
 
         <TextView
             android:id="@+id/menuTitle"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_weight="12"
-            android:textSize="25sp"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/menu"
-            android:paddingRight="64dp"
-            android:textColor="@color/colorPrimaryalt"
-            />
+            android:textSize="24sp"
+            android:textColor="@color/colorPrimaryalt" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 
@@ -44,29 +39,25 @@
         android:id="@+id/addNewTaskButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/addNewTask"
-        />
+        android:text="@string/addNewTask" />
 
     <Button
         android:id="@+id/editTasksButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/editTasks"
-        />
+        android:text="@string/editTasks" />
 
     <Button
         android:id="@+id/setWorkingHours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/setWorkingHours"
-        />
+        android:text="@string/setWorkingHours" />
 
     <Button
         android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/settings"
-        />
+        android:text="@string/settings" />
 
 
 </LinearLayout>

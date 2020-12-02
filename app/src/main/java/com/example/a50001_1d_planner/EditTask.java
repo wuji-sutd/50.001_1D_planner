@@ -106,7 +106,7 @@ public class EditTask extends AppCompatActivity {
         });
 
         this.estHoursInput = findViewById(R.id.inputEditEstHours);
-        this.estHoursInput.setMaxValue(23);
+        this.estHoursInput.setMaxValue(24);
         this.estHoursInput.setMinValue(0);
         this.estMinInput = findViewById(R.id.inputEditEstMin);
 
@@ -168,7 +168,11 @@ public class EditTask extends AppCompatActivity {
                 }
                 //check if due date is in the correct format
                 int isValidDueDate = validDueDate(dueDate);
-                if(isValidDueDate==-1){
+                if(title.length()==0){
+                    Toast.makeText(EditTask.this, "Please input title", Toast.LENGTH_SHORT).show();
+                } else if (estHoursInput.getValue()==0 && estMinInput.getValue()==0){
+                    Toast.makeText(EditTask.this, "Please select estimated time", Toast.LENGTH_SHORT).show();
+                } else if(isValidDueDate==-1){
                     Toast.makeText(EditTask.this,"Due date invalid",Toast.LENGTH_LONG).show();
                 } else if(isValidDueDate==0){
                     Toast.makeText(EditTask.this,"Due date over",Toast.LENGTH_LONG).show();

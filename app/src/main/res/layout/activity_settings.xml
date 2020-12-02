@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="match_parent"
@@ -9,7 +8,7 @@
     android:layout_height="match_parent">
 
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/settingsHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,10 +16,8 @@
 
         <Button
             android:id="@+id/backToMenu"
-            android:layout_width="53dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:baselineAligned="false"
             android:text="@string/back" />
 
         <TextView
@@ -28,21 +25,18 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_weight="12"
             android:gravity="center"
-            android:paddingRight="65dp"
             android:text="@string/settings"
-            android:textColor="@color/colorPrimaryalt"
-            android:textSize="25sp" />
+            android:textSize="24sp"
+            android:textColor="@color/colorPrimaryalt" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <Button
         android:id="@+id/account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/account"
-        />
+        android:text="@string/account" />
 
 
 

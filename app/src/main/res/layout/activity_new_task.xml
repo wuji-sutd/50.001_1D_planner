@@ -9,7 +9,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/newTaskHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -18,30 +18,17 @@
             android:id="@+id/cancelNewTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5sp"
-            android:layout_weight="1"
             android:text="@string/cancel"
             android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:text="@string/Date"
-            android:textSize="13sp"
-            tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/saveNewTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5sp"
-            android:layout_weight="1"
-            android:textSize="13sp"
-            android:text="@string/save" />
+            android:text="@string/save"
+            android:textSize="13sp" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/newTaskTitleLine"

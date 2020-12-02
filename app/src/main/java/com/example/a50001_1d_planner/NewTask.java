@@ -82,7 +82,7 @@ public class NewTask extends AppCompatActivity {
         this.titleInput = findViewById(R.id.inputNewTaskTitle);
 
         this.estHoursInput = findViewById(R.id.inputEstHours);
-        this.estHoursInput.setMaxValue(23);
+        this.estHoursInput.setMaxValue(24);
         this.estHoursInput.setMinValue(0);
         this.estMinInput = findViewById(R.id.inputEstMin);
         //minpicker = new String[] {"00", "30"};
@@ -158,6 +158,8 @@ public class NewTask extends AppCompatActivity {
                int isValidDueDate = validDueDate(dueDate);
                if(title.length()==0){
                    Toast.makeText(NewTask.this,"Please input title",Toast.LENGTH_SHORT).show();
+               } else if (estHoursInput.getValue()==0 && estMinInput.getValue()==0){
+                   Toast.makeText(NewTask.this, "Please select estimated time", Toast.LENGTH_SHORT).show();
                } else if(isValidDueDate==-1){
                    Toast.makeText(NewTask.this,"Due date invalid",Toast.LENGTH_SHORT).show();
                } else if(isValidDueDate==0){
