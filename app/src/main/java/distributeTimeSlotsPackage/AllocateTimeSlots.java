@@ -65,9 +65,9 @@ public class AllocateTimeSlots {
                 } else return "1";
                 count++;
             }
-            int currentWeekofYear = currentTimeSlot.getWeekofYear();
+            int currentDayofYear = currentTimeSlot.getDayofYear();
             while (currTimeSlotIndex < allTimeSlots.size() - 1) {
-                if(allTimeSlots.get(currTimeSlotIndex).getWeekofYear()!=currentWeekofYear) break;
+                if(allTimeSlots.get(currTimeSlotIndex).getDayofYear()!=currentDayofYear) break;
                 currTimeSlotIndex++;
             }
             for(Task t:allTasks){

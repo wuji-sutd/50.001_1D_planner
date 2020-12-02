@@ -10,6 +10,7 @@ public class TimeSlots {
     private double time;
     private Calendar cal;
     private TaskSlots assignedTaskSlot = null;
+    private boolean isBreak;
 
     public TimeSlots(int year, int month, int date, double time){
         cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
@@ -40,6 +41,8 @@ public class TimeSlots {
         return cal.get(Calendar.WEEK_OF_YEAR);
     }
 
+    public int getDayofYear() {return cal.get(Calendar.DAY_OF_YEAR);}
+
     public TaskSlots getAssignedTaskSlot() {
         return assignedTaskSlot;
     }
@@ -53,17 +56,47 @@ public class TimeSlots {
     }
 
     public String getStartToEndTime(){
+        String startTime = getStartTimeString(false);
+        String endTime = getEndTimeString();
+        return startTime + " - " + endTime;
+    }
+
+    public String getBreakStartToEndTime(){
+        String startTime = getStartTimeString(true);
+        String endTime = getEndTimeString();
+        return startTime + " - " + endTime;
+    }
+
+    public String getStartTimeString(boolean hasBreak){
         double startMin = time-(int)time;
         String startTime;
+        if(startMin==0) {
+            if(hasBreak) startTime = String.format(Locale.ENGLISH,"%02d:15", (int)time);
+            else startTime = String.format(Locale.ENGLISH,"%02d:00", (int)time);
+        } else {
+            if(hasBreak) startTime = String.format(Locale.ENGLISH,"%02d:45", (int)time);
+            else startTime = String.format(Locale.ENGLISH,"%02d:30", (int)time);
+        }
+        return startTime;
+    }
+
+    public String getEndTimeString(){
+        double startMin = time-(int)time;
         String endTime;
         if(startMin==0){
-            startTime = String.format(Locale.ENGLISH,"%02d:00", (int)time);
             endTime = String.format(Locale.ENGLISH,"%02d:30", (int)time);
         }
         else{
-            startTime = String.format(Locale.ENGLISH,"%02d:30", (int)time);
             endTime = String.format(Locale.ENGLISH,"%02d:00", (int)time+1);
         }
-        return startTime + " - " + endTime;
+        return endTime;
+    }
+
+    public void setIsBreak(){
+        isBreak = true;
+    }
+
+    public boolean getIsBreak(){
+        return isBreak;
     }
 }

@@ -156,7 +156,8 @@ public class WorkingHoursDAO {
                     } else {
                         numSlotsPerWeek.put(weekYear,1);
                     }
-                    timeslots.add(new TimeSlots(currentDay.get(Calendar.YEAR), currentDay.get(Calendar.MONTH),currentDay.get(Calendar.DAY_OF_MONTH),current));
+                    TimeSlots thisTS = new TimeSlots(currentDay.get(Calendar.YEAR), currentDay.get(Calendar.MONTH),currentDay.get(Calendar.DAY_OF_MONTH),current);
+                    timeslots.add(thisTS);
                     current +=0.5;
                 }
             }
@@ -167,7 +168,7 @@ public class WorkingHoursDAO {
     //get the remaining available timeslots
     public void getAvailableTimeSlots(ArrayList<TimeSlots> timeslots, ArrayList<TimeSlots> availableTimeslots){
         for(TimeSlots ts: timeslots){
-            if (ts.getAssignedTaskSlot()==null){
+            if (ts.getAssignedTaskSlot()==null && !ts.getIsBreak()){
                 availableTimeslots.add(ts);
             }
         }

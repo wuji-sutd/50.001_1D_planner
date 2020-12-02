@@ -114,18 +114,18 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             }
         });
 
-        Button checkList = findViewById(R.id.checkList);
-        checkList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent checkListIntent = new Intent(getApplicationContext(), CheckList.class);
-                checkListIntent.putExtra(currentYearIntentKey,currentYearIntent);
-                checkListIntent.putExtra(currentMonthIntentKey,currentMonthIntent);
-                checkListIntent.putExtra(currentDayIntentKey,currentDayIntent);
-                checkListIntent.putExtra(canDisplayIntentKey,canDisplay);
-                startActivity(checkListIntent);
-            }
-        });
+//        Button checkList = findViewById(R.id.checkList);
+//        checkList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent checkListIntent = new Intent(getApplicationContext(), CheckList.class);
+//                checkListIntent.putExtra(currentYearIntentKey,currentYearIntent);
+//                checkListIntent.putExtra(currentMonthIntentKey,currentMonthIntent);
+//                checkListIntent.putExtra(currentDayIntentKey,currentDayIntent);
+//                checkListIntent.putExtra(canDisplayIntentKey,canDisplay);
+//                startActivity(checkListIntent);
+//            }
+//        });
 
         Button date = findViewById(R.id.date);
         date.setOnClickListener(new View.OnClickListener() {
@@ -156,10 +156,10 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             Log.d(TAG,"can display");
             //display all the time slots
             ArrayList<TaskSlots> currDayTaskSlots = new ArrayList<>();
+            boolean needEnd = true;
             for (Task t : tasks) {
                 Log.d(TAG,t.getTitle() +t.getTaskID());
                 for (TaskSlots ts : t.getTaskSlots()) {
-                    Log.d(TAG,"here");
                     Log.d(TAG,ts.getNameTask() + ts.getTaskTime());
                     Calendar taskSlotCal = ts.getTimeSlots().getCal();
                     if (taskSlotCal.get(Calendar.YEAR) == curYear &&
@@ -170,8 +170,57 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
                 }
             }
             if(currDayTaskSlots.size()>0) {
-                for (TaskSlots ts : currDayTaskSlots) {
-                    addTimeSlotsToLayout(ts.toString(),true);
+                StringBuilder taskMergeString = new StringBuilder();
+                taskMergeString.append(currDayTaskSlots.get(0).getStartTimeString());
+                double currTime = currDayTaskSlots.get(0).getTimeSlots().getTime();
+                double continuousDuration = 0.5;
+                for (int i = 1; i<currDayTaskSlots.size();i++) {
+                    needEnd = true;
+                    //addTimeSlotsToLayout(ts.toString(),true);
+                    Log.d(TAG,"diff time"+String.valueOf(currDayTaskSlots.get(i).getTimeSlots().getTime()-currTime));
+                    Log.d(TAG,"names"+String.valueOf(currDayTaskSlots.get(i).getNameTask()+"-->"+currDayTaskSlots.get(i-1).getNameTask()));
+
+                    if(currDayTaskSlots.get(i).getTimeSlots().getTime()-currTime==0.5
+                            && currDayTaskSlots.get(i).getNameTask().equals(currDayTaskSlots.get(i-1).getNameTask())){
+                        currTime = currDayTaskSlots.get(i).getTimeSlots().getTime();
+                        continuousDuration+=0.5;
+                        Log.d(TAG,"continuous");
+                        if(continuousDuration==2){
+                            needEnd = false;
+                            taskMergeString.append("-");
+                            taskMergeString.append(currDayTaskSlots.get(i).getEndTimeString());
+                            taskMergeString.append(" ");
+                            taskMergeString.append(currDayTaskSlots.get(i).getNameTask());
+                            addTimeSlotsToLayout(taskMergeString.toString(),true);
+                            //addBreak(i,currDayTaskSlots.size()-1);
+                            continuousDuration = 0.5;
+                            i++;
+                            taskMergeString = new StringBuilder();
+                            if(i<currDayTaskSlots.size()) {
+                                currTime = currDayTaskSlots.get(i).getTimeSlots().getTime();
+                                Log.d(TAG, "index:" + i + "," + currDayTaskSlots.size());
+                                taskMergeString.append(currDayTaskSlots.get(i).getStartTimeString());
+                            }
+                        }
+                    } else{
+                        taskMergeString.append("-");
+                        taskMergeString.append(currDayTaskSlots.get(i-1).getEndTimeString());
+                        taskMergeString.append(" ");
+                        taskMergeString.append(currDayTaskSlots.get(i-1).getNameTask());
+                        addTimeSlotsToLayout(taskMergeString.toString(),true);
+                        //addBreak();
+                        continuousDuration = 0.5;
+                        taskMergeString = new StringBuilder();
+                        currTime = currDayTaskSlots.get(i).getTimeSlots().getTime();
+                        taskMergeString.append(currDayTaskSlots.get(i).getStartTimeString());
+                    }
+                }
+                if(needEnd) {
+                    taskMergeString.append("-");
+                    taskMergeString.append(currDayTaskSlots.get(currDayTaskSlots.size() - 1).getEndTimeString());
+                    taskMergeString.append(" ");
+                    taskMergeString.append(currDayTaskSlots.get(currDayTaskSlots.size() - 1).getNameTask());
+                    addTimeSlotsToLayout(taskMergeString.toString(), true);
                 }
             }
             else{
@@ -182,6 +231,17 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             addTimeSlotsToLayout("Please set more working hours",false);
         }
 
+    }
+
+    public void addBreak(int elementEnd2h, int lastIndexPossible){
+        //if the last time slot do not have a break
+        if(elementEnd2h!=lastIndexPossible){
+            //TODO:add break to layout
+            //ok i need to be able to get the break from the taskslot itself
+            //
+            String breakTimeDisplay = "";
+            addTimeSlotsToLayout(breakTimeDisplay,true);
+        }
     }
 
     public static class DatePickerFragment extends DialogFragment {

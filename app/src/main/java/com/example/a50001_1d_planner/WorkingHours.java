@@ -201,6 +201,7 @@ public class WorkingHours extends AppCompatActivity {
 
             minutePicker.setMinValue(0);
             minutePicker.setMaxValue(1);
+
             List<String> displayedValues = new ArrayList<String>();
             for (int i = 0; i < 60; i += 30) {
                 displayedValues.add(String.format(Locale.ENGLISH,"%02d", i));

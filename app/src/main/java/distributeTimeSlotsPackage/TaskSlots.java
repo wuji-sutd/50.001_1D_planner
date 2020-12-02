@@ -4,6 +4,7 @@ public class TaskSlots {
     private TimeSlots timeSlots = null;
     private String nameTask;
     private int id;
+    private boolean hasBreak = false;
     public TaskSlots(String name,int id){
         this.nameTask=name;
         this.id=id;
@@ -35,6 +36,14 @@ public class TaskSlots {
     @Override
     public String toString(){
         return timeSlots.getStartToEndTime()+" " + nameTask;
+    }
+
+    public String getStartTimeString(){
+        return timeSlots.getStartTimeString(hasBreak);
+    }
+
+    public String getEndTimeString(){
+        return timeSlots.getEndTimeString();
     }
 
 }

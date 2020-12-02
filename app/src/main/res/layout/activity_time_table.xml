@@ -29,13 +29,13 @@
             android:text="@string/Date"
             tools:onClick="onClick" />
 
-        <Button
-            android:id="@+id/checkList"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/checkList">
-        </Button>
+<!--        <Button-->
+<!--            android:id="@+id/checkList"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:text="@string/checkList">-->
+<!--        </Button>-->
 
     </LinearLayout>
 
