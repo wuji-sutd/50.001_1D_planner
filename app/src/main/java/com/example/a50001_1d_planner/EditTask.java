@@ -75,7 +75,7 @@ public class EditTask extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    Toast.makeText(getBaseContext(),"Recurring mode On", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),"Due date should reflect the very last recurring due date", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getBaseContext(),"Recurring mode Off", Toast.LENGTH_SHORT).show();
@@ -250,13 +250,14 @@ public class EditTask extends AppCompatActivity {
     }
 
     public void deleteEditTaskFromDB() {
-        for(Task ft:focusingTasks){
-            ft.remakeTimeSlots();
-            taskDAO.deleteTask(ft);
-        }
         deleteEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                for(Task ft:focusingTasks){
+                    Log.d(TAG,ft.getTitle()+ft.getTaskID());
+                    ft.remakeTimeSlots();
+                    taskDAO.deleteTask(ft);
+                }
                 Intent deleteEditTaskIntent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(deleteEditTaskIntent);
             }
@@ -415,6 +416,7 @@ public class EditTask extends AppCompatActivity {
     }
 
     public void updateFieldsForTask(String taskName){
+        focusingTasks.clear();
         for(Task t:tasks){
             if(t.getTitle().equals(taskName)){
                 focusingTasks.add(t);
@@ -442,25 +444,25 @@ public class EditTask extends AppCompatActivity {
     public void setSelectedRadioButton(int recurringDay){
         switch (recurringDay){
             case Calendar.MONDAY:
-                radioMon.setSelected(true);
+                weeklyRecurringDueDate.check(R.id.radio_mon);
                 break;
             case Calendar.TUESDAY:
-                radioTues.setSelected(true);
+                weeklyRecurringDueDate.check(R.id.radio_tues);
                 break;
             case Calendar.WEDNESDAY:
-                radioWed.setSelected(true);
+                weeklyRecurringDueDate.check(R.id.radio_wed);
                 break;
             case Calendar.THURSDAY:
-                radioThurs.setSelected(true);
+                weeklyRecurringDueDate.check(R.id.radio_thurs);
                 break;
             case Calendar.FRIDAY:
-                radioFri.setSelected(true);
+                weeklyRecurringDueDate.check(R.id.radio_fri);
                 break;
             case Calendar.SATURDAY:
-                radioSat.setSelected(true);
+                weeklyRecurringDueDate.check(R.id.radio_sat);
                 break;
             case Calendar.SUNDAY:
-                radioSun.setSelected(true);
+                weeklyRecurringDueDate.check(R.id.radio_sun);
                 break;
         }
     }

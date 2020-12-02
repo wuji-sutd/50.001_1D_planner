@@ -348,7 +348,7 @@ public class Task implements Comparable<Task> {
 
     public void changeDueDateCal(Calendar newDueDateCal){
         this.dueDateCal = newDueDateCal;
-        this.dueDate = newDueDateCal.get(Calendar.DAY_OF_MONTH)+"//"+newDueDateCal.get(Calendar.MONTH)+"//"+newDueDateCal.get(Calendar.YEAR);//DD/MM/YYYY
+        this.dueDate = newDueDateCal.get(Calendar.DAY_OF_MONTH)+"/"+newDueDateCal.get(Calendar.MONTH)+"/"+newDueDateCal.get(Calendar.YEAR);//DD/MM/YYYY
         int numOfWeekBetween = (int)((dueDateCal.get(Calendar.DAY_OF_YEAR) - startDateCal.get(Calendar.DAY_OF_YEAR) + 365)%365 + 1)/7;
         this.hoursPerWeek = Math.ceil(this.estHours/numOfWeekBetween);
         this.hoursPerWeek = hoursPerWeek<1? 1:hoursPerWeek;

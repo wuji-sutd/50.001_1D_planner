@@ -146,6 +146,11 @@ public class TaskDAO {
         String dueDate= cursor.getString(4);
         String startDate = cursor.getString(5);
         String assignedTimeSlots = cursor.getString(6);
+        Log.d(TAG,title);
+        Log.d(TAG,estHours);
+        Log.d(TAG,dueDate);
+        Log.d(TAG,startDate);
+        Log.d(TAG,assignedTimeSlots);
 
         Task task = new Task(userID, taskID, title, estHours,startDate, dueDate);
 

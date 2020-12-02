@@ -68,7 +68,7 @@ public class NewTask extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    Toast.makeText(getBaseContext(),"Recurring mode On", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),"Due date should reflect the very last recurring due date", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getBaseContext(),"Recurring mode Off", Toast.LENGTH_SHORT).show();
