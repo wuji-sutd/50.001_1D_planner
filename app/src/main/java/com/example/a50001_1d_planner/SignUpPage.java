@@ -33,7 +33,7 @@ public class SignUpPage extends AppCompatActivity {
 
         // Initialize
         this.mUserDAO = new UserDAO(this);
-        this.nameInput = findViewById(R.id.inputNewUserName);
+        this.nameInput = findViewById(R.id.inputNewUsername);
         this.emailInput = findViewById(R.id.inputNewUserEmail);
         this.passwordInput = findViewById(R.id.inputNewUserPassword);
         this.confirmPasswordInput = findViewById(R.id.inputNewUserConfirmPassword);
