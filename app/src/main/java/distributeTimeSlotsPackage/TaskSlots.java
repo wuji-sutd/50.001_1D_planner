@@ -1,6 +1,8 @@
 package distributeTimeSlotsPackage;
 
-public class TaskSlots {
+import com.example.a50001_1d_planner.Task;
+
+public class TaskSlots implements Comparable<TaskSlots>{
     private TimeSlots timeSlots = null;
     private String nameTask;
     private int id;
@@ -46,4 +48,8 @@ public class TaskSlots {
         return timeSlots.getEndTimeString();
     }
 
+    @Override
+    public int compareTo(TaskSlots otherTaskSlot) {
+        return Double.compare(this.timeSlots.getTime(), otherTaskSlot.getTimeSlots().getTime());
+    }
 }

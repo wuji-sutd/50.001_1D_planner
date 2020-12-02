@@ -40,6 +40,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String WHCol3_WDDayOfWeek = "DayOfWeek";
     public static final String WHCol4_AvailableHours = "AvailableHours";
     public static final String WHCol5_HasChanged = "HasChanged";
+    public static final String WHCol6_BreakHours = "BreakHours";
+
 
     // SQL Statement for the User Information Table Creation
     private static final String SQL_CreateUserInfoTable = "CREATE TABLE "
@@ -68,8 +70,10 @@ public class DBHelper extends SQLiteOpenHelper {
             + WHCol2_UserID + " INTEGER NOT NULL, "
             + WHCol3_WDDayOfWeek + " INTEGER NOT NULL, "
             + WHCol4_AvailableHours + " TEXT NOT NULL, "
-            + WHCol5_HasChanged + " INTEGER NOT NULL"
+            + WHCol5_HasChanged + " INTEGER NOT NULL, "
+            + WHCol6_BreakHours + " TEXT NOT NULL"
             + ");";
+
 
     // Constructors
     public DBHelper(@Nullable Context context) {
@@ -86,6 +90,7 @@ public class DBHelper extends SQLiteOpenHelper {
 //        db.execSQL(SQL_CreateUserInfoTable);
 //        db.execSQL(SQL_CreateTaskInfoTable);
 //        db.execSQL(SQL_CreateWorkingHoursInfoTable);
+//        db.execSQL(SQL_CreateBreakHoursInfoTable);
         onUpgrade(db,0,2);
     }
 

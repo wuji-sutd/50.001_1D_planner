@@ -28,7 +28,12 @@ public class AllocateTimeSlots {
             }
         }
         TimeSlots currentTimeSlot = allTimeSlots.get(currTimeSlotIndex); //get closest time slot to current day
-        //Task currentTask = chooseTaskToAssign(allTasks);
+        while(currentTimeSlot.getIsBreak()){
+            currTimeSlotIndex++;
+            currentTimeSlot = allTimeSlots.get(currTimeSlotIndex);
+        }
+
+            //Task currentTask = chooseTaskToAssign(allTasks);
         String isAppropriateTimeSlot = "1";
         int count = 0;
         while (currTimeSlotIndex < allTimeSlots.size() - 1) {
@@ -39,9 +44,9 @@ public class AllocateTimeSlots {
                     continue;
                 }
                 //if allocating time slot is before the start date for the task, skip the task
-                if(allTimeSlots.get(currTimeSlotIndex).getCal().getTime().before(allTasks.get(count).getStartDateCal().getTime())){
+                if(allTimeSlots.get(currTimeSlotIndex).getCal().compareTo(allTasks.get(count).getStartDateCal())<0){
                     Log.d(TAG,"start time interfering");
-                    Log.d(TAG,allTimeSlots.get(currTimeSlotIndex).toString());
+                    Log.d(TAG,allTimeSlots.get(currTimeSlotIndex).getCal().getTime().toString());
                     Log.d(TAG,allTasks.get(count).getStartDateCal().getTime().toString());
                     Log.d(TAG,allTimeSlots.get(currTimeSlotIndex).getCal().getTimeInMillis()+","+allTasks.get(count).getStartDateCal().getTimeInMillis());
                     count++;
@@ -70,9 +75,13 @@ public class AllocateTimeSlots {
                 if(allTimeSlots.get(currTimeSlotIndex).getDayofYear()!=currentDayofYear) break;
                 currTimeSlotIndex++;
             }
+            while(currentTimeSlot.getIsBreak()){
+                currTimeSlotIndex++;
+                currentTimeSlot = allTimeSlots.get(currTimeSlotIndex);
+            }
             for(Task t:allTasks){
                 if(!t.checkAssigned()) {
-                    if (allTimeSlots.get(currTimeSlotIndex).getCal().getTime().after(t.getCal().getTime())){
+                    if (allTimeSlots.get(currTimeSlotIndex).getCal().compareTo(t.getCal())>0){
                         Log.d(TAG, "timeslot over due date");
                         Log.d(TAG, allTimeSlots.get(currTimeSlotIndex).toString());
                         Log.d(TAG, t.getCal().getTime().toString());
@@ -85,6 +94,5 @@ public class AllocateTimeSlots {
         }
         return isAppropriateTimeSlot;
     }
-
 
 }
