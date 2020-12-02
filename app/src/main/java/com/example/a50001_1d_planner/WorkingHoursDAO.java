@@ -31,6 +31,7 @@ public class WorkingHoursDAO {
             DBHelper.WHCol3_WDDayOfWeek,
             DBHelper.WHCol4_AvailableHours,
             DBHelper.WHCol5_HasChanged,
+            DBHelper.WHCol6_BreakHours,
     };
 
     public WorkingHoursDAO(Context context) {
@@ -53,7 +54,7 @@ public class WorkingHoursDAO {
         mDBHelper.close();
     }
 
-    public void createWorkingHours(long userID, int dayOfWeek, String availableHours) {
+    public void createWorkingHours(long userID, int dayOfWeek, String availableHours, String breakHours) {
         long count = DatabaseUtils.queryNumEntries(mDatabase, DBHelper.WorkingHoursTableName);
         if(count<7){
             for(int i = Calendar.SUNDAY; i<=Calendar.SATURDAY; i++) {
@@ -66,6 +67,11 @@ public class WorkingHoursDAO {
                     values.put(DBHelper.WHCol4_AvailableHours, "");
                 }
                 values.put(DBHelper.WHCol5_HasChanged,1);
+                if(i==dayOfWeek){
+                    values.put(DBHelper.WHCol6_BreakHours, breakHours);
+                } else {
+                    values.put(DBHelper.WHCol6_BreakHours, "");
+                }
                 mDatabase.insert(DBHelper.WorkingHoursTableName, null, values);
             }
         }
@@ -74,6 +80,7 @@ public class WorkingHoursDAO {
         values.put(DBHelper.WHCol3_WDDayOfWeek, dayOfWeek);
         values.put(DBHelper.WHCol4_AvailableHours, availableHours);
         values.put(DBHelper.WHCol5_HasChanged, 1);
+        values.put(DBHelper.WHCol6_BreakHours, breakHours);
         Cursor cursor = mDatabase.query(DBHelper.WorkingHoursTableName, mAllColumns,
                 null, null, null, null, null);
 
@@ -95,6 +102,7 @@ public class WorkingHoursDAO {
         values.put(DBHelper.WHCol3_WDDayOfWeek, availableDay.getDay());
         values.put(DBHelper.WHCol4_AvailableHours, formatTimePeriodsToString(availableDay.getAvailableTimes()));
         values.put(DBHelper.WHCol5_HasChanged, 0);
+        values.put(DBHelper.WHCol6_BreakHours, availableDay.getBreakHoursString());
         mDatabase.update(DBHelper.WorkingHoursTableName,values,DBHelper.WHCol1_WdID + "=" + availableDay.getAvailableDayID(),null);
     }
 
@@ -128,7 +136,8 @@ public class WorkingHoursDAO {
                 availableTimes.put(Double.parseDouble(startEnd[0]), Double.parseDouble(startEnd[1]));
             }
         }
-        return new AvailableDay(userID, WH_ID, dayOfWeek, availableTimes);
+        String breakHours= cursor.getString(5);
+        return new AvailableDay(userID, WH_ID, dayOfWeek, availableTimes,breakHours);
     }
 
     //because there are 2 arrayLists to return, just give the arrayList to return in advance
@@ -143,6 +152,7 @@ public class WorkingHoursDAO {
                 || currentDay.get(Calendar.MONTH)!=nMonthsFromNow.get(Calendar.MONTH)
                 || currentDay.get(Calendar.DAY_OF_MONTH)!=nMonthsFromNow.get(Calendar.DAY_OF_MONTH)){
             TreeMap<Double,Double> dayTimePeriod = availableDays.get(currentDay.get(Calendar.DAY_OF_WEEK)-1).getAvailableTimes();
+            ArrayList<Double> breakhours = availableDays.get(currentDay.get(Calendar.DAY_OF_WEEK)-1).getBreakHoursDouble();
             String weekYear = currentDay.get(Calendar.WEEK_OF_YEAR) +","+ currentDay.get(Calendar.YEAR);
             //for each day, check what time periods are available
             for(double key: dayTimePeriod.keySet()){
@@ -157,6 +167,11 @@ public class WorkingHoursDAO {
                         numSlotsPerWeek.put(weekYear,1);
                     }
                     TimeSlots thisTS = new TimeSlots(currentDay.get(Calendar.YEAR), currentDay.get(Calendar.MONTH),currentDay.get(Calendar.DAY_OF_MONTH),current);
+                    for(double breakHour:breakhours){
+                        if(thisTS.getTime() == breakHour){
+                            thisTS.setIsBreak();
+                        }
+                    }
                     timeslots.add(thisTS);
                     current +=0.5;
                 }

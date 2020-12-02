@@ -135,20 +135,44 @@ public class WorkingHours extends AppCompatActivity {
         saveWorkingHours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                workingHoursDAO.createWorkingHours(userID, Calendar.MONDAY, getFormattedWorkingHours(Mondaystart,Mondayend));
-                workingHoursDAO.createWorkingHours(userID, Calendar.TUESDAY, getFormattedWorkingHours(Tuesdaystart,Tuesdayend));
-                workingHoursDAO.createWorkingHours(userID, Calendar.WEDNESDAY, getFormattedWorkingHours(Wednesdaystart,Wednesdayend));
-                workingHoursDAO.createWorkingHours(userID, Calendar.THURSDAY, getFormattedWorkingHours(Thursdaystart,Thursdayend));
-                workingHoursDAO.createWorkingHours(userID, Calendar.FRIDAY, getFormattedWorkingHours(Fridaystart,Fridayend));
-                workingHoursDAO.createWorkingHours(userID, Calendar.SATURDAY, getFormattedWorkingHours(Saturdaystart,Saturdayend));
-                workingHoursDAO.createWorkingHours(userID, Calendar.SUNDAY, getFormattedWorkingHours(Sundaystart,Sundayend));
-
+                workingHoursDAO.createWorkingHours(userID, Calendar.MONDAY, getFormattedWorkingHours(Mondaystart,Mondayend), getFormattedBreakHours(Mondaystart,Mondayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.TUESDAY, getFormattedWorkingHours(Tuesdaystart,Tuesdayend), getFormattedBreakHours(Tuesdaystart,Tuesdayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.WEDNESDAY, getFormattedWorkingHours(Wednesdaystart,Wednesdayend), getFormattedBreakHours(Wednesdaystart,Wednesdayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.THURSDAY, getFormattedWorkingHours(Thursdaystart,Thursdayend), getFormattedBreakHours(Thursdaystart,Thursdayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.FRIDAY, getFormattedWorkingHours(Fridaystart,Fridayend), getFormattedBreakHours(Fridaystart,Fridayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.SATURDAY, getFormattedWorkingHours(Saturdaystart,Saturdayend), getFormattedBreakHours(Saturdaystart,Saturdayend));
+                workingHoursDAO.createWorkingHours(userID, Calendar.SUNDAY, getFormattedWorkingHours(Sundaystart,Sundayend), getFormattedBreakHours(Sundaystart,Sundayend));
                 Intent saveWorkingHoursIntent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(saveWorkingHoursIntent);
             }
         });
 
     }
+    //break times should be formatted as "13.5,15.5" or ""
+    public String getFormattedBreakHours(TimePicker dayStart, TimePicker dayEnd){
+        StringBuilder formattedBreakHours = new StringBuilder();
+        int startHour= dayStart.getCurrentHour();
+        int startMin = dayStart.getCurrentMinute();
+        int endHour= dayEnd.getCurrentHour();
+        int endMin = dayEnd.getCurrentMinute();
+        if((endHour+endMin)-(startHour+startMin)<=2){
+            return  "";
+        } else{
+            double tempStart = startHour+(startMin==0? 0:0.5);
+            float timeDifference = 0;
+            while(tempStart<(endHour+(endMin==0? 0:0.5))){
+                timeDifference+=0.5;
+                if(timeDifference==2){
+                    formattedBreakHours.append(tempStart);
+                    formattedBreakHours.append(",");
+                    timeDifference = 0;
+                }
+                tempStart+=0.5;
+            }
+            formattedBreakHours.setLength(formattedBreakHours.length()-1);
+            return formattedBreakHours.toString();
+        }
+    };
 
     //NOTE: if allowing for more than one time slot: available times should be "13.5-15,17-18"
     //currently accepts only one input can make it an arrayList in the future
@@ -164,6 +188,7 @@ public class WorkingHours extends AppCompatActivity {
         String endTime = endHour+"."+endMinString;
         Log.d(TAG,startTime + "-" + endTime);
         return startTime + "-" + endTime;
+
     }
 
     public TimePicker getCorrespondingDayEditText(int day,boolean isStart){
@@ -188,7 +213,7 @@ public class WorkingHours extends AppCompatActivity {
                 else return Saturdayend;
             default:
                 if(isStart) return Sundaystart;
-                else return Saturdayend;
+                else return Sundayend;
         }
     }
 

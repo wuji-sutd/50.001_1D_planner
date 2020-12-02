@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +42,7 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
 
     private TaskDAO taskDAO;
     private WorkingHoursDAO workingHoursDAO;
+    ArrayList<AvailableDay> availableDays;
     private String TAG = "TimeTableActivity";
     private ArrayList<Task> tasks;
     private boolean canDisplay;
@@ -67,7 +69,7 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
         }
         tasks = taskDAO.getAllTasks(timeslots);
         ArrayList<AvailableDay> recentlyUpdatedDays = workingHoursDAO.getRecentlyUpdatedAvailableDays();
-        ArrayList<AvailableDay> availableDays = workingHoursDAO.getAllAvailableDays();
+        availableDays = workingHoursDAO.getAllAvailableDays();
         canDisplay = true;
 
         for(Task t:tasks){
@@ -114,19 +116,6 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             }
         });
 
-//        Button checkList = findViewById(R.id.checkList);
-//        checkList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent checkListIntent = new Intent(getApplicationContext(), CheckList.class);
-//                checkListIntent.putExtra(currentYearIntentKey,currentYearIntent);
-//                checkListIntent.putExtra(currentMonthIntentKey,currentMonthIntent);
-//                checkListIntent.putExtra(currentDayIntentKey,currentDayIntent);
-//                checkListIntent.putExtra(canDisplayIntentKey,canDisplay);
-//                startActivity(checkListIntent);
-//            }
-//        });
-
         Button date = findViewById(R.id.date);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,58 +159,48 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
                 }
             }
             if(currDayTaskSlots.size()>0) {
-                StringBuilder taskMergeString = new StringBuilder();
-                taskMergeString.append(currDayTaskSlots.get(0).getStartTimeString());
-                double currTime = currDayTaskSlots.get(0).getTimeSlots().getTime();
-                double continuousDuration = 0.5;
-                for (int i = 1; i<currDayTaskSlots.size();i++) {
-                    needEnd = true;
-                    //addTimeSlotsToLayout(ts.toString(),true);
-                    Log.d(TAG,"diff time"+String.valueOf(currDayTaskSlots.get(i).getTimeSlots().getTime()-currTime));
-                    Log.d(TAG,"names"+String.valueOf(currDayTaskSlots.get(i).getNameTask()+"-->"+currDayTaskSlots.get(i-1).getNameTask()));
+                //StringBuilder taskMergeString = new StringBuilder();
+                Calendar currentDay = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+                currentDay.set(curYear,curMonth,curDay);
+                ArrayList<Double> breakHours = availableDays.get(currentDay.get(Calendar.DAY_OF_WEEK)-1).getBreakHoursDouble();
+                Log.d(TAG,"current Day: "+ currentDay.get(Calendar.DAY_OF_WEEK));
 
-                    if(currDayTaskSlots.get(i).getTimeSlots().getTime()-currTime==0.5
-                            && currDayTaskSlots.get(i).getNameTask().equals(currDayTaskSlots.get(i-1).getNameTask())){
-                        currTime = currDayTaskSlots.get(i).getTimeSlots().getTime();
-                        continuousDuration+=0.5;
-                        Log.d(TAG,"continuous");
-                        if(continuousDuration==2){
-                            needEnd = false;
-                            taskMergeString.append("-");
-                            taskMergeString.append(currDayTaskSlots.get(i).getEndTimeString());
-                            taskMergeString.append(" ");
-                            taskMergeString.append(currDayTaskSlots.get(i).getNameTask());
-                            addTimeSlotsToLayout(taskMergeString.toString(),true);
-                            //addBreak(i,currDayTaskSlots.size()-1);
-                            continuousDuration = 0.5;
-                            i++;
-                            taskMergeString = new StringBuilder();
-                            if(i<currDayTaskSlots.size()) {
-                                currTime = currDayTaskSlots.get(i).getTimeSlots().getTime();
-                                Log.d(TAG, "index:" + i + "," + currDayTaskSlots.size());
-                                taskMergeString.append(currDayTaskSlots.get(i).getStartTimeString());
-                            }
-                        }
-                    } else{
-                        taskMergeString.append("-");
-                        taskMergeString.append(currDayTaskSlots.get(i-1).getEndTimeString());
-                        taskMergeString.append(" ");
-                        taskMergeString.append(currDayTaskSlots.get(i-1).getNameTask());
-                        addTimeSlotsToLayout(taskMergeString.toString(),true);
-                        //addBreak();
-                        continuousDuration = 0.5;
-                        taskMergeString = new StringBuilder();
-                        currTime = currDayTaskSlots.get(i).getTimeSlots().getTime();
-                        taskMergeString.append(currDayTaskSlots.get(i).getStartTimeString());
+                for(double breakHour:breakHours){
+                    Log.d(TAG,"break hour found:" + breakHour);
+                    TaskSlots currentBreakTask = new TaskSlots("Break",99999); //fake id
+                    currentDay.set(Calendar.HOUR_OF_DAY,(int)breakHour);
+                    currentDay.set(Calendar.MINUTE,breakHour-(int)breakHour==0?0:30);
+                    if(currentDay.compareTo(Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore")))>0) {
+                        TimeSlots breaktimeSlot = new TimeSlots(currentDay);
+                        currentBreakTask.setTimeSlots(breaktimeSlot);
+                        currDayTaskSlots.add(currentBreakTask);
+                        Log.d(TAG, "found break");
                     }
                 }
-                if(needEnd) {
-                    taskMergeString.append("-");
-                    taskMergeString.append(currDayTaskSlots.get(currDayTaskSlots.size() - 1).getEndTimeString());
-                    taskMergeString.append(" ");
-                    taskMergeString.append(currDayTaskSlots.get(currDayTaskSlots.size() - 1).getNameTask());
-                    addTimeSlotsToLayout(taskMergeString.toString(), true);
+                Collections.sort(currDayTaskSlots);
+
+                StringBuilder mergeContinuousTaskBuilder = new StringBuilder();
+                mergeContinuousTaskBuilder.append(currDayTaskSlots.get(0).getStartTimeString());
+                String currentTaskName = currDayTaskSlots.get(0).getNameTask();
+                for (int i=0;i<currDayTaskSlots.size();i++) {
+                    if(!currentTaskName.equals(currDayTaskSlots.get(i).getNameTask())){
+                        mergeContinuousTaskBuilder.append("-");
+                        String currentEndTime = (i==0? currDayTaskSlots.get(0).getEndTimeString(): currDayTaskSlots.get(i).getEndTimeString());
+                        mergeContinuousTaskBuilder.append(currentEndTime);
+                        mergeContinuousTaskBuilder.append(" ");
+                        mergeContinuousTaskBuilder.append(currentTaskName);
+                        addTimeSlotsToLayout(mergeContinuousTaskBuilder.toString(),true);
+                        currentTaskName = currDayTaskSlots.get(i).getNameTask();
+                        mergeContinuousTaskBuilder = new StringBuilder();
+                        mergeContinuousTaskBuilder.append(currDayTaskSlots.get(i).getStartTimeString());
+
+                    }
                 }
+                mergeContinuousTaskBuilder.append("-");
+                mergeContinuousTaskBuilder.append(currDayTaskSlots.get(currDayTaskSlots.size()-1).getEndTimeString());
+                mergeContinuousTaskBuilder.append(" ");
+                mergeContinuousTaskBuilder.append(currentTaskName);
+                addTimeSlotsToLayout(mergeContinuousTaskBuilder.toString(),true);
             }
             else{
                 addTimeSlotsToLayout("No tasks assigned today",false);
@@ -233,16 +212,6 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
 
     }
 
-    public void addBreak(int elementEnd2h, int lastIndexPossible){
-        //if the last time slot do not have a break
-        if(elementEnd2h!=lastIndexPossible){
-            //TODO:add break to layout
-            //ok i need to be able to get the break from the taskslot itself
-            //
-            String breakTimeDisplay = "";
-            addTimeSlotsToLayout(breakTimeDisplay,true);
-        }
-    }
 
     public static class DatePickerFragment extends DialogFragment {
         @Override

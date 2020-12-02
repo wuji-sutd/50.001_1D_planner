@@ -24,6 +24,7 @@ public class TimeSlots {
 
     public TimeSlots(Calendar fixedCalendar){
         cal = fixedCalendar;
+        time = fixedCalendar.get(Calendar.HOUR_OF_DAY)+(fixedCalendar.get(Calendar.MINUTE)==0?0:0.5);
     }
 
     @Override
