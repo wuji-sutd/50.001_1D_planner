@@ -60,7 +60,7 @@
             android:layout_marginLeft="10sp"
             android:layout_gravity="center"
             android:gravity="left"
-            android:text="@string/newTaskTitle"
+            android:text="@string/title"
             android:textSize="18sp" />
 
         <EditText

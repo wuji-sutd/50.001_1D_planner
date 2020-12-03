@@ -50,7 +50,7 @@
     <string name="timePeriod">HH/MM to HH/MM</string>
     <string name="title">Title: </string>
     <string name="newTask">New Task</string>
-    <string name="newTaskTitle">Title: </string>
+    <string name="newTaskTitle">New Title: </string>
     <string name="estHours">Hours: </string>
     <string name="estMinutes">Minutes</string>
     <string name="dueDate">Due date: </string>

@@ -118,7 +118,7 @@ public class EditTask extends AppCompatActivity {
         String[] minuteValues = {"00","30"};
         estMinInput.setDisplayedValues(minuteValues);
 
-        this.dueDateInput = findViewById(R.id.inputeditTaskDueDate);
+        this.dueDateInput = findViewById(R.id.inputEditTaskDueDate);
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);

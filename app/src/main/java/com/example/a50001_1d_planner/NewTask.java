@@ -82,7 +82,7 @@ public class NewTask extends AppCompatActivity {
         // Initialize
         this.mtaskDAO = new TaskDAO(this);
 
-        this.titleInput = findViewById(R.id.inputUsername);
+        this.titleInput = findViewById(R.id.inputNewTaskTitle);
 
         this.estHoursInput = findViewById(R.id.inputEstHours);
         this.estHoursInput.setMaxValue(23);
