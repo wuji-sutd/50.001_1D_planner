@@ -67,10 +67,9 @@ public class SignUpPage extends AppCompatActivity {
                             if (isSamePassword) {
                                 User createdUser = mUserDAO.createUser(name, email, password);
                                 errorList = "";
-                                Toast.makeText(SignUpPage.this, "Signed up successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(SignUpPage.this, "Signed up successfully", Toast.LENGTH_SHORT).show();
                                 //Save account and return to the log in page
-                                Intent backToLogInIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(backToLogInIntent);
+                                finish();
                             }
                         }
                     }
@@ -135,8 +134,7 @@ public class SignUpPage extends AppCompatActivity {
         backToLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToLogInIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(backToLogInIntent);
+                finish();
             }
         });
     }

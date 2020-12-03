@@ -67,5 +67,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        if (getIntent().getBooleanExtra("EXIT", false)) {
+//            finish();
+//        }
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+//    public void onBackPressed()
+//    {
+//        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.putExtra("EXIT", true);
+//        startActivity(intent);
+//    }
+
 }

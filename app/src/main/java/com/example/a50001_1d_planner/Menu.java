@@ -22,8 +22,7 @@ public class Menu extends AppCompatActivity {
         backToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToMainIntent = new Intent(getApplicationContext(), TimeTable.class);
-                startActivity(backToMainIntent);
+                finish();
             }
         });
 
@@ -62,8 +61,5 @@ public class Menu extends AppCompatActivity {
                 startActivity(new Intent(Menu.this, EditTask.class));
             }
         });
-
-
-
     }
 }

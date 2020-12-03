@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -17,8 +16,7 @@
             android:id="@+id/backToSettings"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:text="@string/back"
-            />
+            android:text="@string/back" />
 
         <TextView
             android:id="@+id/account"
@@ -28,16 +26,14 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="24sp"
-            android:textColor="@color/colorPrimaryalt"
-            />
+            android:textColor="@color/colorPrimaryalt" />
 
     </FrameLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:background="#A1979797"
-        />
+        android:background="#A1979797" />
 
     <TextView
         android:id="@+id/userName"
@@ -64,6 +60,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20sp"
         android:text="@string/changePw"
+        android:gravity="left"
+        android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/deleteAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/deleteAccount"
         android:gravity="left"
         android:layout_gravity="center" />
 

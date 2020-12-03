@@ -109,7 +109,7 @@ public class EditTask extends AppCompatActivity {
         });
 
         this.estHoursInput = findViewById(R.id.inputEditEstHours);
-        this.estHoursInput.setMaxValue(24);
+        this.estHoursInput.setMaxValue(23);
         this.estHoursInput.setMinValue(0);
         this.estMinInput = findViewById(R.id.inputEditEstMin);
 
@@ -238,8 +238,7 @@ public class EditTask extends AppCompatActivity {
                     }
                     Toast.makeText(EditTask.this, "Task Edited", Toast.LENGTH_LONG).show();
                     // Return back to menu page if new task is added
-                    Intent cancelNewTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                    startActivity(cancelNewTaskIntent);
+                    finish();
                 }
             }
         });
@@ -250,8 +249,7 @@ public class EditTask extends AppCompatActivity {
         cancelEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cancelEditTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(cancelEditTaskIntent);
+                finish();
             }
         });
     }

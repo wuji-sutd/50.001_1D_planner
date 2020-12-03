@@ -85,7 +85,7 @@ public class NewTask extends AppCompatActivity {
         this.titleInput = findViewById(R.id.inputUsername);
 
         this.estHoursInput = findViewById(R.id.inputEstHours);
-        this.estHoursInput.setMaxValue(24);
+        this.estHoursInput.setMaxValue(23);
         this.estHoursInput.setMinValue(0);
         this.estMinInput = findViewById(R.id.inputEstMin);
         //minpicker = new String[] {"00", "30"};
@@ -111,11 +111,11 @@ public class NewTask extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     weeklyRecurringDueDate.setVisibility(View.VISIBLE);
-                    setUpPopUpWindow(0.9,0.85);
+//                    setUpPopUpWindow(0.9,0.85);
 
                 } else {
                     weeklyRecurringDueDate.setVisibility(View.GONE);
-                    setUpPopUpWindow(0.9,0.7);
+//                    setUpPopUpWindow(0.9,0.7);
                 }
             }
         });
@@ -124,14 +124,14 @@ public class NewTask extends AppCompatActivity {
     }
 
     // Set up the dimension of pop-up window: 90% width * 70% height
-    public void setUpPopUpWindow(double widthProportion, double heightProportion) {
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//    public void setUpPopUpWindow(double widthProportion, double heightProportion) {
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        getWindow().setLayout((int) (width*widthProportion), (int) (height*heightProportion));
-    }
+//        int width = dm.widthPixels;
+//        int height = dm.heightPixels;
+//        getWindow().setLayout((int) (width*widthProportion), (int) (height*heightProportion));
+//    }
 
     public void addTaskData() {
         this.radioMon = findViewById(R.id.radio_mon);
@@ -181,8 +181,7 @@ public class NewTask extends AppCompatActivity {
                    }
                    Toast.makeText(NewTask.this, "New task added", Toast.LENGTH_LONG).show();
                    // Return back to menu page if new task is added
-                   Intent cancelNewTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                   startActivity(cancelNewTaskIntent);
+                   finish();
                 }
             }
         });
@@ -193,8 +192,7 @@ public class NewTask extends AppCompatActivity {
         cancelNewTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cancelNewTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(cancelNewTaskIntent);
+                finish();
             }
         });
     }
@@ -307,6 +305,4 @@ public class NewTask extends AppCompatActivity {
             currentRecurring.add(Calendar.DATE,7-NUM_DAYS_BEFORE_RECURRENCE);
         }
     }
-
-
 }

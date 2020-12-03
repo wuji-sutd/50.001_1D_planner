@@ -125,8 +125,7 @@ public class WorkingHours extends AppCompatActivity {
         backToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(backToMenuIntent);
+                finish();
             }
         });
 
@@ -238,7 +237,6 @@ public class WorkingHours extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }
 
 

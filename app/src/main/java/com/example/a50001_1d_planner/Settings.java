@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ThemedSpinnerAdapter;
 
 public class Settings extends AppCompatActivity {
 
@@ -21,10 +22,18 @@ public class Settings extends AppCompatActivity {
         backToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(backToMenuIntent);
+                finish();
             }
         });
+
+//        Button toThemes = findViewById(R.id.theme);
+//        toThemes.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent toThemesIntent = new Intent(getApplicationContext(), Themes.class);
+//                startActivity(toThemesIntent);
+//            }
+//        });
 
         Button toAccount = findViewById(R.id.account);
         toAccount.setOnClickListener(new View.OnClickListener() {
@@ -34,7 +43,5 @@ public class Settings extends AppCompatActivity {
                 startActivity(toAccountIntent);
             }
         });
-
-
     }
 }

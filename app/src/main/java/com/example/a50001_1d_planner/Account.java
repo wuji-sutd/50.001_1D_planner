@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class Account extends AppCompatActivity {
 
@@ -21,8 +25,25 @@ public class Account extends AppCompatActivity {
         backToSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToSettingsIntent = new Intent(getApplicationContext(), Settings.class);
-                startActivity(backToSettingsIntent);
+                finish();
+            }
+        });
+
+        Button changePassword = findViewById(R.id.changePw);
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent changePasswordIntent = new Intent(getApplicationContext(), ChangePassword.class);
+                startActivity(changePasswordIntent);
+            }
+        });
+
+        Button deleteAccount = findViewById(R.id.deleteAccount);
+        deleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent deleteAccountIntent = new Intent(getApplicationContext(), DeleteAccount.class);
+                startActivity(deleteAccountIntent);
             }
         });
 
@@ -31,10 +52,18 @@ public class Account extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent logOutIntent = new Intent(getApplicationContext(), MainActivity.class);
+                logOutIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                logOutIntent.putExtra("EXIT", true);
                 startActivity(logOutIntent);
             }
         });
 
-
     }
 }
+
+
+
+
+
+
+
