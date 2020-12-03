@@ -200,6 +200,12 @@ public class NewTask extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+        startActivity(backToMenuIntent);
+    }
+
     public String getDateFromDatePicker(){
         int day = dueDateInput.getDayOfMonth();
         int month = dueDateInput.getMonth();

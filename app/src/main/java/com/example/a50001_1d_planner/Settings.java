@@ -46,4 +46,10 @@ public class Settings extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed(){
+        Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+        startActivity(backToMenuIntent);
+    }
 }

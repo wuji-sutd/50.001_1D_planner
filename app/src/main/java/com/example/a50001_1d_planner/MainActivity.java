@@ -64,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(toSignUpIntent);
             }
         });
-
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
     }
 
     //ADDED FROM HERE
@@ -84,5 +86,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean isCorrectPassword(User user){
         return passwordEditText.getText().toString().equals(user.getPassword());
     }
-
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
+    }
 }

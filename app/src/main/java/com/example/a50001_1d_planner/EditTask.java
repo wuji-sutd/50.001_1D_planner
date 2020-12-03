@@ -267,6 +267,12 @@ public class EditTask extends AppCompatActivity {
             });
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+        startActivity(backToMenuIntent);
+    }
+
     public void deleteEditTaskFromDB() {
         deleteEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -379,7 +385,7 @@ public class EditTask extends AppCompatActivity {
             } else {
                 currentRecurring.add(Calendar.DATE,daysBetween-NUM_DAYS_BEFORE_RECURRENCE);
             }
-        } else{
+        } else {
             if(daysBetween+7<NUM_DAYS_BEFORE_RECURRENCE){
                 //DD/MM/YYYY
                 startDate = currentRecurring.get(Calendar.DAY_OF_MONTH)+"/"+

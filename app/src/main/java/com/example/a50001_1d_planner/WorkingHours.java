@@ -130,6 +130,7 @@ public class WorkingHours extends AppCompatActivity {
             }
         });
 
+
         Button saveWorkingHours = findViewById(R.id.saveWorkingHours);
 
         saveWorkingHours.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +149,13 @@ public class WorkingHours extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void onBackPressed(){
+        Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+        startActivity(backToMenuIntent);
+    }
+
     //break times should be formatted as "13.5,15.5" or ""
     public String getFormattedBreakHours(TimePicker dayStart, TimePicker dayEnd){
         StringBuilder formattedBreakHours = new StringBuilder();

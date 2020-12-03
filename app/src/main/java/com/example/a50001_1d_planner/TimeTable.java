@@ -239,4 +239,11 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
             timeTableDisplayLayout.addView(taskSlotTextView);
         }
     }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(TimeTable.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
+    }
 }

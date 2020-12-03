@@ -64,4 +64,9 @@ public class Menu extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed(){
+        Intent backToMainIntent = new Intent(getApplicationContext(), TimeTable.class);
+        startActivity(backToMainIntent);
+    }
 }
