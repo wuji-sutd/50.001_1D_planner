@@ -154,9 +154,18 @@ public class EditTask extends AppCompatActivity {
         this.radioSat = findViewById(R.id.radio_sat);
         this.radioSun = findViewById(R.id.radio_sun);
 
+
+
         saveEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(focusingTasks.size()==0) {
+                    Toast.makeText(getBaseContext(),"No tasks to edit", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+
                 long userID = 0; // Need a method to find which user created the task
                 String title = titleSelection.getSelectedItem().toString();
                 Log.d(TAG,String.valueOf(estMinInput.getValue()));

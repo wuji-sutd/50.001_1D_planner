@@ -63,32 +63,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/editTaskTitle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3sp"
-            android:layout_gravity="center"
-            android:gravity="left"
-            android:text="@string/newTaskTitle"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/inputEditTaskTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5sp"
-            android:layout_marginRight="10sp"
-            android:layout_weight="1"
-            android:hint="" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/newTaskHoursLine"
         android:layout_width="match_parent"
         android:layout_height="107dp"
