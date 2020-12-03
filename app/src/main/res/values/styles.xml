@@ -7,4 +7,28 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="OverlayThemeLime" parent="AppTheme">
+        <item name="colorPrimary">@color/color2</item>
+        <item name="colorPrimaryDark">@color/color2alt</item>
+        <item name="colorAccent">@color/color2Accent</item>
+    </style>
+
+    <style name="OverlayThemeRed" parent="AppTheme">
+        <item name="colorPrimary">@color/color3</item>
+        <item name="colorPrimaryDark">@color/color3alt</item>
+        <item name="colorAccent">@color/color3Accent</item>
+    </style>
+
+    <style name="OverlayThemeBlack" parent="AppTheme">
+        <item name="colorPrimary">@color/black3</item>
+        <item name="colorPrimaryDark">@color/black2</item>
+        <item name="colorAccent">@color/offwhite</item>
+    </style>
+
+    <style name="OverlayThemeBlue" parent="AppTheme">
+        <item name="colorPrimary">@color/color4</item>
+        <item name="colorPrimaryDark">@color/color4alt</item>
+        <item name="colorAccent">@color/color4Accent</item>
+    </style>
+
 </resources>

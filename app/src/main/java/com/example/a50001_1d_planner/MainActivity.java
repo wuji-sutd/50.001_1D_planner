@@ -11,50 +11,48 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    private UserDAO mUserDAO;
-
-    private EditText nameInput;
-    private EditText passwordInput;
-//    private HashMap<String, String> dbInfo;
+    private UserDAO userDAO; //ADDED
+    private EditText usernameEditText; //ADDED
+    private EditText passwordEditText; //ADDED
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //NOTE: if need to clean the database, uncomment next 2 lines
-//       DBHelper dbHelper = new DBHelper(this);
+        //NOTE: if need to clean the database, uncomment this
+//        DBHelper dbHelper = new DBHelper(this);
 //        dbHelper.onUpgrade(dbHelper.getWritableDatabase(),0,0);
-///        dbInfo = dbHelper.getUserInfo();
         getSupportActionBar().hide();
+        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getSupportActionBar().setCustomView(R.layout.activity_title);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.nameInput = findViewById(R.id.inputUsername);
-        this.passwordInput = findViewById(R.id.inputPassword);
+        userDAO = new UserDAO(this); //ADDED
+        usernameEditText = findViewById(R.id.inputUsername); //ADDED
+        passwordEditText = findViewById(R.id.inputPassword); //ADDED
 
         Button toMain = findViewById(R.id.logIn);
-        toMain.setOnClickListener(new View.OnClickListener() {
-            String username = nameInput.getText().toString();
-            String password = passwordInput.getText().toString();
-
-
-
+        toMain.setOnClickListener(new View.OnClickListener() { //ADDED AND CHANGED
             @Override
             public void onClick(View v) {
-///                if (!dbInfo.containsValue(username)) {
-///                    Toast.makeText(MainActivity.this, "User does not exist", Toast.LENGTH_SHORT).show();
-///                }
-///                else if (!.contains(password)) {
-///                    Toast.makeText(MainActivity.this, "Incorrect password", Toast.LENGTH_SHORT).show();
-///                }
-///                else {
-                    Intent toMainIntent = new Intent(getApplicationContext(), TimeTable.class);
-                    startActivity(toMainIntent);
-///                }
+                if(!checkFieldsPopulated()){
+                    Toast.makeText(getBaseContext(),"Please fill in your login details", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                User user = userDoesExists();
+                if(user == null) {
+                    Toast.makeText(getBaseContext(),"User name invalid", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!isCorrectPassword(user)) {
+                    Toast.makeText(getBaseContext(),"Password invalid for user", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent toMainIntent = new Intent(getApplicationContext(), TimeTable.class);
+                startActivity(toMainIntent);
             }
         });
 
@@ -67,21 +65,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        if (getIntent().getBooleanExtra("EXIT", false)) {
-//            finish();
-//        }
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
+    //ADDED FROM HERE
+    public boolean checkFieldsPopulated(){
+        return !usernameEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty();
     }
-//    public void onBackPressed()
-//    {
-//        Intent intent = new Intent(MainActivity.this, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        intent.putExtra("EXIT", true);
-//        startActivity(intent);
-//    }
+
+    public User userDoesExists(){
+        ArrayList<User> allUsers = userDAO.getAllUsers();
+        if(allUsers.size()==0) return null;
+        for(User user:allUsers){
+            if(user.getName().equals(usernameEditText.getText().toString())) return user;
+        }
+        return null;
+    }
+
+    public boolean isCorrectPassword(User user){
+        return passwordEditText.getText().toString().equals(user.getPassword());
+    }
 
 }

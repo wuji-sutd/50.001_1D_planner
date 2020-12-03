@@ -17,6 +17,7 @@ public class Account extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_account);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.activity_title);
@@ -25,7 +26,8 @@ public class Account extends AppCompatActivity {
         backToSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent backToSettingsIntent = new Intent(getApplicationContext(), Settings.class);
+                startActivity(backToSettingsIntent);
             }
         });
 

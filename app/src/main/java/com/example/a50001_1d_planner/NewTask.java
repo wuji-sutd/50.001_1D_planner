@@ -60,6 +60,7 @@ public class NewTask extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_new_task);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.activity_title);
@@ -181,7 +182,8 @@ public class NewTask extends AppCompatActivity {
                    }
                    Toast.makeText(NewTask.this, "New task added", Toast.LENGTH_LONG).show();
                    // Return back to menu page if new task is added
-                   finish();
+                   Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+                   startActivity(backToMenuIntent);
                 }
             }
         });
@@ -192,7 +194,8 @@ public class NewTask extends AppCompatActivity {
         cancelNewTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+                startActivity(backToMenuIntent);
             }
         });
     }

@@ -8,6 +8,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
@@ -89,9 +90,29 @@ public class UserDAO {
 
         if (cursor != null) {
             cursor.moveToFirst();
+        } else{
+            return null;
         }
-        assert cursor != null;
+        //assert cursor != null;
         return cursorToUser(cursor);
+    }
+
+    public ArrayList<User> getAllUsers(){
+        ArrayList<User> listOfUsers = new ArrayList<>();
+
+        Cursor cursor = mDatabase.query(DBHelper.UserTableName, mAllColumns,
+                null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (! cursor.isAfterLast()) {
+            User user = cursorToUser(cursor);
+            listOfUsers.add(user);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        Log.d(TAG,"finding");
+
+        return listOfUsers;
     }
 
     protected User cursorToUser(Cursor cursor) {

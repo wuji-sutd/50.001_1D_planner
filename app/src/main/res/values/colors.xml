@@ -10,11 +10,14 @@
     <color name="offwhite">#F1F1F1</color>
     <color name="white">#FFFFFF</color>
     <color name="red">#FF0000</color>
-    <color name="colour2">#71C2FF</color>
-    <color name="color2alt">#468EC5</color>
-    <color name="color2Accent">#FCE65E</color>
+    <color name="color2">#6D9904</color>
+    <color name="color2alt">#587C02</color>
+    <color name="color2Accent">#F55E0C</color>
     <color name="color3">#FF6B6B</color>
     <color name="color3alt">#D80000</color>
-    <color name="color3Accent">#33FEEC</color>
+    <color name="color3Accent">#FBC02D</color>
+    <color name="color4">#6DBBFD</color>
+    <color name="color4alt">#4C8FC9</color>
+    <color name="color4Accent">#E9E2B5</color>
     <color name="ic_launcher_background">#FFFFFF</color>
 </resources>

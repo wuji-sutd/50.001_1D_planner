@@ -28,6 +28,7 @@ public class SignUpPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_sign_up_page);
         this.errorBox = findViewById(R.id.errorBox);
 
@@ -69,7 +70,8 @@ public class SignUpPage extends AppCompatActivity {
                                 errorList = "";
                                 Toast.makeText(SignUpPage.this, "Signed up successfully", Toast.LENGTH_SHORT).show();
                                 //Save account and return to the log in page
-                                finish();
+                                Intent backToMainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(backToMainIntent);
                             }
                         }
                     }
@@ -134,7 +136,8 @@ public class SignUpPage extends AppCompatActivity {
         backToLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+            Intent backToMainIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(backToMainIntent);
             }
         });
     }

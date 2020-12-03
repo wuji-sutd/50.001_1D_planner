@@ -14,6 +14,7 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_settings);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.activity_title);
@@ -22,7 +23,8 @@ public class Settings extends AppCompatActivity {
         backToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+                startActivity(backToMenuIntent);
             }
         });
 
