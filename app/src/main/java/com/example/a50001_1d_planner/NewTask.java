@@ -1,6 +1,7 @@
 package com.example.a50001_1d_planner;
 
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -59,9 +60,12 @@ public class NewTask extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_new_task);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.activity_title);
 
-        setUpPopUpWindow(0.9,0.7);
+        //setUpPopUpWindow(0.9,0.7);
         Log.d(TAG,"calendar time" + today.getTime().toString());
         weeklyRecSwitch = (Switch)findViewById(R.id.weeklyRecSwitch);
         weeklyRecSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -108,11 +112,11 @@ public class NewTask extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     weeklyRecurringDueDate.setVisibility(View.VISIBLE);
-                    setUpPopUpWindow(0.9,0.85);
+//                    setUpPopUpWindow(0.9,0.85);
 
                 } else {
                     weeklyRecurringDueDate.setVisibility(View.GONE);
-                    setUpPopUpWindow(0.9,0.7);
+//                    setUpPopUpWindow(0.9,0.7);
                 }
             }
         });
@@ -121,14 +125,14 @@ public class NewTask extends AppCompatActivity {
     }
 
     // Set up the dimension of pop-up window: 90% width * 70% height
-    public void setUpPopUpWindow(double widthProportion, double heightProportion) {
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//    public void setUpPopUpWindow(double widthProportion, double heightProportion) {
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        getWindow().setLayout((int) (width*widthProportion), (int) (height*heightProportion));
-    }
+//        int width = dm.widthPixels;
+//        int height = dm.heightPixels;
+//        getWindow().setLayout((int) (width*widthProportion), (int) (height*heightProportion));
+//    }
 
     public void addTaskData() {
         this.radioMon = findViewById(R.id.radio_mon);
@@ -158,6 +162,8 @@ public class NewTask extends AppCompatActivity {
                int isValidDueDate = validDueDate(dueDate);
                if(title.length()==0){
                    Toast.makeText(NewTask.this,"Please input title",Toast.LENGTH_SHORT).show();
+               } else if (estHoursInput.getValue()==0 && estMinInput.getValue()==0){
+                   Toast.makeText(NewTask.this, "Please select estimated time", Toast.LENGTH_SHORT).show();
                } else if(isValidDueDate==-1){
                    Toast.makeText(NewTask.this,"Due date invalid",Toast.LENGTH_SHORT).show();
                } else if(isValidDueDate==0){
@@ -176,8 +182,8 @@ public class NewTask extends AppCompatActivity {
                    }
                    Toast.makeText(NewTask.this, "New task added", Toast.LENGTH_LONG).show();
                    // Return back to menu page if new task is added
-                   Intent cancelNewTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                   startActivity(cancelNewTaskIntent);
+                   Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+                   startActivity(backToMenuIntent);
                 }
             }
         });
@@ -188,10 +194,16 @@ public class NewTask extends AppCompatActivity {
         cancelNewTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cancelNewTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(cancelNewTaskIntent);
+                Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+                startActivity(backToMenuIntent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+        startActivity(backToMenuIntent);
     }
 
     public String getDateFromDatePicker(){
@@ -302,6 +314,4 @@ public class NewTask extends AppCompatActivity {
             currentRecurring.add(Calendar.DATE,7-NUM_DAYS_BEFORE_RECURRENCE);
         }
     }
-
-
 }

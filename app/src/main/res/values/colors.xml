@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#C6D57DF4</color>
-    <color name="colorPrimaryalt">#C25BDF</color>
+    <color name="colorPrimary">#BB85FE</color>
+    <color name="colorPrimaryalt">#9762DA</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="black">#505050</color>
-    <color name="black2">#808080</color>
+    <color name="black">#000000</color>
+    <color name="black2">#505050</color>
+    <color name="black3">#808080</color>
+    <color name="blackAccent">#AA97FD</color>
     <color name="offwhite">#F1F1F1</color>
     <color name="white">#FFFFFF</color>
     <color name="red">#FF0000</color>
-    <color name="color2">#BB85FE</color>
-    <color name="colour2alt">#9762DA</color>
-    <color name="colour3">#71C2FF</color>
-    <color name="color3alt">#468EC5</color>
-    <color name="color4">#FF6B6B</color>
-    <color name="color4alt">#BF4545</color>
+    <color name="color2">#6D9904</color>
+    <color name="color2alt">#587C02</color>
+    <color name="color2Accent">#F55E0C</color>
+    <color name="color3">#FF6B6B</color>
+    <color name="color3alt">#D80000</color>
+    <color name="color3Accent">#FBC02D</color>
+    <color name="color4">#6DBBFD</color>
+    <color name="color4alt">#4C8FC9</color>
+    <color name="color4Accent">#E9E2B5</color>
     <color name="ic_launcher_background">#FFFFFF</color>
 </resources>

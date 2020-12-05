@@ -176,7 +176,7 @@ public class WorkingHoursDAO {
                     current +=0.5;
                 }
             }
-             currentDay.add(Calendar.DATE,1);
+            currentDay.add(Calendar.DATE,1);
         }
     }
 

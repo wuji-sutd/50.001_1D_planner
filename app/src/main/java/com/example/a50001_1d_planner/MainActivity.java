@@ -23,14 +23,16 @@ public class MainActivity extends AppCompatActivity {
         //NOTE: if need to clean the database, uncomment this
 //        DBHelper dbHelper = new DBHelper(this);
 //        dbHelper.onUpgrade(dbHelper.getWritableDatabase(),0,0);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.activity_title);
+        getSupportActionBar().hide();
+        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getSupportActionBar().setCustomView(R.layout.activity_title);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         userDAO = new UserDAO(this); //ADDED
-        usernameEditText = findViewById(R.id.inputUserName); //ADDED
+
+        usernameEditText = findViewById(R.id.inputUsername); //ADDED
         passwordEditText = findViewById(R.id.inputPassword); //ADDED
 
         Button toMain = findViewById(R.id.logIn);
@@ -63,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(toSignUpIntent);
             }
         });
-
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
     }
 
     //ADDED FROM HERE
@@ -83,5 +87,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean isCorrectPassword(User user){
         return passwordEditText.getText().toString().equals(user.getPassword());
     }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
+    }
+
 
 }

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="match_parent"
@@ -31,9 +29,11 @@
         android:textSize="40sp" />
 
     <EditText
-        android:id="@+id/inputUserName"
+        android:id="@+id/inputUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
         android:layout_weight="1"
         android:inputType="textPersonName"
         android:digits="@string/alphanumeric"
@@ -45,6 +45,8 @@
         android:id="@+id/inputPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="3sp"
+        android:layout_marginRight="3sp"
         android:layout_weight="1"
         android:inputType="textPassword"
         android:maxLength="30"

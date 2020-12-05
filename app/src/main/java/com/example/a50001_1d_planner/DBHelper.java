@@ -1,12 +1,15 @@
 package com.example.a50001_1d_planner;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
+import android.database.Cursor;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -107,6 +110,37 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CreateWorkingHoursInfoTable);
         //onCreate(db);
     }
+
+
+
+
+///    public HashMap<String,String> getUserInfo(){
+///        HashMap<String,String> user = new HashMap<String,String>();
+///        SQLiteDatabase db = this.getReadableDatabase();
+
+///        String[] column = {"userID","username","email","password"};
+
+///        Cursor cursor = db.query(UserTableName,column,"username = ? AND password = ?",new String[]{"username, password"},null,null,null);
+
+///        int userIDIndex = cursor.getColumnIndex("userID");
+///        int usernameIndex = cursor.getColumnIndex("username");
+///        int emailIndex = cursor.getColumnIndex("email");
+///        int passwordIndex = cursor.getColumnIndex("password");
+
+///        if(cursor.getCount() > 0){
+///            user.put("userID",cursor.getString(userIDIndex));
+///            user.put("username",cursor.getString(usernameIndex));
+///            user.put("email",cursor.getString(emailIndex));
+///            user.put("password",cursor.getString(passwordIndex));
+///        }
+///        if (cursor != null && !cursor.isClosed()) {
+///            cursor.close();
+///        }
+///        return user;
+///    }
+
+
+
 
     /*// Insert New User Information
     public boolean insertUserData(String name, String email, String password) {

@@ -9,27 +9,36 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/menu"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/menu">
         </Button>
 
+        <TextView
+            android:id="@+id/tasksTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/tasks"
+            android:textSize="24sp"
+            android:textColor="@color/colorPrimaryalt" />
+
         <Button
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:text="@string/Date"
+            android:layout_gravity="right"
+            android:text="@string/Calendar"
             tools:onClick="onClick" />
 
-<!--        <Button-->
+        <!--        <Button-->
 <!--            android:id="@+id/checkList"-->
 <!--            android:layout_weight="1"-->
 <!--            android:layout_height="wrap_content"-->
@@ -37,21 +46,35 @@
 <!--            android:text="@string/checkList">-->
 <!--        </Button>-->
 
-    </LinearLayout>
+    </FrameLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="#A1979797"
+        />
 
     <LinearLayout
         android:id = "@+id/datedisplay"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id= "@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:layout_marginLeft="5sp"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="8sp"
             android:text = "@string/today"
+            android:textColor="@color/black"
             android:textSize="30sp"
             />
 
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

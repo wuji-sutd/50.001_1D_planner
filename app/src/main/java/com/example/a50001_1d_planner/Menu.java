@@ -14,6 +14,7 @@ public class Menu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_menu);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.activity_title);
@@ -62,8 +63,10 @@ public class Menu extends AppCompatActivity {
                 startActivity(new Intent(Menu.this, EditTask.class));
             }
         });
-
-
-
+    }
+    @Override
+    public void onBackPressed(){
+        Intent backToMainIntent = new Intent(getApplicationContext(), TimeTable.class);
+        startActivity(backToMainIntent);
     }
 }

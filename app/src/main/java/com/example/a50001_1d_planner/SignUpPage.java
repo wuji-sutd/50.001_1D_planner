@@ -28,12 +28,13 @@ public class SignUpPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_sign_up_page);
         this.errorBox = findViewById(R.id.errorBox);
 
         // Initialize
         this.mUserDAO = new UserDAO(this);
-        this.nameInput = findViewById(R.id.inputNewUserName);
+        this.nameInput = findViewById(R.id.inputNewUsername);
         this.emailInput = findViewById(R.id.inputNewUserEmail);
         this.passwordInput = findViewById(R.id.inputNewUserPassword);
         this.confirmPasswordInput = findViewById(R.id.inputNewUserConfirmPassword);
@@ -67,10 +68,10 @@ public class SignUpPage extends AppCompatActivity {
                             if (isSamePassword) {
                                 User createdUser = mUserDAO.createUser(name, email, password);
                                 errorList = "";
-                                Toast.makeText(SignUpPage.this, "Signed up successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(SignUpPage.this, "Signed up successfully", Toast.LENGTH_SHORT).show();
                                 //Save account and return to the log in page
-                                Intent backToLogInIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(backToLogInIntent);
+                                Intent backToMainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(backToMainIntent);
                             }
                         }
                     }
@@ -135,8 +136,8 @@ public class SignUpPage extends AppCompatActivity {
         backToLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToLogInIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(backToLogInIntent);
+            Intent backToMainIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(backToMainIntent);
             }
         });
     }

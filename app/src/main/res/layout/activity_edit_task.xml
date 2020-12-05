@@ -3,7 +3,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
@@ -20,12 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cancel" />
+
         <Button
             android:id="@+id/deleteEditTask"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Delete" />
+
         <Button
             android:id="@+id/saveEditTask"
             android:layout_width="wrap_content"
@@ -47,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="left"
-            android:text="@string/newTaskTitle"
+            android:layout_marginLeft="3sp"
+            android:text="@string/title"
             android:textSize="20sp" />
 
         <Spinner
@@ -59,7 +61,6 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/newTaskHoursLine"
@@ -73,8 +74,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_marginLeft="3sp"
             android:gravity="left"
-            android:text="Estimated Hours Left"
+            android:text="@string/estHoursToComplete"
             android:textSize="20sp" />
 
         <NumberPicker
@@ -104,12 +106,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="3sp"
             android:gravity="left"
             android:text="@string/dueDate"
             android:textSize="20sp" />
 
         <DatePicker
-            android:id="@+id/inputeditTaskDueDate"
+            android:id="@+id/inputEditTaskDueDate"
             android:layout_width="wrap_content"
             android:layout_height="80sp"
             android:layout_weight="1"

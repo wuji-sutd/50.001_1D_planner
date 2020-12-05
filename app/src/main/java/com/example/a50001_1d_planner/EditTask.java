@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -68,7 +69,10 @@ public class EditTask extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_edit_task);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.activity_title);
         Log.d(TAG,"calendar time" + today.getTime().toString());
         weeklyRecSwitch = (Switch)findViewById(R.id.editWeeklyRecSwitch);
         weeklyRecSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -115,7 +119,7 @@ public class EditTask extends AppCompatActivity {
         String[] minuteValues = {"00","30"};
         estMinInput.setDisplayedValues(minuteValues);
 
-        this.dueDateInput = findViewById(R.id.inputeditTaskDueDate);
+        this.dueDateInput = findViewById(R.id.inputEditTaskDueDate);
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
@@ -151,9 +155,18 @@ public class EditTask extends AppCompatActivity {
         this.radioSat = findViewById(R.id.radio_sat);
         this.radioSun = findViewById(R.id.radio_sun);
 
+
+
         saveEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(focusingTasks.size()==0) {
+                    Toast.makeText(getBaseContext(),"No tasks to edit", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+
                 long userID = 0; // Need a method to find which user created the task
                 String title = titleSelection.getSelectedItem().toString();
                 Log.d(TAG,String.valueOf(estMinInput.getValue()));
@@ -168,7 +181,11 @@ public class EditTask extends AppCompatActivity {
                 }
                 //check if due date is in the correct format
                 int isValidDueDate = validDueDate(dueDate);
-                if(isValidDueDate==-1){
+                if(title.length()==0){
+                    Toast.makeText(EditTask.this, "Please input title", Toast.LENGTH_SHORT).show();
+                } else if (estHoursInput.getValue()==0 && estMinInput.getValue()==0){
+                    Toast.makeText(EditTask.this, "Please select estimated time", Toast.LENGTH_SHORT).show();
+                } else if(isValidDueDate==-1){
                     Toast.makeText(EditTask.this,"Due date invalid",Toast.LENGTH_LONG).show();
                 } else if(isValidDueDate==0){
                     Toast.makeText(EditTask.this,"Due date over",Toast.LENGTH_LONG).show();
@@ -231,8 +248,9 @@ public class EditTask extends AppCompatActivity {
                     }
                     Toast.makeText(EditTask.this, "Task Edited", Toast.LENGTH_LONG).show();
                     // Return back to menu page if new task is added
-                    Intent cancelNewTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                    startActivity(cancelNewTaskIntent);
+                    Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+                    startActivity(backToMenuIntent);
+
                 }
             }
         });
@@ -241,12 +259,18 @@ public class EditTask extends AppCompatActivity {
     // Return back to menu page if the 'CANCEL' button is clicked
     public void backToMenu() {
         cancelEditTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent cancelEditTaskIntent = new Intent(getApplicationContext(), Menu.class);
-                startActivity(cancelEditTaskIntent);
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+                    startActivity(backToMenuIntent);
+                }
+            });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent backToMenuIntent = new Intent(getApplicationContext(), Menu.class);
+        startActivity(backToMenuIntent);
     }
 
     public void deleteEditTaskFromDB() {
@@ -361,7 +385,7 @@ public class EditTask extends AppCompatActivity {
             } else {
                 currentRecurring.add(Calendar.DATE,daysBetween-NUM_DAYS_BEFORE_RECURRENCE);
             }
-        } else{
+        } else {
             if(daysBetween+7<NUM_DAYS_BEFORE_RECURRENCE){
                 //DD/MM/YYYY
                 startDate = currentRecurring.get(Calendar.DAY_OF_MONTH)+"/"+
