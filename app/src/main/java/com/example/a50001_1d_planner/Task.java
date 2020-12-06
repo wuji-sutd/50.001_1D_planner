@@ -53,6 +53,7 @@ public class Task implements Comparable<Task> {
         //set(int year, int month, int date, int hourOfDay, int minute)
         dueDateCal.set(Integer.parseInt(dueDateComponents[2]),Integer.parseInt(dueDateComponents[1]),Integer.parseInt(dueDateComponents[0]), hour, min);
         dueDateCal.set(Calendar.HOUR_OF_DAY,hour);
+        dueDateCal.set(Calendar.MILLISECOND,0);
 
         startDateCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
@@ -67,6 +68,7 @@ public class Task implements Comparable<Task> {
             startDateCal.set(Calendar.MINUTE, today.get(Calendar.MINUTE)==0 ? 0:30);
 
         }
+        startDateCal.set(Calendar.MILLISECOND,0);
 
         this.time = time;
         this.estHours = Double.parseDouble(estHours);
@@ -218,6 +220,8 @@ public class Task implements Comparable<Task> {
     public void remakeTimeSlots(int numMissedSlots){
         estHours = getHoursNeededLeft() + (double)numMissedSlots/2;
         Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+        today.set(Calendar.MILLISECOND,0);
+
         numTaskSlotsNeeded = (int)estHours*2;
         for(TaskSlots ts: taskSlots){
             if(ts.getTimeSlots()!=null)

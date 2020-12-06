@@ -20,6 +20,7 @@ public class TimeSlots {
         int min = time-hour ==0? 0:30;
         cal.set(year,month,date,0,min,0);
         cal.set(Calendar.HOUR_OF_DAY,hour);
+        cal.set(Calendar.MILLISECOND,0);
     }
 
     public TimeSlots(Calendar fixedCalendar){

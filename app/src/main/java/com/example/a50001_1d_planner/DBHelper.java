@@ -90,11 +90,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.execSQL(SQL_CreateUserInfoTable);
-//        db.execSQL(SQL_CreateTaskInfoTable);
-//        db.execSQL(SQL_CreateWorkingHoursInfoTable);
-//        db.execSQL(SQL_CreateBreakHoursInfoTable);
-        onUpgrade(db,0,2);
+        db.execSQL(SQL_CreateUserInfoTable);
+        db.execSQL(SQL_CreateTaskInfoTable);
+        db.execSQL(SQL_CreateWorkingHoursInfoTable);
     }
 
     @Override
@@ -105,10 +103,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TaskTableName);
         db.execSQL("DROP TABLE IF EXISTS " + WorkingHoursTableName);
         // Recreate the tables
-        db.execSQL(SQL_CreateUserInfoTable);
-        db.execSQL(SQL_CreateTaskInfoTable);
-        db.execSQL(SQL_CreateWorkingHoursInfoTable);
-        //onCreate(db);
+        onCreate(db);
     }
 
 

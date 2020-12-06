@@ -185,7 +185,9 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
                 for (int i=0;i<currDayTaskSlots.size();i++) {
                     if(!currentTaskName.equals(currDayTaskSlots.get(i).getNameTask())){
                         mergeContinuousTaskBuilder.append("-");
-                        String currentEndTime = (i==0? currDayTaskSlots.get(0).getEndTimeString(): currDayTaskSlots.get(i).getEndTimeString());
+                        String currentEndTime = (i==1? currDayTaskSlots.get(0).getEndTimeString(): currDayTaskSlots.get(i-1).getEndTimeString());
+                        Log.d(TAG,currentTaskName);
+                        Log.d(TAG,currDayTaskSlots.get(i).getEndTimeString());
                         mergeContinuousTaskBuilder.append(currentEndTime);
                         mergeContinuousTaskBuilder.append(" ");
                         mergeContinuousTaskBuilder.append(currentTaskName);
@@ -193,7 +195,6 @@ public class TimeTable extends AppCompatActivity implements DatePickerDialog.OnD
                         currentTaskName = currDayTaskSlots.get(i).getNameTask();
                         mergeContinuousTaskBuilder = new StringBuilder();
                         mergeContinuousTaskBuilder.append(currDayTaskSlots.get(i).getStartTimeString());
-
                     }
                 }
                 mergeContinuousTaskBuilder.append("-");

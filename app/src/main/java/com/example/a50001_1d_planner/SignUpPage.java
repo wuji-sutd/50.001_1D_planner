@@ -97,7 +97,7 @@ public class SignUpPage extends AppCompatActivity {
 
     //Check if email is valid
     private boolean validEmail(String email) {
-        if (!email.contains("@") || email.contains(" ") || email.length() == 0) {
+        if (!email.contains("@") || email.contains(" ") || email.length() == 0||!email.contains(".") ) {
             //Toast.makeText(SignUpPage.this, "Please enter valid email", Toast.LENGTH_SHORT).show();
             errorList = errorList + "Please enter valid email\n";
             return false;

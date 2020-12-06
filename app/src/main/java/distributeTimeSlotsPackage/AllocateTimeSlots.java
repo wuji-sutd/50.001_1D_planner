@@ -2,13 +2,18 @@ package distributeTimeSlotsPackage;
 
 import android.util.Log;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.TimeZone;
+
 import com.example.a50001_1d_planner.Task;
 
 public class AllocateTimeSlots {
     private static String TAG = "AllocateTimeSlotsClass";
+    public static Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
     public static String AllocateTime(ArrayList<TimeSlots> allTimeSlots, ArrayList<Task> allTasks, int numSlotToFill, int numSlotLeftToFill, int currTimeSlotIndex) {
         Log.d(TAG,"reached function");
         if (numSlotLeftToFill == 0) {
@@ -28,10 +33,19 @@ public class AllocateTimeSlots {
             }
         }
         TimeSlots currentTimeSlot = allTimeSlots.get(currTimeSlotIndex); //get closest time slot to current day
+        if(currentTimeSlot.getCal().get(Calendar.DAY_OF_YEAR)==today.get(Calendar.DAY_OF_YEAR) && currentTimeSlot.getCal().get(Calendar.YEAR)==today.get(Calendar.YEAR)){
+            Log.d(TAG,"today");
+            while(currentTimeSlot.getCal().compareTo(today)<0){
+                Log.d(TAG,"older");
+                currTimeSlotIndex++;
+                currentTimeSlot = allTimeSlots.get(currTimeSlotIndex);
+            }
+        }
         while(currentTimeSlot.getIsBreak()){
             currTimeSlotIndex++;
             currentTimeSlot = allTimeSlots.get(currTimeSlotIndex);
         }
+
 
             //Task currentTask = chooseTaskToAssign(allTasks);
         String isAppropriateTimeSlot = "1";

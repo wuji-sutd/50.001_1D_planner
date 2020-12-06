@@ -17,6 +17,8 @@ public class Account extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final DBHelper dbHelper = new DBHelper(this);
+
         getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_account);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -31,31 +33,12 @@ public class Account extends AppCompatActivity {
             }
         });
 
-        Button changePassword = findViewById(R.id.changePw);
-        changePassword.setOnClickListener(new View.OnClickListener() {
+        Button deleteButton = findViewById(R.id.deleteAccountButton);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent changePasswordIntent = new Intent(getApplicationContext(), ChangePassword.class);
-                startActivity(changePasswordIntent);
-            }
-        });
-
-        Button deleteAccount = findViewById(R.id.deleteAccount);
-        deleteAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent deleteAccountIntent = new Intent(getApplicationContext(), DeleteAccount.class);
-                startActivity(deleteAccountIntent);
-            }
-        });
-
-        Button logOut = findViewById(R.id.logOut);
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                dbHelper.onUpgrade(dbHelper.getWritableDatabase(),0,0);
                 Intent logOutIntent = new Intent(getApplicationContext(), MainActivity.class);
-                logOutIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                logOutIntent.putExtra("EXIT", true);
                 startActivity(logOutIntent);
             }
         });

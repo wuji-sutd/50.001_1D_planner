@@ -38,11 +38,11 @@
         android:background="#A1979797"
         />
 
-    <Button
-        android:id="@+id/theme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/theme" />
+<!--    <Button-->
+<!--        android:id="@+id/theme"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/theme" />-->
 
     <Button
         android:id="@+id/account"

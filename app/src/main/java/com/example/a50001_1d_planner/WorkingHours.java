@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -132,10 +133,12 @@ public class WorkingHours extends AppCompatActivity {
 
 
         Button saveWorkingHours = findViewById(R.id.saveWorkingHours);
-
+        Log.d(TAG,"fdasfd");
         saveWorkingHours.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!verifyWorkingHours())
+                    return;
                 workingHoursDAO.createWorkingHours(userID, Calendar.MONDAY, getFormattedWorkingHours(Mondaystart,Mondayend), getFormattedBreakHours(Mondaystart,Mondayend));
                 workingHoursDAO.createWorkingHours(userID, Calendar.TUESDAY, getFormattedWorkingHours(Tuesdaystart,Tuesdayend), getFormattedBreakHours(Tuesdaystart,Tuesdayend));
                 workingHoursDAO.createWorkingHours(userID, Calendar.WEDNESDAY, getFormattedWorkingHours(Wednesdaystart,Wednesdayend), getFormattedBreakHours(Wednesdaystart,Wednesdayend));
@@ -170,7 +173,7 @@ public class WorkingHours extends AppCompatActivity {
             float timeDifference = 0;
             while(tempStart<(endHour+(endMin==0? 0:0.5))){
                 timeDifference+=0.5;
-                if(timeDifference==2){
+                if(timeDifference>2){
                     formattedBreakHours.append(tempStart);
                     formattedBreakHours.append(",");
                     timeDifference = 0;
@@ -245,6 +248,49 @@ public class WorkingHours extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean verifyWorkingHours(){
+        TimePicker startTimePicker;
+        TimePicker endTimePicker;
+        double startTime;
+        double endTime;
+        String errorDay;
+
+        for(int i =1;i<8;i++){
+            startTimePicker =  getCorrespondingDayEditText( i,true);
+            endTimePicker =  getCorrespondingDayEditText( i,false);
+
+            startTime = startTimePicker.getCurrentHour()+(startTimePicker.getCurrentHour()==0?0:0.5);
+            endTime = endTimePicker.getCurrentHour()+(endTimePicker.getCurrentHour()==0?0:0.5);
+            if(startTime>endTime) {
+                switch (i) {
+                    case Calendar.MONDAY:
+                        errorDay = "Mon";
+                        break;
+                    case Calendar.TUESDAY:
+                        errorDay = "Tues";
+                        break;
+                    case Calendar.WEDNESDAY:
+                        errorDay = "Wed";
+                        break;
+                    case Calendar.THURSDAY:
+                        errorDay = "Thurs";
+                        break;
+                    case Calendar.FRIDAY:
+                        errorDay = "Fri";
+                        break;
+                    case Calendar.SATURDAY:
+                        errorDay = "Sat";
+                        break;
+                    default:
+                        errorDay = "Sun";
+                }
+                Toast.makeText(getBaseContext(), "Ending hour should come after starting hour on " + errorDay, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
     }
 
 }

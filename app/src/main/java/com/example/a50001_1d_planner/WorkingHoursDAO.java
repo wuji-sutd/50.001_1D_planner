@@ -145,6 +145,9 @@ public class WorkingHoursDAO {
         Calendar nMonthsFromNow = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
         nMonthsFromNow.add(Calendar.MONTH,NUMBER_OF_MONTHS);
         Calendar currentDay = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+        Calendar today = Calendar.getInstance(TimeZone.getTimeZone("Asia/Singapore"));
+        currentDay.set(Calendar.SECOND,0);
+        today.set(Calendar.SECOND,0);
         ArrayList<AvailableDay> availableDays = getAllAvailableDays();
         if(availableDays.size()==0) return;
         //go from today to n months from now
@@ -159,7 +162,15 @@ public class WorkingHoursDAO {
                 //add timeslots for every 30min
                 double current = key;
                 double endTime = dayTimePeriod.get(key);
-                while(current!=endTime){
+                int startMin = (key-(int)key) == 0?0:30;
+                while((today.get(Calendar.DAY_OF_YEAR) == currentDay.get(Calendar.DAY_OF_YEAR) && today.get(Calendar.YEAR) == currentDay.get(Calendar.YEAR)) &&
+                    (currentDay.get(Calendar.HOUR_OF_DAY)>current || (currentDay.get(Calendar.MINUTE)>(startMin+30)%60 && currentDay.get(Calendar.HOUR_OF_DAY)==(int)current)))
+                    {
+                        current+=0.5;
+                        startMin = (current-(int)current) == 0?0:30;
+                        Log.d(TAG,current+currentDay.getTime().toString());
+                    }
+                while(current<endTime){
                     //int year, int month, int date, double time
                     if(numSlotsPerWeek.containsKey(weekYear)){
                         numSlotsPerWeek.put(weekYear,numSlotsPerWeek.get(weekYear)+1);
