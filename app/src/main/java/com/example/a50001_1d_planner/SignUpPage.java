@@ -1,6 +1,7 @@
 package com.example.a50001_1d_planner;
 
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -30,6 +31,8 @@ public class SignUpPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getTheme().applyStyle(R.style.AppTheme, true);
         setContentView(R.layout.activity_sign_up_page);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.activity_title);
         this.errorBox = findViewById(R.id.errorBox);
 
         // Initialize
